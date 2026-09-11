@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 Inicialmente se tenia pensado usar React, postgreSQL y FastApi debido a que personas del equipo ya habian tenido experiencia usando algunos de estos Frameworks sin embargo estos tienen una curva de aprendizaje ligeramente mas pronunciada y debido a que el timepo programado que se tiene para llevar acabo el proyecto, estos frameworks es que si bien son mucho mas modernas, HTML, CSS, JavaScript, Python Flask y SQLite, son mucho mejores opciones
 
 En la semana dos se estuvo realizanco actividades en las cuales vimos los puntos fuertes que tiene nuestro proyecto, y notamos que gran parte de los puntos son positivos, ya que los puntos negativos son algo situacional, y pueden solucionarce rapido, con eso en mente tomamos las fortalezas de nuestro proyecto y las estuvimos discutiendo para ver cada una de ellas.
+=======
+Inicialmente se tenia pensado usar React, postgreSQL y FastApi debido a que personas del equipo ya habian tenido experiencia usando algunos de estos Frameworks sin embargo estos tienen una curva de aprendizaje ligeramente mas pronunciada y debido a que el tiempo programado que se tiene para llevar acabo el proyecto, estos frameworks es que si bien son mucho mas modernas, HTML, CSS, JavaScript, Python Flask y SQLite, son mucho mejores opciones
+Luego se llevo acabo un analisis acerca de las fortalezas, debilidades, oportunidades y amenazas (FODA) que tiene nuestro proyecto para ver si es viable realizarlo en el tiempo que tenemos establecido, luego de verificar que si se puede llevar acabo dividiremos el proyecto en etapas y nos dividiremos los modulos para agilizar el proceso y apoyarnos entre si 
+>>>>>>> a0b2fffc9afff3ffdba8554831e8cd816e59de47
