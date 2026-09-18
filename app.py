@@ -1,6 +1,9 @@
 from flask import Flask, render_template
+from database import crear_tablas
 
 app = Flask(__name__)
+
+crear_tablas()
 
 
 @app.route("/")
