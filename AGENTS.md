@@ -34,6 +34,16 @@ Estructura esperada:
 - No hacer push, merge, publicación o cambios remotos sin autorización explícita del usuario.
 - No reemplazar decisiones documentadas sin actualizar `PROJECT_CONTEXT.md`.
 
+## Ramas de trabajo
+- `main`: rama estable; no desarrollar directamente en ella.
+- `dev`: rama de integración y pruebas conjuntas.
+- `frontend`: rama para HTML, CSS, JavaScript y la experiencia visual del cliente.
+- `backend`: rama para Flask, SQLite y la lógica del servidor.
+- Antes de implementar, comprobar la rama activa con `git branch --show-current`.
+- Usar la rama que corresponda al tipo de tarea. Si una tarea afecta frontend y backend,
+  consultar al usuario en qué rama trabajar o dividirla en cambios coordinados.
+- No hacer merge entre ramas ni push al remoto sin autorización explícita del usuario.
+
 ## Estilo de trabajo
 Cuando se solicite una implementación:
 1. Inspeccionar archivos actuales.

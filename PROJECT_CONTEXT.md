@@ -445,3 +445,22 @@ Antes de modificar código:
 6. No agregar frameworks o dependencias sin justificar su necesidad.
 7. Mantener el alcance del MVP.
 8. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
+
+## 23. Estrategia de ramas
+
+El equipo trabajará con cuatro ramas:
+
+- `main`: versión estable y demostrable del proyecto.
+- `dev`: integración y pruebas conjuntas del frontend y el backend.
+- `frontend`: trabajo del flujo visual y la interacción del cliente.
+- `backend`: trabajo de Flask, SQLite y la lógica del servidor.
+
+Flujo de integración:
+
+1. Cada integrante trabaja y crea commits en su rama (`frontend` o `backend`).
+2. El trabajo terminado y probado se integra en `dev`.
+3. En `dev` se comprueba que frontend y backend funcionen juntos.
+4. Solo una versión estable de `dev` se integra en `main`.
+
+No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
+especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
