@@ -330,6 +330,7 @@ Sistema-de-Gestion-de-Pedidos/
 ├── requirements.txt
 ├── README.md
 ├── PROJECT_CONTEXT.md
+├── SPRINT_STATUS.md
 ├── AGENTS.md
 ├── templates/
 │   └── index.html
@@ -438,6 +439,7 @@ Este cronograma es orientativo y puede ajustarse según avance real.
 
 Antes de modificar código:
 1. Leer `PROJECT_CONTEXT.md`.
+<<<<<<< HEAD
 2. Revisar la estructura y estado actual del repositorio.
 3. No asumir funcionalidades que no estén definidas.
 4. Priorizar una implementación sencilla entendible por principiantes.
@@ -464,3 +466,53 @@ Flujo de integración:
 
 No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
 especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
+=======
+2. Leer `SPRINT_STATUS.md`.
+3. Revisar la estructura y estado actual del repositorio.
+4. No asumir funcionalidades que no estén definidas.
+5. Priorizar una implementación sencilla entendible por principiantes.
+6. Explicar cambios importantes.
+7. No agregar frameworks o dependencias sin justificar su necesidad.
+8. Mantener el alcance del MVP.
+9. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
+
+## 23. Plan de desarrollo Scrum: 10 sprints / 10 semanas
+
+Cada sprint dura una semana y debe terminar con un incremento funcional y demostrable. El contenido de los próximos sprints puede ajustarse según lo aprendido, pero sin ampliar el MVP ni comprometer la meta final.
+
+| Sprint | Meta | Acciones principales | Incremento entregable |
+|---|---|---|---|
+| 1. Preparación y estructura | Tener el entorno y la base inicial funcionando. | Configurar herramientas, Git, entorno virtual, Flask, carpetas y página inicial. | Aplicación Flask ejecutándose localmente y mostrando la página inicial. |
+| 2. Base de datos y productos | Almacenar y recuperar productos desde SQLite. | Diseñar la base de datos, crear la tabla `productos`, insertar datos de prueba y conectar Flask con SQLite. | Productos almacenados en SQLite y recuperados correctamente desde Flask. |
+| 3. Menú de la cafetería | Mostrar un menú funcional obtenido desde la base de datos. | Crear catálogo y categorías; mostrar nombre, descripción, precio y disponibilidad; adaptar la interfaz a celular. | Página que muestra dinámicamente los productos disponibles. |
+| 4. Carrito de compras | Permitir construir y revisar un pedido. | Agregar y eliminar productos, modificar cantidades y calcular subtotal y total con JavaScript. | El estudiante selecciona productos y revisa su carrito completo. |
+| 5. Creación del pedido | Registrar pedidos reales en la base de datos. | Crear las tablas `pedidos` y `detalle_pedido`, solicitar el nombre, validar el carrito, generar el número y guardar el pedido. | Flujo Menú → Carrito → Nombre → Número de pedido funcional. |
+| 6. Módulo de caja | Recibir y confirmar pedidos. | Crear el panel de caja, consultar pendientes, mostrar detalles, buscar por número y confirmar el pago físico. | Un pedido aparece en caja y cambia de Pendiente de pago a Pagado. |
+| 7. Módulo de cocina | Gestionar la preparación de pedidos pagados. | Mostrar pedidos pagados y agregar controles para cambiar sus estados. | Flujo Pagado → En preparación → Listo → Entregado funcional. |
+| 8. Administración | Administrar el menú sin modificar código. | Crear el panel y el CRUD de productos: agregar, editar y activar o desactivar disponibilidad. | Los cambios administrativos aparecen en el menú del estudiante. |
+| 9. Integración, seguridad y pruebas | Integrar módulos y corregir problemas importantes. | Añadir validaciones, proteger el área interna, manejar errores, probar el flujo completo y mejorar el diseño responsive. | Versión candidata completa y estable. |
+| 10. MVP final y entrega | Preparar el software para su demostración. | Ejecutar pruebas finales, preparar datos de demostración, mejorar la presentación, documentar y respaldar el repositorio. | MVP terminado, documentado y demostrable de principio a fin. |
+
+### Ciclo semanal
+
+- Inicio: Sprint Planning y selección del Sprint Backlog.
+- Durante la semana: desarrollo y Daily Scrum breve.
+- Final: Sprint Review del incremento y Sprint Retrospective.
+
+### Criterio de entrega final
+
+La demostración debe ejecutar el flujo completo sin modificar código ni datos manualmente:
+
+Menú → Carrito → Nombre → Número de pedido → Caja → Pago confirmado → Cocina → En preparación → Listo → Entregado.
+
+Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. Las estadísticas, promociones, pagos en línea, notificaciones e integración con localizadores físicos permanecen fuera del MVP.
+
+## 24. Seguimiento compartido y ramas
+
+- `SPRINT_STATUS.md` registra el sprint activo, tareas, responsables, ramas, impedimentos y avance integrado.
+- La versión integrada en `main` es la única fuente oficial del estado.
+- Las ramas de trabajo pueden tener diferencias temporales, pero no deben mantener planes oficiales independientes.
+- Se recomienda una rama por funcionalidad, no una rama permanente por integrante.
+- Una tarea puede estar en progreso o terminada en su rama, pero solo se considera parte del incremento cuando se prueba e integra en `main`.
+- Para reducir conflictos, el equipo debe acordar quién actualiza `SPRINT_STATUS.md` al integrar trabajo.
+>>>>>>> main
