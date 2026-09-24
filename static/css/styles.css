@@ -1,1 +1,358 @@
+* {
+    box-sizing: border-box;
+}
 
+:root {
+    --verde: #214e34;
+    --verde-claro: #eaf1e8;
+    --crema: #fffaf0;
+    --naranja: #d86f35;
+    --texto: #26322b;
+    --blanco: #ffffff;
+}
+
+body {
+    margin: 0;
+    color: var(--texto);
+    background: var(--crema);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+}
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 72px;
+    padding: 1rem max(5vw, 1.25rem);
+    color: var(--blanco);
+    background: var(--verde);
+}
+
+.logo {
+    color: var(--blanco);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.enlace-menu,
+.enlace-inicio {
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.enlace-menu {
+    padding: .6rem 1rem;
+    border: 1px solid rgba(255, 255, 255, .65);
+    border-radius: 999px;
+}
+
+.acciones-encabezado {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.boton-carrito,
+.boton-agregar {
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.boton-carrito {
+    padding: .65rem 1rem;
+    color: var(--verde);
+    background: var(--blanco);
+}
+
+.contador-carrito {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.45rem;
+    min-height: 1.45rem;
+    margin-left: .35rem;
+    border-radius: 50%;
+    color: var(--blanco);
+    background: var(--naranja);
+}
+
+.pagina-inicio,
+.menu,
+.presentacion {
+    width: min(1120px, 90%);
+    margin-inline: auto;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.25fr .75fr;
+    gap: 3rem;
+    align-items: center;
+    min-height: 560px;
+    padding: 4rem 0;
+}
+
+.hero h1,
+.presentacion h1 {
+    margin: .35rem 0 1rem;
+    color: var(--verde);
+    line-height: 1.08;
+}
+
+.hero h1 {
+    max-width: 750px;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+.hero-descripcion {
+    max-width: 650px;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.presentacion-etiqueta,
+.producto-categoria {
+    color: var(--naranja);
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.boton-principal,
+.boton-secundario {
+    display: inline-block;
+    padding: .8rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.boton-principal {
+    color: var(--blanco);
+    background: var(--naranja);
+}
+
+.boton-secundario {
+    color: var(--verde);
+    background: var(--blanco);
+}
+
+.hero-ilustracion {
+    display: grid;
+    place-items: center;
+    min-height: 360px;
+    padding: 2rem;
+    border-radius: 48% 48% 18% 18%;
+    color: var(--verde);
+    background: var(--verde-claro);
+    text-align: center;
+}
+
+.hero-ilustracion span {
+    font-size: clamp(7rem, 15vw, 11rem);
+}
+
+.hero-ilustracion p {
+    margin: 0;
+    font-weight: 700;
+}
+
+.bienvenida,
+.llamada-menu {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    align-items: center;
+    padding: 3rem;
+    border-radius: 1.5rem;
+}
+
+.bienvenida {
+    background: var(--blanco);
+}
+
+.bienvenida > * {
+    flex: 1;
+}
+
+.bienvenida h2,
+.llamada-menu h2 {
+    margin: .25rem 0;
+    color: var(--verde);
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    line-height: 1.15;
+}
+
+.ventajas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    padding: 4rem 0;
+}
+
+.ventajas article {
+    padding: 2rem;
+    border-top: 4px solid var(--naranja);
+    background: var(--blanco);
+}
+
+.ventajas span {
+    font-size: 2rem;
+}
+
+.ventajas h3 {
+    margin-bottom: .25rem;
+    color: var(--verde);
+}
+
+.llamada-menu {
+    margin-bottom: 4rem;
+    color: var(--blanco);
+    background: var(--verde);
+}
+
+.llamada-menu h2 {
+    color: var(--blanco);
+}
+
+.presentacion {
+    padding: 4rem 0 2rem;
+}
+
+.presentacion h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+}
+
+.menu {
+    padding-bottom: 4rem;
+}
+
+.menu h2 {
+    color: var(--verde);
+}
+
+.lista-productos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.producto {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--blanco);
+    box-shadow: 0 10px 30px rgba(33, 78, 52, .08);
+}
+
+.producto-imagen {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    font-size: 4rem;
+    background: var(--verde-claro);
+}
+
+.producto-informacion {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.producto-informacion h3 {
+    margin: .35rem 0;
+    color: var(--verde);
+}
+
+.producto-informacion p {
+    margin-top: 0;
+}
+
+.producto-compra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.producto-precio {
+    color: var(--verde);
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.boton-agregar {
+    padding: .65rem 1rem;
+    color: var(--blanco);
+    background: var(--naranja);
+}
+
+.pie-pagina {
+    padding: 2rem 5%;
+    color: var(--blanco);
+    background: #173824;
+    text-align: center;
+}
+
+.pie-pagina p {
+    margin: .2rem;
+}
+
+@media (max-width: 800px) {
+    .hero,
+    .lista-productos {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        gap: 1rem;
+        padding-top: 3rem;
+    }
+
+    .hero-ilustracion {
+        min-height: 260px;
+    }
+
+    .bienvenida,
+    .llamada-menu {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem;
+    }
+
+    .ventajas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .encabezado,
+    .acciones-encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .acciones-encabezado {
+        width: 100%;
+    }
+
+    .producto {
+        grid-template-columns: 1fr;
+    }
+
+    .producto-imagen {
+        min-height: 150px;
+    }
+}

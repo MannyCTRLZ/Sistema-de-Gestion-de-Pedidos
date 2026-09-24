@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="logo" href="{{ url_for('inicio') }}">Cafetería Universitaria</a>
+
+        <div class="acciones-encabezado">
+            <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
+            <button class="boton-carrito" id="boton-carrito" type="button">
+                Carrito
+                <span class="contador-carrito" id="contador-carrito">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="presentacion">
+            <p class="presentacion-etiqueta">Menú del día</p>
+            <h1>¿Qué quieres ordenar?</h1>
+            <p>Selecciona tus productos y recógelos en la cafetería.</p>
+        </section>
+
+        <section class="menu" aria-labelledby="titulo-menu">
+            <h2 id="titulo-menu">Nuestros productos</h2>
+
+            <div class="lista-productos">
+                <article class="producto">
+                    <div class="producto-imagen" aria-hidden="true">🍔</div>
+                    <div class="producto-informacion">
+                        <span class="producto-categoria">Alimentos</span>
+                        <h3>Hamburguesa sencilla</h3>
+                        <p>Carne, queso, lechuga, tomate y aderezo de la casa.</p>
+                        <div class="producto-compra">
+                            <span class="producto-precio">$95.00</span>
+                            <button class="boton-agregar" type="button" data-id="1" data-nombre="Hamburguesa sencilla" data-precio="95">Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="producto">
+                    <div class="producto-imagen" aria-hidden="true">🍤</div>
+                    <div class="producto-informacion">
+                        <span class="producto-categoria">Alimentos</span>
+                        <h3>Tacos capeados</h3>
+                        <p>Camarones capeados, doble tortilla, lechuga, col y aderezo de la casa.</p>
+                        <div class="producto-compra">
+                            <span class="producto-precio">$65.00</span>
+                            <button class="boton-agregar" type="button" data-id="4" data-nombre="Tacos capeados" data-precio="65">Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="producto">
+                    <div class="producto-imagen" aria-hidden="true">🌯</div>
+                    <div class="producto-informacion">
+                        <span class="producto-categoria">Alimentos</span>
+                        <h3>Burrito</h3>
+                        <p>Burrito de tortilla de harina con frijoles, carne y queso.</p>
+                        <div class="producto-compra">
+                            <span class="producto-precio">$55.00</span>
+                            <button class="boton-agregar" type="button" data-id="2" data-nombre="Burrito" data-precio="55">Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="producto">
+                    <div class="producto-imagen" aria-hidden="true">🥤</div>
+                    <div class="producto-informacion">
+                        <span class="producto-categoria">Bebidas</span>
+                        <h3>Refresco</h3>
+                        <p>Refresco frío de 600 ml. Diferentes sabores disponibles.</p>
+                        <div class="producto-compra">
+                            <span class="producto-precio">$25.00</span>
+                            <button class="boton-agregar" type="button" data-id="3" data-nombre="Refresco" data-precio="25">Agregar</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p>Cafetería Universitaria</p>
+        <p>Realiza tu pedido y paga directamente en caja.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
