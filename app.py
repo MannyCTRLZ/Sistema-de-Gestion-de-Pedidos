@@ -19,7 +19,8 @@ def inicio():
 
 @app.route("/menu")
 def menu():
-    return render_template("menu.html")
+    productos = obtener_productos_disponibles()
+    return render_template("menu.html", productos=productos)
 
 
 if __name__ == "__main__":

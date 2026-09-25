@@ -30,57 +30,38 @@
             <h2 id="titulo-menu">Nuestros productos</h2>
 
             <div class="lista-productos">
+                {% for producto in productos %}
                 <article class="producto">
-                    <div class="producto-imagen" aria-hidden="true">🍔</div>
+                    <div class="producto-imagen" aria-hidden="true">
+                        {% if producto.categoria == "Bebidas" %}🥤{% else %}🍽️{% endif %}
+                    </div>
                     <div class="producto-informacion">
-                        <span class="producto-categoria">Alimentos</span>
-                        <h3>Hamburguesa sencilla</h3>
-                        <p>Carne, queso, lechuga, tomate y aderezo de la casa.</p>
+                        <span class="producto-categoria">
+                            {{ producto.categoria }}
+                        </span>
+                        <h3>{{ producto.nombre }}</h3>
+                        <p>{{ producto.descripcion }}</p>
                         <div class="producto-compra">
-                            <span class="producto-precio">$95.00</span>
-                            <button class="boton-agregar" type="button" data-id="1" data-nombre="Hamburguesa sencilla" data-precio="95">Agregar</button>
+                            <span class="producto-precio">
+                                ${{ "%.2f"|format(producto.precio) }}
+                            </span>
+                            <button
+                                class="boton-agregar"
+                                type="button"
+                                data-id="{{ producto.id }}"
+                                data-nombre="{{ producto.nombre }}"
+                                data-precio="{{ producto.precio }}"
+                            >
+                                Agregar
+                            </button>
                         </div>
                     </div>
                 </article>
-
-                <article class="producto">
-                    <div class="producto-imagen" aria-hidden="true">🍤</div>
-                    <div class="producto-informacion">
-                        <span class="producto-categoria">Alimentos</span>
-                        <h3>Tacos capeados</h3>
-                        <p>Camarones capeados, doble tortilla, lechuga, col y aderezo de la casa.</p>
-                        <div class="producto-compra">
-                            <span class="producto-precio">$65.00</span>
-                            <button class="boton-agregar" type="button" data-id="4" data-nombre="Tacos capeados" data-precio="65">Agregar</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="producto">
-                    <div class="producto-imagen" aria-hidden="true">🌯</div>
-                    <div class="producto-informacion">
-                        <span class="producto-categoria">Alimentos</span>
-                        <h3>Burrito</h3>
-                        <p>Burrito de tortilla de harina con frijoles, carne y queso.</p>
-                        <div class="producto-compra">
-                            <span class="producto-precio">$55.00</span>
-                            <button class="boton-agregar" type="button" data-id="2" data-nombre="Burrito" data-precio="55">Agregar</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="producto">
-                    <div class="producto-imagen" aria-hidden="true">🥤</div>
-                    <div class="producto-informacion">
-                        <span class="producto-categoria">Bebidas</span>
-                        <h3>Refresco</h3>
-                        <p>Refresco frío de 600 ml. Diferentes sabores disponibles.</p>
-                        <div class="producto-compra">
-                            <span class="producto-precio">$25.00</span>
-                            <button class="boton-agregar" type="button" data-id="3" data-nombre="Refresco" data-precio="25">Agregar</button>
-                        </div>
-                    </div>
-                </article>
+                {% else %}
+                <p class="menu-vacio">
+                    No hay productos disponibles en este momento.
+                </p>
+                {% endfor %}
             </div>
         </section>
     </main>

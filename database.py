@@ -41,7 +41,7 @@ def insertar_productos_iniciales():
                 "Tacos de pescado capeados con lechuga, col y aderezo de la casa.",
                 65.00,
                 "Alimentos",
-                1
+                0
             ),
             (
                 "Burrito",
@@ -55,7 +55,7 @@ def insertar_productos_iniciales():
                 "Refresco frío de 600 ml. Diferentes sabores disponibles.",
                 25.00,
                 "Bebidas",
-                1
+                0
             )
         ]
 

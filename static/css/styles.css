@@ -246,6 +246,15 @@ a {
     gap: 1.25rem;
 }
 
+.menu-vacio {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 2rem;
+    border-radius: 1rem;
+    background: var(--blanco);
+    text-align: center;
+}
+
 .producto {
     display: grid;
     grid-template-columns: 140px 1fr;
