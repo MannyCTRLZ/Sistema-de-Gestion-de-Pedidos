@@ -439,6 +439,34 @@ Este cronograma es orientativo y puede ajustarse según avance real.
 
 Antes de modificar código:
 1. Leer `PROJECT_CONTEXT.md`.
+<<<<<<< HEAD
+2. Revisar la estructura y estado actual del repositorio.
+3. No asumir funcionalidades que no estén definidas.
+4. Priorizar una implementación sencilla entendible por principiantes.
+5. Explicar cambios importantes.
+6. No agregar frameworks o dependencias sin justificar su necesidad.
+7. Mantener el alcance del MVP.
+8. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
+
+## 23. Estrategia de ramas
+
+El equipo trabajará con cuatro ramas:
+
+- `main`: versión estable y demostrable del proyecto.
+- `dev`: integración y pruebas conjuntas del frontend y el backend.
+- `frontend`: trabajo del flujo visual y la interacción del cliente.
+- `backend`: trabajo de Flask, SQLite y la lógica del servidor.
+
+Flujo de integración:
+
+1. Cada integrante trabaja y crea commits en su rama (`frontend` o `backend`).
+2. El trabajo terminado y probado se integra en `dev`.
+3. En `dev` se comprueba que frontend y backend funcionen juntos.
+4. Solo una versión estable de `dev` se integra en `main`.
+
+No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
+especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
+=======
 2. Leer `SPRINT_STATUS.md`.
 3. Revisar la estructura y estado actual del repositorio.
 4. No asumir funcionalidades que no estén definidas.
@@ -487,3 +515,4 @@ Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. La
 - Se recomienda una rama por funcionalidad, no una rama permanente por integrante.
 - Una tarea puede estar en progreso o terminada en su rama, pero solo se considera parte del incremento cuando se prueba e integra en `main`.
 - Para reducir conflictos, el equipo debe acordar quién actualiza `SPRINT_STATUS.md` al integrar trabajo.
+>>>>>>> main
