@@ -45,7 +45,6 @@ Estructura esperada:
 - `.venv/` debe permanecer fuera de Git.
 - No hacer push, merge, publicación o cambios remotos sin autorización explícita del usuario.
 - No reemplazar decisiones documentadas sin actualizar `PROJECT_CONTEXT.md`.
-- No mantener estados oficiales diferentes del sprint en cada rama.
 
 ## Estilo de trabajo
 Cuando se solicite una implementación:

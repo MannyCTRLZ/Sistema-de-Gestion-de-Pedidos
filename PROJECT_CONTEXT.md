@@ -176,6 +176,9 @@ Cada producto debe manejar como mínimo:
 - Categoría.
 - Disponibilidad.
 
+Los productos no disponibles permanecen visibles en el menú con la etiqueta
+"Agotado" y el botón para agregarlos deshabilitado.
+
 ### Carrito
 Debe permitir:
 - Agregar producto.
@@ -448,7 +451,26 @@ Antes de modificar código:
 8. Mantener el alcance del MVP.
 9. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
 
-## 23. Plan de desarrollo Scrum: 10 sprints / 10 semanas
+## 23. Estrategia de ramas
+
+El equipo trabajará con cuatro ramas:
+
+- `main`: versión estable y demostrable del proyecto.
+- `dev`: integración y pruebas conjuntas del frontend y el backend.
+- `frontend`: trabajo del flujo visual y la interacción del cliente.
+- `backend`: trabajo de Flask, SQLite y la lógica del servidor.
+
+Flujo de integración:
+
+1. Cada integrante trabaja y crea commits en su rama (`frontend` o `backend`).
+2. El trabajo terminado y probado se integra en `dev`.
+3. En `dev` se comprueba que frontend y backend funcionen juntos.
+4. Solo una versión estable de `dev` se integra en `main`.
+
+No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
+especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
+
+## 24. Plan de desarrollo Scrum: 10 sprints / 10 semanas
 
 Cada sprint dura una semana y debe terminar con un incremento funcional y demostrable. El contenido de los próximos sprints puede ajustarse según lo aprendido, pero sin ampliar el MVP ni comprometer la meta final.
 
@@ -479,7 +501,7 @@ Menú → Carrito → Nombre → Número de pedido → Caja → Pago confirmado 
 
 Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. Las estadísticas, promociones, pagos en línea, notificaciones e integración con localizadores físicos permanecen fuera del MVP.
 
-## 24. Seguimiento compartido y ramas
+## 25. Seguimiento compartido y ramas
 
 - `SPRINT_STATUS.md` registra el sprint activo, tareas, responsables, ramas, impedimentos y avance integrado.
 - La versión integrada en `main` es la única fuente oficial del estado.
