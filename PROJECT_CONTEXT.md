@@ -439,14 +439,14 @@ Este cronograma es orientativo y puede ajustarse según avance real.
 
 Antes de modificar código:
 1. Leer `PROJECT_CONTEXT.md`.
-<<<<<<< HEAD
-2. Revisar la estructura y estado actual del repositorio.
-3. No asumir funcionalidades que no estén definidas.
-4. Priorizar una implementación sencilla entendible por principiantes.
-5. Explicar cambios importantes.
-6. No agregar frameworks o dependencias sin justificar su necesidad.
-7. Mantener el alcance del MVP.
-8. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
+2. Leer `SPRINT_STATUS.md`.
+3. Revisar la estructura y estado actual del repositorio.
+4. No asumir funcionalidades que no estén definidas.
+5. Priorizar una implementación sencilla entendible por principiantes.
+6. Explicar cambios importantes.
+7. No agregar frameworks o dependencias sin justificar su necesidad.
+8. Mantener el alcance del MVP.
+9. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
 
 ## 23. Estrategia de ramas
 
@@ -466,17 +466,8 @@ Flujo de integración:
 
 No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
 especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
-=======
-2. Leer `SPRINT_STATUS.md`.
-3. Revisar la estructura y estado actual del repositorio.
-4. No asumir funcionalidades que no estén definidas.
-5. Priorizar una implementación sencilla entendible por principiantes.
-6. Explicar cambios importantes.
-7. No agregar frameworks o dependencias sin justificar su necesidad.
-8. Mantener el alcance del MVP.
-9. No modificar o publicar repositorios remotos sin autorización explícita del usuario.
 
-## 23. Plan de desarrollo Scrum: 10 sprints / 10 semanas
+## 24. Plan de desarrollo Scrum: 10 sprints / 10 semanas
 
 Cada sprint dura una semana y debe terminar con un incremento funcional y demostrable. El contenido de los próximos sprints puede ajustarse según lo aprendido, pero sin ampliar el MVP ni comprometer la meta final.
 
@@ -507,7 +498,7 @@ Menú → Carrito → Nombre → Número de pedido → Caja → Pago confirmado 
 
 Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. Las estadísticas, promociones, pagos en línea, notificaciones e integración con localizadores físicos permanecen fuera del MVP.
 
-## 24. Seguimiento compartido y ramas
+## 25. Seguimiento compartido y ramas
 
 - `SPRINT_STATUS.md` registra el sprint activo, tareas, responsables, ramas, impedimentos y avance integrado.
 - La versión integrada en `main` es la única fuente oficial del estado.
@@ -515,4 +506,3 @@ Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. La
 - Se recomienda una rama por funcionalidad, no una rama permanente por integrante.
 - Una tarea puede estar en progreso o terminada en su rama, pero solo se considera parte del incremento cuando se prueba e integra en `main`.
 - Para reducir conflictos, el equipo debe acordar quién actualiza `SPRINT_STATUS.md` al integrar trabajo.
->>>>>>> main
