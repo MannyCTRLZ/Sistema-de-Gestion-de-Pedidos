@@ -23,10 +23,10 @@ Productos de prueba almacenados en la base de datos y recuperados correctamente 
 | Diseñar la tabla `productos` | Por asignar | Integrada en `main` | `main` |
 | Crear la conexión entre Python y SQLite | Por asignar | Integrada en `main` | `main` |
 | Crear automáticamente la tabla `productos` | Por asignar | Integrada en `main` | `main` |
-| Insertar productos de prueba | Por asignar | Pendiente | Por definir |
-| Crear una consulta para obtener productos disponibles | Por asignar | Pendiente | Por definir |
-| Recuperar los productos desde la ruta de Flask | Por asignar | Pendiente | Por definir |
-| Verificar la creación y consulta de datos | Por asignar | Pendiente | Por definir |
+| Insertar productos de prueba | Codex | Terminada en rama | `Jesus` |
+| Crear una consulta para obtener productos disponibles | Codex | Terminada en rama | `Jesus` |
+| Recuperar los productos desde la ruta de Flask | Codex | Terminada en rama | `Jesus` |
+| Verificar la creación y consulta de datos | Codex | Terminada en rama | `Jesus` |
 
 ## Trabajo integrado en `main`
 
@@ -35,6 +35,13 @@ Productos de prueba almacenados en la base de datos y recuperados correctamente 
 - SQLite está conectado mediante `database.py`.
 - La tabla `productos` se crea automáticamente si todavía no existe.
 - Hay un boceto estático del menú con tres productos de ejemplo.
+
+## Trabajo terminado en la rama `Jesus`
+
+- Se agregaron cuatro productos de prueba con una carga que evita duplicarlos.
+- Se creó una consulta que devuelve únicamente productos disponibles.
+- La ruta `/api/productos` recupera los productos desde Flask en formato JSON.
+- Se verificó la creación, la carga idempotente y el filtro de disponibilidad con una base temporal.
 
 ## Impedimentos
 

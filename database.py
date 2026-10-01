@@ -3,11 +3,43 @@ import sqlite3
 
 DATABASE = "cafeteria.db"
 
+PRODUCTOS_PRUEBA = [
+    (
+        "Hamburguesa sencilla",
+        "Carne, queso, lechuga, tomate y aderezo de la casa.",
+        95.00,
+        "Alimentos",
+        1,
+    ),
+    (
+        "Tacos capeados",
+        "Camarones capeados, doble tortilla, lechuga, col y aderezo de la casa.",
+        65.00,
+        "Alimentos",
+        1,
+    ),
+    (
+        "Burrito",
+        "Tortilla de harina con frijoles, carne y queso.",
+        55.00,
+        "Alimentos",
+        1,
+    ),
+    (
+        "Refresco",
+        "Refresco frio de 600 ml. Diferentes sabores disponibles.",
+        25.00,
+        "Bebidas",
+        1,
+    ),
+]
+
 
 def obtener_conexion():
     conexion = sqlite3.connect(DATABASE)
     conexion.row_factory = sqlite3.Row
     return conexion
+
 
 def crear_tablas():
     conexion = obtener_conexion()
@@ -25,3 +57,38 @@ def crear_tablas():
 
     conexion.commit()
     conexion.close()
+
+
+def insertar_productos_prueba():
+    conexion = obtener_conexion()
+    cantidad_productos = conexion.execute(
+        "SELECT COUNT(*) FROM productos"
+    ).fetchone()[0]
+
+    if cantidad_productos == 0:
+        conexion.executemany(
+            """
+            INSERT INTO productos
+                (nombre, descripcion, precio, categoria, disponible)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            PRODUCTOS_PRUEBA,
+        )
+        conexion.commit()
+
+    conexion.close()
+
+
+def obtener_productos_disponibles():
+    conexion = obtener_conexion()
+    productos = conexion.execute(
+        """
+        SELECT id, nombre, descripcion, precio, categoria
+        FROM productos
+        WHERE disponible = 1
+        ORDER BY categoria, nombre
+        """
+    ).fetchall()
+    conexion.close()
+
+    return [dict(producto) for producto in productos]
