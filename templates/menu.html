@@ -14,7 +14,7 @@
             <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
             <button class="boton-carrito" id="boton-carrito" type="button">
                 Carrito
-                <span class="contador-carrito" id="contador-carrito">0</span>
+                <span class="contador-carrito" id="contador-carrito" aria-label="0 productos">0</span>
             </button>
         </div>
     </header>
@@ -69,6 +69,31 @@
             </div>
         </section>
     </main>
+
+    <div class="carrito-fondo" id="carrito-fondo" hidden></div>
+
+    <aside class="carrito-panel" id="carrito-panel" aria-labelledby="titulo-carrito" aria-hidden="true">
+        <div class="carrito-encabezado">
+            <div>
+                <p class="presentacion-etiqueta">Tu selección</p>
+                <h2 id="titulo-carrito">Carrito</h2>
+            </div>
+            <button class="carrito-cerrar" id="carrito-cerrar" type="button" aria-label="Cerrar carrito">×</button>
+        </div>
+
+        <p class="carrito-vacio" id="carrito-vacio">Tu carrito está vacío.</p>
+        <div class="carrito-productos" id="carrito-productos"></div>
+
+        <div class="carrito-resumen">
+            <div class="carrito-total">
+                <span>Total</span>
+                <strong id="carrito-total">$0.00</strong>
+            </div>
+            <button class="carrito-vaciar" id="carrito-vaciar" type="button" disabled>
+                Vaciar carrito
+            </button>
+        </div>
+    </aside>
 
     <footer class="pie-pagina">
         <p>Cafetería Universitaria</p>

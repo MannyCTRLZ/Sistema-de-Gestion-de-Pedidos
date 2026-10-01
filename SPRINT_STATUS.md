@@ -4,62 +4,64 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 3 — Menú de la cafetería**
+**Sprint 4 — Carrito de compras**
 
 Estado: **COMPLETADO**
 
 ## Objetivo del sprint
 
-Mostrar un menú funcional obtenido desde la base de datos y adaptado a dispositivos móviles.
+Permitir que el estudiante construya y revise su pedido antes de proporcionar su nombre.
 
 ## Incremento esperado
 
-Página de menú que muestra dinámicamente los productos con su nombre, descripción, precio, categoría y disponibilidad.
+Carrito interactivo que permite agregar y eliminar productos, modificar cantidades y calcular el total.
 
 ## Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Crear la ruta independiente `/menu` | Equipo | Integrada en `main` | `main` |
-| Renderizar los productos recuperados desde SQLite | Equipo | Integrada en `main` | `main` |
-| Mostrar nombre, descripción, precio y categoría | Equipo | Integrada en `main` | `main` |
-| Marcar como agotados los productos no disponibles | Equipo | Integrada en `main` | `main` |
-| Deshabilitar el botón de los productos agotados | Equipo | Integrada en `main` | `main` |
-| Mostrar un mensaje cuando no existan productos registrados | Equipo | Integrada en `main` | `main` |
-| Adaptar las tarjetas y la navegación a dispositivos móviles | Equipo | Integrada en `main` | `main` |
-| Probar manualmente el menú en computadora y celular | Equipo | Integrada en `main` | `main` |
-| Realizar la Review y Retrospective del Sprint 3 | Equipo | Integrada en `main` | `main` |
+| Abrir y cerrar el panel del carrito | Equipo | Integrada en `main` | `main` |
+| Agregar productos disponibles | Equipo | Integrada en `main` | `main` |
+| Agrupar productos repetidos | Equipo | Integrada en `main` | `main` |
+| Aumentar y disminuir cantidades | Equipo | Integrada en `main` | `main` |
+| Eliminar un producto | Equipo | Integrada en `main` | `main` |
+| Vaciar el carrito | Equipo | Integrada en `main` | `main` |
+| Calcular contador y total | Equipo | Integrada en `main` | `main` |
+| Adaptar el panel a dispositivos móviles | Equipo | Integrada en `main` | `main` |
+| Probar el flujo completo del carrito | Equipo | Integrada en `main` | `main` |
 
 ## Trabajo integrado en `main`
 
-- La página de presentación se encuentra en `/` y conduce al menú.
-- La ruta `/menu` recupera los productos mediante Flask.
-- Las tarjetas del menú se generan dinámicamente desde SQLite.
-- El menú muestra nombre, descripción, precio y categoría.
-- Los productos no disponibles aparecen como agotados y no se pueden agregar.
-- Existe un estado vacío para cuando no haya productos registrados.
-- La interfaz incluye estilos responsive para pantallas pequeñas.
+- El botón del encabezado abre un panel lateral con el contenido del carrito.
+- Los productos repetidos se agrupan y aumentan su cantidad.
+- Cada producto permite aumentar, disminuir o eliminar su cantidad.
+- El contador representa el total de unidades seleccionadas.
+- El total se recalcula después de cada cambio.
+- El carrito se puede vaciar completamente.
+- Los productos agotados no se pueden agregar.
+- El panel se adapta al ancho disponible en dispositivos móviles.
 
 ## Trabajo verificado localmente
 
-- El menú se revisó en navegador con una vista de escritorio y una vista móvil de 390 × 844 px.
-- Las tarjetas se acomodan en una columna en pantallas pequeñas sin desbordamiento horizontal.
-- El navegador no reportó errores ni advertencias durante la revisión.
-- Se verificó el mensaje mostrado cuando la consulta no devuelve productos, sin modificar la base de datos.
+- Se agregaron dos productos y se comprobó un contador de tres unidades.
+- Se verificó el total de dos burritos y un plato de chilaquiles: `$170.00`.
+- Se probaron los controles para aumentar y disminuir cantidades.
+- Se eliminó un producto y se verificó el nuevo total.
+- Se vació el carrito y el total regresó a `$0.00`.
+- Se confirmó que los botones de productos agotados permanecen deshabilitados.
 
 ## Sprint Review
 
-- El menú obtiene los productos desde SQLite y genera sus tarjetas con Flask y Jinja.
-- Se comprobó que los productos no disponibles aparecen como agotados y con el botón deshabilitado.
-- Cada tarjeta muestra nombre, descripción, categoría y precio.
-- Se verificaron el diseño de escritorio, la adaptación móvil y el estado sin productos.
-- El incremento cumple el objetivo definido para el Sprint 3 y quedó integrado localmente en `main`.
+- El estudiante puede construir y revisar un carrito completo desde el menú.
+- Las cantidades, el contador y el total se actualizan correctamente.
+- El estado vacío y la acción de vaciar carrito funcionan correctamente.
+- El incremento cumple el objetivo definido para el Sprint 4 y quedó integrado localmente en `main`.
 
 ## Sprint Retrospective
 
-- Reutilizar el diseño existente permitió conectar el frontend sin ampliar el alcance del sprint.
-- Las pruebas con una base temporal facilitaron validar disponibilidad y estado vacío sin alterar los datos locales.
-- En el siguiente sprint conviene mantener la lógica del carrito separada de la consulta de productos.
+- La delegación de eventos simplificó los controles creados dinámicamente dentro del carrito.
+- Mantener el carrito únicamente en JavaScript permitió completar el incremento sin adelantar la creación de pedidos.
+- En el Sprint 5 será necesario validar nuevamente precios y disponibilidad antes de guardar el pedido.
 
 ## Impedimentos
 
@@ -67,11 +69,12 @@ Ninguno documentado.
 
 ## Criterios para cerrar el sprint
 
-- El menú obtiene sus productos desde SQLite, sin tarjetas escritas manualmente en HTML.
-- Los productos no disponibles se muestran como agotados y no se pueden agregar.
-- Cada producto muestra nombre, descripción, precio y categoría.
-- La interfaz se puede utilizar correctamente en computadora y celular.
-- Se prueba el estado sin productos registrados.
+- Se pueden agregar varios productos al carrito.
+- Se pueden aumentar y disminuir cantidades.
+- Se puede eliminar un producto y vaciar todo el carrito.
+- El contador y el total se actualizan correctamente.
+- Los productos agotados no se pueden agregar.
+- El panel funciona correctamente en computadora y celular.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización
@@ -82,6 +85,24 @@ Ninguno documentado.
 - Al cerrar el sprint, registrar el resultado de la Review y la Retrospective antes de preparar el siguiente Sprint Backlog.
 
 ## Sprints anteriores
+
+### Sprint 3 — Menú de la cafetería
+
+Estado: **COMPLETADO**
+
+Incremento verificado en `main`: el menú obtiene los productos desde SQLite, muestra sus datos y presenta los productos no disponibles como agotados con el botón deshabilitado.
+
+#### Sprint Review
+
+- Las tarjetas se generan dinámicamente con Flask y Jinja.
+- Cada producto muestra nombre, descripción, categoría, precio y disponibilidad.
+- Se verificaron el diseño responsive y el estado sin productos registrados.
+
+#### Sprint Retrospective
+
+- Reutilizar el diseño existente permitió conectar el frontend sin ampliar el alcance.
+- Las pruebas con una base temporal permitieron verificar la disponibilidad sin alterar los datos locales.
+- La lógica del carrito se mantuvo separada de la consulta de productos.
 
 ### Sprint 2 — Base de datos y productos
 
