@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 3 — Menú de la cafetería**
 
-Estado: **EN PROGRESO**
+Estado: **COMPLETADO**
 
 ## Objetivo del sprint
 
@@ -26,8 +26,8 @@ Página de menú que muestra dinámicamente los productos disponibles con su nom
 | Ocultar productos no disponibles | Equipo | Integrada en `main` | `main` |
 | Mostrar un mensaje cuando no existan productos disponibles | Equipo | Integrada en `main` | `main` |
 | Adaptar las tarjetas y la navegación a dispositivos móviles | Equipo | Integrada en `main` | `main` |
-| Probar manualmente el menú en computadora y celular | Equipo | Terminada en rama | `frontend` |
-| Realizar la Review y Retrospective del Sprint 3 | Equipo | Pendiente | `main` |
+| Probar manualmente el menú en computadora y celular | Equipo | Integrada en `main` | `main` |
+| Realizar la Review y Retrospective del Sprint 3 | Equipo | Integrada en `main` | `main` |
 
 ## Trabajo integrado en `main`
 
@@ -45,6 +45,20 @@ Página de menú que muestra dinámicamente los productos disponibles con su nom
 - Las tarjetas se acomodan en una columna en pantallas pequeñas sin desbordamiento horizontal.
 - El navegador no reportó errores ni advertencias durante la revisión.
 - Se verificó el mensaje mostrado cuando la consulta no devuelve productos, sin modificar la base de datos.
+
+## Sprint Review
+
+- El menú obtiene los productos desde SQLite y genera sus tarjetas con Flask y Jinja.
+- Se comprobó que únicamente aparecen productos disponibles.
+- Cada tarjeta muestra nombre, descripción, categoría y precio.
+- Se verificaron el diseño de escritorio, la adaptación móvil y el estado sin productos.
+- El incremento cumple el objetivo definido para el Sprint 3 y quedó integrado localmente en `main`.
+
+## Sprint Retrospective
+
+- Reutilizar el diseño existente permitió conectar el frontend sin ampliar el alcance del sprint.
+- Las pruebas con una base temporal facilitaron validar disponibilidad y estado vacío sin alterar los datos locales.
+- En el siguiente sprint conviene mantener la lógica del carrito separada de la consulta de productos.
 
 ## Impedimentos
 
