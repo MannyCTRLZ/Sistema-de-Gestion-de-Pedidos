@@ -107,12 +107,11 @@ def insertar_productos_iniciales():
     conexion.close()
 
 
-def obtener_productos_disponibles():
+def obtener_productos():
     conexion = obtener_conexion()
     productos = conexion.execute("""
         SELECT id, nombre, descripcion, precio, categoria, disponible
         FROM productos
-        WHERE disponible = 1
         ORDER BY categoria, nombre
     """).fetchall()
     conexion.close()

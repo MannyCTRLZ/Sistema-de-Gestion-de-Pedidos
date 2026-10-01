@@ -176,6 +176,9 @@ Cada producto debe manejar como mínimo:
 - Categoría.
 - Disponibilidad.
 
+Los productos no disponibles permanecen visibles en el menú con la etiqueta
+"Agotado" y el botón para agregarlos deshabilitado.
+
 ### Carrito
 Debe permitir:
 - Agregar producto.

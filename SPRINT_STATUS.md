@@ -14,7 +14,7 @@ Mostrar un menú funcional obtenido desde la base de datos y adaptado a disposit
 
 ## Incremento esperado
 
-Página de menú que muestra dinámicamente los productos disponibles con su nombre, descripción, precio y categoría.
+Página de menú que muestra dinámicamente los productos con su nombre, descripción, precio, categoría y disponibilidad.
 
 ## Sprint Backlog
 
@@ -23,8 +23,9 @@ Página de menú que muestra dinámicamente los productos disponibles con su nom
 | Crear la ruta independiente `/menu` | Equipo | Integrada en `main` | `main` |
 | Renderizar los productos recuperados desde SQLite | Equipo | Integrada en `main` | `main` |
 | Mostrar nombre, descripción, precio y categoría | Equipo | Integrada en `main` | `main` |
-| Ocultar productos no disponibles | Equipo | Integrada en `main` | `main` |
-| Mostrar un mensaje cuando no existan productos disponibles | Equipo | Integrada en `main` | `main` |
+| Marcar como agotados los productos no disponibles | Equipo | Integrada en `main` | `main` |
+| Deshabilitar el botón de los productos agotados | Equipo | Integrada en `main` | `main` |
+| Mostrar un mensaje cuando no existan productos registrados | Equipo | Integrada en `main` | `main` |
 | Adaptar las tarjetas y la navegación a dispositivos móviles | Equipo | Integrada en `main` | `main` |
 | Probar manualmente el menú en computadora y celular | Equipo | Integrada en `main` | `main` |
 | Realizar la Review y Retrospective del Sprint 3 | Equipo | Integrada en `main` | `main` |
@@ -32,11 +33,11 @@ Página de menú que muestra dinámicamente los productos disponibles con su nom
 ## Trabajo integrado en `main`
 
 - La página de presentación se encuentra en `/` y conduce al menú.
-- La ruta `/menu` recupera los productos disponibles mediante Flask.
+- La ruta `/menu` recupera los productos mediante Flask.
 - Las tarjetas del menú se generan dinámicamente desde SQLite.
 - El menú muestra nombre, descripción, precio y categoría.
-- Los productos no disponibles no aparecen en el menú.
-- Existe un estado vacío para cuando no haya productos disponibles.
+- Los productos no disponibles aparecen como agotados y no se pueden agregar.
+- Existe un estado vacío para cuando no haya productos registrados.
 - La interfaz incluye estilos responsive para pantallas pequeñas.
 
 ## Trabajo verificado localmente
@@ -49,7 +50,7 @@ Página de menú que muestra dinámicamente los productos disponibles con su nom
 ## Sprint Review
 
 - El menú obtiene los productos desde SQLite y genera sus tarjetas con Flask y Jinja.
-- Se comprobó que únicamente aparecen productos disponibles.
+- Se comprobó que los productos no disponibles aparecen como agotados y con el botón deshabilitado.
 - Cada tarjeta muestra nombre, descripción, categoría y precio.
 - Se verificaron el diseño de escritorio, la adaptación móvil y el estado sin productos.
 - El incremento cumple el objetivo definido para el Sprint 3 y quedó integrado localmente en `main`.
@@ -67,10 +68,10 @@ Ninguno documentado.
 ## Criterios para cerrar el sprint
 
 - El menú obtiene sus productos desde SQLite, sin tarjetas escritas manualmente en HTML.
-- Solo aparecen productos disponibles.
+- Los productos no disponibles se muestran como agotados y no se pueden agregar.
 - Cada producto muestra nombre, descripción, precio y categoría.
 - La interfaz se puede utilizar correctamente en computadora y celular.
-- Se prueba el estado sin productos disponibles.
+- Se prueba el estado sin productos registrados.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización

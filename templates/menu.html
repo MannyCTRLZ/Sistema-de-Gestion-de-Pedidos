@@ -31,7 +31,7 @@
 
             <div class="lista-productos">
                 {% for producto in productos %}
-                <article class="producto">
+                <article class="producto{% if not producto.disponible %} producto-agotado{% endif %}">
                     <div class="producto-imagen" aria-hidden="true">
                         {% if producto.categoria == "Bebidas" %}🥤{% else %}🍽️{% endif %}
                     </div>
@@ -39,6 +39,9 @@
                         <span class="producto-categoria">
                             {{ producto.categoria }}
                         </span>
+                        {% if not producto.disponible %}
+                        <span class="producto-estado">Agotado</span>
+                        {% endif %}
                         <h3>{{ producto.nombre }}</h3>
                         <p>{{ producto.descripcion }}</p>
                         <div class="producto-compra">
@@ -51,6 +54,7 @@
                                 data-id="{{ producto.id }}"
                                 data-nombre="{{ producto.nombre }}"
                                 data-precio="{{ producto.precio }}"
+                                {% if not producto.disponible %}disabled{% endif %}
                             >
                                 Agregar
                             </button>
@@ -59,7 +63,7 @@
                 </article>
                 {% else %}
                 <p class="menu-vacio">
-                    No hay productos disponibles en este momento.
+                    No hay productos registrados en este momento.
                 </p>
                 {% endfor %}
             </div>

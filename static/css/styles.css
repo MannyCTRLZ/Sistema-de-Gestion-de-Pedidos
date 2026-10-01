@@ -264,6 +264,10 @@ a {
     box-shadow: 0 10px 30px rgba(33, 78, 52, .08);
 }
 
+.producto-agotado {
+    opacity: .72;
+}
+
 .producto-imagen {
     display: grid;
     place-items: center;
@@ -281,6 +285,19 @@ a {
 .producto-informacion h3 {
     margin: .35rem 0;
     color: var(--verde);
+}
+
+.producto-estado {
+    align-self: flex-start;
+    margin-top: .5rem;
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    color: #7a2929;
+    background: #f8dddd;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
 }
 
 .producto-informacion p {
@@ -305,6 +322,12 @@ a {
     padding: .65rem 1rem;
     color: var(--blanco);
     background: var(--naranja);
+}
+
+.boton-agregar:disabled {
+    color: #5f665f;
+    background: #d5d9d5;
+    cursor: not-allowed;
 }
 
 .pie-pagina {
