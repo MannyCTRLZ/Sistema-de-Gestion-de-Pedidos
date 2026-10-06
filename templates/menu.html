@@ -31,7 +31,7 @@
 
             <div class="lista-productos">
                 {% for producto in productos %}
-                <article class="producto{% if not producto.disponible %} producto-agotado{% endif %}">
+                <article class="producto{% if not producto.disponible or producto.existencia == 0 %} producto-agotado{% endif %}">
                     <div class="producto-imagen" aria-hidden="true">
                         {% if producto.categoria == "Bebidas" %}🥤{% else %}🍽️{% endif %}
                     </div>
@@ -39,8 +39,10 @@
                         <span class="producto-categoria">
                             {{ producto.categoria }}
                         </span>
-                        {% if not producto.disponible %}
+                        {% if not producto.disponible or producto.existencia == 0 %}
                         <span class="producto-estado">Agotado</span>
+                        {% else %}
+                        <span class="producto-existencia">Disponibles: {{ producto.existencia }}</span>
                         {% endif %}
                         <h3>{{ producto.nombre }}</h3>
                         <p>{{ producto.descripcion }}</p>
@@ -54,7 +56,9 @@
                                 data-id="{{ producto.id }}"
                                 data-nombre="{{ producto.nombre }}"
                                 data-precio="{{ producto.precio }}"
-                                {% if not producto.disponible %}disabled{% endif %}
+                                data-existencia="{{ producto.existencia }}"
+                                data-disponible="{{ producto.disponible }}"
+                                {% if not producto.disponible or producto.existencia == 0 %}disabled{% endif %}
                             >
                                 Agregar
                             </button>

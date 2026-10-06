@@ -300,6 +300,19 @@ a {
     text-transform: uppercase;
 }
 
+.producto-existencia {
+    margin-top: .35rem;
+    color: #657068;
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.control-cantidad button:disabled {
+    color: #777d77;
+    background: #d5d9d5;
+    cursor: not-allowed;
+}
+
 .producto-informacion p {
     margin-top: 0;
 }

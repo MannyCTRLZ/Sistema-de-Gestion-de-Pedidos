@@ -175,9 +175,14 @@ Cada producto debe manejar como mínimo:
 - Precio.
 - Categoría.
 - Disponibilidad.
+- Existencia disponible.
 
 Los productos no disponibles permanecen visibles en el menú con la etiqueta
 "Agotado" y el botón para agregarlos deshabilitado.
+
+La cantidad seleccionada no puede superar la existencia registrada. Al
+confirmar un pedido, el sistema descuenta las unidades y marca el producto como
+no disponible cuando la existencia llega a cero.
 
 ### Carrito
 Debe permitir:
