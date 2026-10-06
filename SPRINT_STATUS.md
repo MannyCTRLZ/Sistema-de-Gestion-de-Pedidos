@@ -4,64 +4,60 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 4 — Carrito de compras**
+**Sprint 5 — Creación del pedido**
 
-Estado: **COMPLETADO**
+Estado: **EN PROGRESO**
 
 ## Objetivo del sprint
 
-Permitir que el estudiante construya y revise su pedido antes de proporcionar su nombre.
+Registrar pedidos reales a partir del carrito y entregar un número de pedido al estudiante.
 
 ## Incremento esperado
 
-Carrito interactivo que permite agregar y eliminar productos, modificar cantidades y calcular el total.
+Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 
 ## Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Abrir y cerrar el panel del carrito | Equipo | Integrada en `main` | `main` |
-| Agregar productos disponibles | Equipo | Integrada en `main` | `main` |
-| Agrupar productos repetidos | Equipo | Integrada en `main` | `main` |
-| Aumentar y disminuir cantidades | Equipo | Integrada en `main` | `main` |
-| Eliminar un producto | Equipo | Integrada en `main` | `main` |
-| Vaciar el carrito | Equipo | Integrada en `main` | `main` |
-| Calcular contador y total | Equipo | Integrada en `main` | `main` |
-| Adaptar el panel a dispositivos móviles | Equipo | Integrada en `main` | `main` |
-| Probar el flujo completo del carrito | Equipo | Integrada en `main` | `main` |
+| Agregar el botón para continuar desde el carrito | Equipo | Integrada en `main` | `main` |
+| Crear el formulario para el nombre del pedido | Equipo | Integrada en `main` | `main` |
+| Validar que el nombre no esté vacío | Equipo | Integrada en `main` | `main` |
+| Mostrar el resumen previo del pedido | Equipo | Integrada en `main` | `main` |
+| Permitir editar el nombre y volver al carrito | Equipo | Integrada en `main` | `main` |
+| Crear las tablas `pedidos` y `detalle_pedido` | Por asignar | Pendiente | Por definir |
+| Validar productos y precios en Flask | Por asignar | Pendiente | Por definir |
+| Guardar el pedido y su detalle | Por asignar | Pendiente | Por definir |
+| Generar el número de pedido | Por asignar | Pendiente | Por definir |
+| Mostrar la confirmación final | Por asignar | Pendiente | Por definir |
+| Probar la persistencia completa | Por asignar | Pendiente | Por definir |
 
 ## Trabajo integrado en `main`
 
-- El botón del encabezado abre un panel lateral con el contenido del carrito.
-- Los productos repetidos se agrupan y aumentan su cantidad.
-- Cada producto permite aumentar, disminuir o eliminar su cantidad.
-- El contador representa el total de unidades seleccionadas.
-- El total se recalcula después de cada cambio.
-- El carrito se puede vaciar completamente.
-- Los productos agotados no se pueden agregar.
-- El panel se adapta al ancho disponible en dispositivos móviles.
+- El carrito incluye un botón para continuar que solo se habilita cuando contiene productos.
+- El estudiante puede ingresar únicamente el nombre que usará en caja.
+- El formulario rechaza nombres vacíos.
+- La interfaz muestra un resumen con nombre, productos, cantidades y total.
+- El estudiante puede editar el nombre o regresar al carrito sin perder su selección.
+- La interfaz indica claramente que el registro y el número dependen de la conexión pendiente con Flask.
 
 ## Trabajo verificado localmente
 
-- Se agregaron dos productos y se comprobó un contador de tres unidades.
-- Se verificó el total de dos burritos y un plato de chilaquiles: `$170.00`.
-- Se probaron los controles para aumentar y disminuir cantidades.
-- Se eliminó un producto y se verificó el nuevo total.
-- Se vació el carrito y el total regresó a `$0.00`.
-- Se confirmó que los botones de productos agotados permanecen deshabilitados.
+- Se comprobó que el botón para continuar aparece habilitado con productos en el carrito.
+- Se verificó el mensaje de error al intentar continuar con un nombre vacío.
+- El resumen mostró correctamente el nombre `María`, tres unidades y un total de `$170.00`.
+- Se verificó que editar el nombre conserva los datos capturados.
+- Se regresó al carrito y se confirmó que los productos y cantidades permanecen intactos.
 
 ## Sprint Review
 
-- El estudiante puede construir y revisar un carrito completo desde el menú.
-- Las cantidades, el contador y el total se actualizan correctamente.
-- El estado vacío y la acción de vaciar carrito funcionan correctamente.
-- El incremento cumple el objetivo definido para el Sprint 4 y quedó integrado localmente en `main`.
+- La parte frontend del flujo Nombre → Revisión está terminada y probada.
+- El sprint permanece abierto porque todavía no se almacenan pedidos ni se genera un número real.
 
 ## Sprint Retrospective
 
-- La delegación de eventos simplificó los controles creados dinámicamente dentro del carrito.
-- Mantener el carrito únicamente en JavaScript permitió completar el incremento sin adelantar la creación de pedidos.
-- En el Sprint 5 será necesario validar nuevamente precios y disponibilidad antes de guardar el pedido.
+- Separar la revisión visual del guardado permitió avanzar sin simular una confirmación inexistente.
+- Cuando se retome el backend, Flask deberá recalcular precios y disponibilidad en vez de confiar en JavaScript.
 
 ## Impedimentos
 
@@ -69,12 +65,13 @@ Ninguno documentado.
 
 ## Criterios para cerrar el sprint
 
-- Se pueden agregar varios productos al carrito.
-- Se pueden aumentar y disminuir cantidades.
-- Se puede eliminar un producto y vaciar todo el carrito.
-- El contador y el total se actualizan correctamente.
-- Los productos agotados no se pueden agregar.
-- El panel funciona correctamente en computadora y celular.
+- Existen las tablas `pedidos` y `detalle_pedido`.
+- El nombre del pedido se valida en frontend y backend.
+- Flask valida productos, disponibilidad, cantidades y precios.
+- El pedido y sus detalles se guardan en una sola transacción.
+- Se genera un número de pedido único.
+- La confirmación final muestra el número y el total real almacenado.
+- El pedido queda registrado como `PENDIENTE DE PAGO`.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización
@@ -85,6 +82,24 @@ Ninguno documentado.
 - Al cerrar el sprint, registrar el resultado de la Review y la Retrospective antes de preparar el siguiente Sprint Backlog.
 
 ## Sprints anteriores
+
+### Sprint 4 — Carrito de compras
+
+Estado: **COMPLETADO**
+
+Incremento verificado en `main`: el estudiante puede agregar productos, modificar cantidades, eliminar, vaciar y revisar el total de su carrito.
+
+#### Sprint Review
+
+- El contador y el total se actualizan después de cada cambio.
+- Los productos repetidos se agrupan y los agotados no pueden agregarse.
+- El panel lateral funciona en escritorio y se adapta a pantallas pequeñas.
+
+#### Sprint Retrospective
+
+- La delegación de eventos simplificó los controles creados dinámicamente.
+- Mantener el carrito en JavaScript evitó adelantar la persistencia del Sprint 5.
+- El servidor deberá validar nuevamente todos los datos antes de guardar pedidos.
 
 ### Sprint 3 — Menú de la cafetería
 
