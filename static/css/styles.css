@@ -479,7 +479,8 @@ a {
 
 .carrito-continuar,
 .boton-confirmar,
-.boton-volver {
+.boton-volver,
+.boton-confirmar-pedido {
     width: 100%;
     padding: .8rem 1rem;
     border: 0;
@@ -615,6 +616,31 @@ a {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .75rem;
+}
+
+.boton-confirmar-pedido {
+    grid-column: 1 / -1;
+}
+
+.boton-confirmar-pedido:disabled {
+    background: #a9aea9;
+    cursor: wait;
+}
+
+.pedido-confirmado-datos {
+    display: grid;
+    gap: .75rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: var(--verde-claro);
+}
+
+.pedido-confirmado-datos p {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
 }
 
 .boton-editar {

@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 5 — Creación del pedido**
 
-Estado: **EN PROGRESO**
+Estado: **COMPLETADO**
 
 ## Objetivo del sprint
 
@@ -25,12 +25,12 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 | Validar que el nombre no esté vacío | Equipo | Integrada en `main` | `main` |
 | Mostrar el resumen previo del pedido | Equipo | Integrada en `main` | `main` |
 | Permitir editar el nombre y volver al carrito | Equipo | Integrada en `main` | `main` |
-| Crear las tablas `pedidos` y `detalle_pedido` | Por asignar | Pendiente | Por definir |
-| Validar productos y precios en Flask | Por asignar | Pendiente | Por definir |
-| Guardar el pedido y su detalle | Por asignar | Pendiente | Por definir |
-| Generar el número de pedido | Por asignar | Pendiente | Por definir |
-| Mostrar la confirmación final | Por asignar | Pendiente | Por definir |
-| Probar la persistencia completa | Por asignar | Pendiente | Por definir |
+| Crear las tablas `pedidos` y `detalle_pedido` | Equipo | Integrada en `main` | `main` |
+| Validar productos y precios en Flask | Equipo | Integrada en `main` | `main` |
+| Guardar el pedido y su detalle | Equipo | Integrada en `main` | `main` |
+| Generar el número de pedido | Equipo | Integrada en `main` | `main` |
+| Mostrar la confirmación final | Equipo | Integrada en `main` | `main` |
+| Probar la persistencia completa | Equipo | Integrada en `main` | `main` |
 
 ## Trabajo integrado en `main`
 
@@ -39,7 +39,10 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 - El formulario rechaza nombres vacíos.
 - La interfaz muestra un resumen con nombre, productos, cantidades y total.
 - El estudiante puede editar el nombre o regresar al carrito sin perder su selección.
-- La interfaz indica claramente que el registro y el número dependen de la conexión pendiente con Flask.
+- Flask recibe el nombre y las cantidades mediante `POST /api/pedidos`.
+- Los precios y la disponibilidad se validan nuevamente desde SQLite.
+- El pedido y sus detalles se guardan en una sola transacción.
+- La confirmación final muestra número, estado y total calculados por el servidor.
 
 ## Trabajo verificado localmente
 
@@ -48,16 +51,21 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 - El resumen mostró correctamente el nombre `María`, tres unidades y un total de `$170.00`.
 - Se verificó que editar el nombre conserva los datos capturados.
 - Se regresó al carrito y se confirmó que los productos y cantidades permanecen intactos.
+- Se verificó la creación de `pedidos` y `detalle_pedido` con claves foráneas activas.
+- Flask recalculó el total desde SQLite y rechazó un producto agotado sin guardar datos parciales.
+- El flujo completo generó el pedido `#0001`, con estado `PENDIENTE DE PAGO` y total `$170.00`.
+- La base temporal conservó un pedido y dos detalles sin violaciones de integridad referencial.
 
 ## Sprint Review
 
-- La parte frontend del flujo Nombre → Revisión está terminada y probada.
-- El sprint permanece abierto porque todavía no se almacenan pedidos ni se genera un número real.
+- Se verificó el flujo completo Menú → Carrito → Nombre → Número de pedido.
+- El incremento cumple el objetivo del Sprint 5 y quedó integrado localmente en `main`.
 
 ## Sprint Retrospective
 
-- Separar la revisión visual del guardado permitió avanzar sin simular una confirmación inexistente.
-- Cuando se retome el backend, Flask deberá recalcular precios y disponibilidad en vez de confiar en JavaScript.
+- Separar la revisión visual del guardado permitió conectar el backend de forma incremental.
+- Recalcular precios y disponibilidad en Flask evita confiar en datos modificables del navegador.
+- Las pruebas con una base temporal permitieron validar transacciones sin contaminar los datos locales.
 
 ## Impedimentos
 
