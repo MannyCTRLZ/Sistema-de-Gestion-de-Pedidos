@@ -9,6 +9,20 @@ const listaCarrito = document.querySelector("#carrito-productos");
 const mensajeVacio = document.querySelector("#carrito-vacio");
 const totalCarrito = document.querySelector("#carrito-total");
 const botonVaciar = document.querySelector("#carrito-vaciar");
+const botonContinuar = document.querySelector("#carrito-continuar");
+const fondoPedido = document.querySelector("#pedido-fondo");
+const modalPedido = document.querySelector("#pedido-modal");
+const botonCerrarPedido = document.querySelector("#pedido-cerrar");
+const pasoNombre = document.querySelector("#paso-nombre");
+const pasoResumen = document.querySelector("#paso-resumen");
+const formularioNombre = document.querySelector("#formulario-nombre");
+const campoNombre = document.querySelector("#nombre-cliente");
+const errorNombre = document.querySelector("#nombre-error");
+const resumenNombre = document.querySelector("#resumen-nombre");
+const resumenPedido = document.querySelector("#pedido-resumen");
+const resumenTotal = document.querySelector("#resumen-total");
+const botonEditarNombre = document.querySelector("#editar-nombre");
+const botonVolverCarrito = document.querySelector("#volver-carrito");
 
 function formatearPrecio(precio) {
     return `$${precio.toFixed(2)}`;
@@ -26,6 +40,27 @@ function cerrarCarrito() {
     panelCarrito.classList.remove("carrito-panel-abierto");
     panelCarrito.setAttribute("aria-hidden", "true");
     fondoCarrito.hidden = true;
+    document.body.classList.remove("carrito-visible");
+    botonCarrito.focus();
+}
+
+function abrirFormularioPedido() {
+    cerrarCarrito();
+    pasoNombre.hidden = false;
+    pasoResumen.hidden = true;
+    errorNombre.hidden = true;
+    campoNombre.removeAttribute("aria-invalid");
+    modalPedido.classList.add("pedido-modal-abierto");
+    modalPedido.setAttribute("aria-hidden", "false");
+    fondoPedido.hidden = false;
+    document.body.classList.add("carrito-visible");
+    campoNombre.focus();
+}
+
+function cerrarFormularioPedido() {
+    modalPedido.classList.remove("pedido-modal-abierto");
+    modalPedido.setAttribute("aria-hidden", "true");
+    fondoPedido.hidden = true;
     document.body.classList.remove("carrito-visible");
     botonCarrito.focus();
 }
@@ -73,6 +108,31 @@ function actualizarCarrito() {
     totalCarrito.textContent = formatearPrecio(precioTotal);
     mensajeVacio.hidden = carrito.length > 0;
     botonVaciar.disabled = carrito.length === 0;
+    botonContinuar.disabled = carrito.length === 0;
+}
+
+function mostrarResumenPedido(nombre) {
+    resumenNombre.textContent = nombre;
+    resumenPedido.innerHTML = "";
+
+    carrito.forEach((producto) => {
+        const renglon = document.createElement("p");
+        const descripcion = document.createElement("span");
+        const subtotal = document.createElement("strong");
+
+        descripcion.textContent = `${producto.cantidad} × ${producto.nombre}`;
+        subtotal.textContent = formatearPrecio(producto.precio * producto.cantidad);
+        renglon.append(descripcion, subtotal);
+        resumenPedido.appendChild(renglon);
+    });
+
+    const total = carrito.reduce(
+        (acumulado, producto) => acumulado + producto.precio * producto.cantidad,
+        0,
+    );
+    resumenTotal.textContent = formatearPrecio(total);
+    pasoNombre.hidden = true;
+    pasoResumen.hidden = false;
 }
 
 function agregarProducto(boton) {
@@ -150,9 +210,49 @@ botonVaciar.addEventListener("click", () => {
     actualizarCarrito();
 });
 
+botonContinuar.addEventListener("click", abrirFormularioPedido);
+botonCerrarPedido.addEventListener("click", cerrarFormularioPedido);
+fondoPedido.addEventListener("click", cerrarFormularioPedido);
+
+formularioNombre.addEventListener("submit", (evento) => {
+    evento.preventDefault();
+    const nombre = campoNombre.value.trim();
+
+    if (nombre === "") {
+        errorNombre.hidden = false;
+        campoNombre.setAttribute("aria-invalid", "true");
+        campoNombre.focus();
+        return;
+    }
+
+    errorNombre.hidden = true;
+    campoNombre.removeAttribute("aria-invalid");
+    mostrarResumenPedido(nombre);
+});
+
+campoNombre.addEventListener("input", () => {
+    if (campoNombre.value.trim() !== "") {
+        errorNombre.hidden = true;
+        campoNombre.removeAttribute("aria-invalid");
+    }
+});
+
+botonEditarNombre.addEventListener("click", () => {
+    pasoResumen.hidden = true;
+    pasoNombre.hidden = false;
+    campoNombre.focus();
+});
+
+botonVolverCarrito.addEventListener("click", () => {
+    cerrarFormularioPedido();
+    abrirCarrito();
+});
+
 document.addEventListener("keydown", (evento) => {
     if (evento.key === "Escape" && panelCarrito.classList.contains("carrito-panel-abierto")) {
         cerrarCarrito();
+    } else if (evento.key === "Escape" && modalPedido.classList.contains("pedido-modal-abierto")) {
+        cerrarFormularioPedido();
     }
 });
 

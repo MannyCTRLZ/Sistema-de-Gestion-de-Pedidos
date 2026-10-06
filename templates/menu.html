@@ -92,8 +92,57 @@
             <button class="carrito-vaciar" id="carrito-vaciar" type="button" disabled>
                 Vaciar carrito
             </button>
+            <button class="carrito-continuar" id="carrito-continuar" type="button" disabled>
+                Continuar pedido
+            </button>
         </div>
     </aside>
+
+    <div class="pedido-fondo" id="pedido-fondo" hidden></div>
+
+    <section class="pedido-modal" id="pedido-modal" aria-labelledby="titulo-pedido" aria-hidden="true">
+        <button class="pedido-cerrar" id="pedido-cerrar" type="button" aria-label="Cerrar">×</button>
+
+        <div id="paso-nombre">
+            <p class="presentacion-etiqueta">Identifica tu pedido</p>
+            <h2 id="titulo-pedido">¿A nombre de quién?</h2>
+            <p>Ingresa únicamente el nombre que mencionarás al pagar en caja.</p>
+
+            <form id="formulario-nombre" novalidate>
+                <label for="nombre-cliente">Nombre para el pedido</label>
+                <input
+                    id="nombre-cliente"
+                    name="nombre-cliente"
+                    type="text"
+                    maxlength="50"
+                    autocomplete="name"
+                    placeholder="Ejemplo: María"
+                    required
+                >
+                <p class="campo-error" id="nombre-error" role="alert" hidden>
+                    Escribe un nombre para continuar.
+                </p>
+                <button class="boton-confirmar" type="submit">Revisar pedido</button>
+            </form>
+        </div>
+
+        <div id="paso-resumen" hidden>
+            <p class="presentacion-etiqueta">Revisa tus datos</p>
+            <h2>Pedido de <span id="resumen-nombre"></span></h2>
+            <div class="pedido-resumen" id="pedido-resumen"></div>
+            <div class="pedido-total">
+                <span>Total</span>
+                <strong id="resumen-total">$0.00</strong>
+            </div>
+            <p class="pedido-pendiente">
+                El registro y el número de pedido se habilitarán al conectar esta pantalla con Flask.
+            </p>
+            <div class="pedido-acciones">
+                <button class="boton-editar" id="editar-nombre" type="button">Editar nombre</button>
+                <button class="boton-volver" id="volver-carrito" type="button">Volver al carrito</button>
+            </div>
+        </div>
+    </section>
 
     <footer class="pie-pagina">
         <p>Cafetería Universitaria</p>
