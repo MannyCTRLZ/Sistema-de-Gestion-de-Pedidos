@@ -25,12 +25,12 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 | Validar que el nombre no esté vacío | Equipo | Integrada en `main` | `main` |
 | Mostrar el resumen previo del pedido | Equipo | Integrada en `main` | `main` |
 | Permitir editar el nombre y volver al carrito | Equipo | Integrada en `main` | `main` |
-| Crear las tablas `pedidos` y `detalle_pedido` | Por asignar | Pendiente | Por definir |
-| Validar productos y precios en Flask | Por asignar | Pendiente | Por definir |
-| Guardar el pedido y su detalle | Por asignar | Pendiente | Por definir |
-| Generar el número de pedido | Por asignar | Pendiente | Por definir |
-| Mostrar la confirmación final | Por asignar | Pendiente | Por definir |
-| Probar la persistencia completa | Por asignar | Pendiente | Por definir |
+| Crear las tablas `pedidos` y `detalle_pedido` | Equipo | Terminada en rama | `frontend` |
+| Validar productos y precios en Flask | Equipo | Terminada en rama | `frontend` |
+| Guardar el pedido y su detalle | Equipo | Terminada en rama | `frontend` |
+| Generar el número de pedido | Equipo | Terminada en rama | `frontend` |
+| Mostrar la confirmación final | Equipo | Terminada en rama | `frontend` |
+| Probar la persistencia completa | Equipo | Terminada en rama | `frontend` |
 
 ## Trabajo integrado en `main`
 
@@ -48,6 +48,10 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 - El resumen mostró correctamente el nombre `María`, tres unidades y un total de `$170.00`.
 - Se verificó que editar el nombre conserva los datos capturados.
 - Se regresó al carrito y se confirmó que los productos y cantidades permanecen intactos.
+- Se verificó la creación de `pedidos` y `detalle_pedido` con claves foráneas activas.
+- Flask recalculó el total desde SQLite y rechazó un producto agotado sin guardar datos parciales.
+- El flujo completo generó el pedido `#0001`, con estado `PENDIENTE DE PAGO` y total `$170.00`.
+- La base temporal conservó un pedido y dos detalles sin violaciones de integridad referencial.
 
 ## Sprint Review
 

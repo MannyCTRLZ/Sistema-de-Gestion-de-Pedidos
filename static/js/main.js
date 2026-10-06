@@ -23,6 +23,13 @@ const resumenPedido = document.querySelector("#pedido-resumen");
 const resumenTotal = document.querySelector("#resumen-total");
 const botonEditarNombre = document.querySelector("#editar-nombre");
 const botonVolverCarrito = document.querySelector("#volver-carrito");
+const botonConfirmarPedido = document.querySelector("#confirmar-pedido");
+const errorPedido = document.querySelector("#pedido-error");
+const pasoConfirmacion = document.querySelector("#paso-confirmacion");
+const numeroPedido = document.querySelector("#numero-pedido");
+const estadoPedido = document.querySelector("#estado-pedido");
+const totalConfirmado = document.querySelector("#total-confirmado");
+const botonNuevoPedido = document.querySelector("#nuevo-pedido");
 
 function formatearPrecio(precio) {
     return `$${precio.toFixed(2)}`;
@@ -48,6 +55,7 @@ function abrirFormularioPedido() {
     cerrarCarrito();
     pasoNombre.hidden = false;
     pasoResumen.hidden = true;
+    pasoConfirmacion.hidden = true;
     errorNombre.hidden = true;
     campoNombre.removeAttribute("aria-invalid");
     modalPedido.classList.add("pedido-modal-abierto");
@@ -133,6 +141,46 @@ function mostrarResumenPedido(nombre) {
     resumenTotal.textContent = formatearPrecio(total);
     pasoNombre.hidden = true;
     pasoResumen.hidden = false;
+    errorPedido.hidden = true;
+}
+
+async function confirmarPedido() {
+    botonConfirmarPedido.disabled = true;
+    botonConfirmarPedido.textContent = "Guardando...";
+    errorPedido.hidden = true;
+
+    try {
+        const respuesta = await fetch("/api/pedidos", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                nombre_cliente: campoNombre.value.trim(),
+                productos: carrito.map((producto) => ({
+                    id: producto.id,
+                    cantidad: producto.cantidad,
+                })),
+            }),
+        });
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(datos.error || "No fue posible registrar el pedido.");
+        }
+
+        numeroPedido.textContent = `#${String(datos.numero_pedido).padStart(4, "0")}`;
+        estadoPedido.textContent = datos.estado;
+        totalConfirmado.textContent = formatearPrecio(datos.total);
+        pasoResumen.hidden = true;
+        pasoConfirmacion.hidden = false;
+        carrito.length = 0;
+        actualizarCarrito();
+    } catch (error) {
+        errorPedido.textContent = error.message;
+        errorPedido.hidden = false;
+    } finally {
+        botonConfirmarPedido.disabled = false;
+        botonConfirmarPedido.textContent = "Confirmar pedido";
+    }
 }
 
 function agregarProducto(boton) {
@@ -246,6 +294,13 @@ botonEditarNombre.addEventListener("click", () => {
 botonVolverCarrito.addEventListener("click", () => {
     cerrarFormularioPedido();
     abrirCarrito();
+});
+
+botonConfirmarPedido.addEventListener("click", confirmarPedido);
+
+botonNuevoPedido.addEventListener("click", () => {
+    campoNombre.value = "";
+    cerrarFormularioPedido();
 });
 
 document.addEventListener("keydown", (evento) => {

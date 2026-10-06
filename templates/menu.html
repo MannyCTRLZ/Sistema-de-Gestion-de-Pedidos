@@ -135,12 +135,27 @@
                 <strong id="resumen-total">$0.00</strong>
             </div>
             <p class="pedido-pendiente">
-                El registro y el número de pedido se habilitarán al conectar esta pantalla con Flask.
+                Al confirmar, tu pedido quedará pendiente de pago en caja.
             </p>
+            <p class="campo-error" id="pedido-error" role="alert" hidden></p>
             <div class="pedido-acciones">
                 <button class="boton-editar" id="editar-nombre" type="button">Editar nombre</button>
                 <button class="boton-volver" id="volver-carrito" type="button">Volver al carrito</button>
+                <button class="boton-confirmar-pedido" id="confirmar-pedido" type="button">
+                    Confirmar pedido
+                </button>
             </div>
+        </div>
+
+        <div id="paso-confirmacion" hidden>
+            <p class="presentacion-etiqueta">Pedido registrado</p>
+            <h2>Tu número es <span id="numero-pedido"></span></h2>
+            <p>Presenta este número en caja para realizar el pago.</p>
+            <div class="pedido-confirmado-datos">
+                <p><span>Estado</span><strong id="estado-pedido"></strong></p>
+                <p><span>Total</span><strong id="total-confirmado"></strong></p>
+            </div>
+            <button class="boton-volver" id="nuevo-pedido" type="button">Volver al menú</button>
         </div>
     </section>
 
