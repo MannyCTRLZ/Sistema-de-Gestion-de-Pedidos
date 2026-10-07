@@ -59,24 +59,6 @@ def crear_tablas():
     conexion.close()
 
 
-<<<<<<< HEAD
-def insertar_productos_prueba():
-    conexion = obtener_conexion()
-    cantidad_productos = conexion.execute(
-        "SELECT COUNT(*) FROM productos"
-    ).fetchone()[0]
-
-    if cantidad_productos == 0:
-        conexion.executemany(
-            """
-            INSERT INTO productos
-                (nombre, descripcion, precio, categoria, disponible)
-            VALUES (?, ?, ?, ?, ?)
-            """,
-            PRODUCTOS_PRUEBA,
-        )
-        conexion.commit()
-=======
 def insertar_productos_iniciales():
     conexion = obtener_conexion()
 
@@ -153,25 +135,10 @@ def insertar_productos_iniciales():
             """, producto)
 
     conexion.commit()
->>>>>>> frontend
 
     conexion.close()
 
 
-<<<<<<< HEAD
-def obtener_productos_disponibles():
-    conexion = obtener_conexion()
-    productos = conexion.execute(
-        """
-        SELECT id, nombre, descripcion, precio, categoria
-        FROM productos
-        WHERE disponible = 1
-        ORDER BY categoria, nombre
-        """
-    ).fetchall()
-    conexion.close()
-
-=======
 def obtener_productos():
     conexion = obtener_conexion()
     productos = conexion.execute("""
@@ -180,5 +147,4 @@ def obtener_productos():
         ORDER BY categoria, nombre
     """).fetchall()
     conexion.close()
->>>>>>> frontend
     return [dict(producto) for producto in productos]
