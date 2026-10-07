@@ -88,7 +88,7 @@ function actualizarCarrito() {
                 <div class="control-cantidad" aria-label="Cantidad de ${producto.nombre}">
                     <button type="button" data-accion="disminuir" data-id="${producto.id}" aria-label="Disminuir ${producto.nombre}">−</button>
                     <span>${producto.cantidad}</span>
-                    <button type="button" data-accion="aumentar" data-id="${producto.id}" aria-label="Aumentar ${producto.nombre}" ${producto.cantidad >= producto.existencia ? "disabled" : ""}>+</button>
+                    <button type="button" data-accion="aumentar" data-id="${producto.id}" aria-label="Aumentar ${producto.nombre}">+</button>
                 </div>
                 <strong>${formatearPrecio(producto.precio * producto.cantidad)}</strong>
                 <button class="carrito-eliminar" type="button" data-accion="eliminar" data-id="${producto.id}">
@@ -117,16 +117,6 @@ function actualizarCarrito() {
     mensajeVacio.hidden = carrito.length > 0;
     botonVaciar.disabled = carrito.length === 0;
     botonContinuar.disabled = carrito.length === 0;
-
-    document.querySelectorAll(".boton-agregar").forEach((boton) => {
-        const producto = carrito.find((item) => item.id === Number(boton.dataset.id));
-        const existencia = Number(boton.dataset.existencia);
-        const disponible = boton.dataset.disponible === "1";
-        const alcanzoLimite = producto && producto.cantidad >= existencia;
-
-        boton.disabled = !disponible || existencia === 0 || alcanzoLimite;
-        boton.textContent = alcanzoLimite ? "Máximo agregado" : "Agregar";
-    });
 }
 
 function mostrarResumenPedido(nombre) {
@@ -198,16 +188,12 @@ function agregarProducto(boton) {
     const productoExistente = carrito.find((producto) => producto.id === id);
 
     if (productoExistente) {
-        if (productoExistente.cantidad >= productoExistente.existencia) {
-            return;
-        }
         productoExistente.cantidad += 1;
     } else {
         carrito.push({
             id,
             nombre: boton.dataset.nombre,
             precio: Number(boton.dataset.precio),
-            existencia: Number(boton.dataset.existencia),
             cantidad: 1,
         });
     }

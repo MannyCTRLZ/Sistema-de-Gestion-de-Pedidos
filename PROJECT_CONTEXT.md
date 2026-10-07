@@ -175,14 +175,13 @@ Cada producto debe manejar como mínimo:
 - Precio.
 - Categoría.
 - Disponibilidad.
-- Existencia disponible.
 
 Los productos no disponibles permanecen visibles en el menú con la etiqueta
 "Agotado" y el botón para agregarlos deshabilitado.
 
-La cantidad seleccionada no puede superar la existencia registrada. Al
-confirmar un pedido, el sistema descuenta las unidades y marca el producto como
-no disponible cuando la existencia llega a cero.
+La disponibilidad se maneja como un estado de sí/no. No se administran
+cantidades de inventario: cuando falten insumos, el personal desactivará el
+producto desde el módulo de administración.
 
 ### Carrito
 Debe permitir:

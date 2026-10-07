@@ -31,7 +31,7 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 | Generar el número de pedido | Equipo | Integrada en `main` | `main` |
 | Mostrar la confirmación final | Equipo | Integrada en `main` | `main` |
 | Probar la persistencia completa | Equipo | Integrada en `main` | `main` |
-| Limitar el carrito según la existencia y descontarla al confirmar | Equipo | Integrada en `main` | `main` |
+| Manejar la disponibilidad como estado manual, sin inventario numérico | Equipo | Integrada en `main` | `main` |
 
 ## Trabajo integrado en `main`
 
@@ -44,7 +44,7 @@ Flujo Menú → Carrito → Nombre → Número de pedido funcional.
 - Los precios y la disponibilidad se validan nuevamente desde SQLite.
 - El pedido y sus detalles se guardan en una sola transacción.
 - La confirmación final muestra número, estado y total calculados por el servidor.
-- El carrito impide superar la existencia y Flask descuenta el inventario dentro de la transacción.
+- Los productos se aceptan únicamente cuando están dados de alta y marcados como disponibles.
 
 ## Trabajo verificado localmente
 

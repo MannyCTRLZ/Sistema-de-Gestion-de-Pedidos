@@ -22,8 +22,7 @@ def crear_tablas():
             descripcion TEXT,
             precio REAL NOT NULL,
             categoria TEXT NOT NULL,
-            disponible INTEGER NOT NULL DEFAULT 1,
-            existencia INTEGER NOT NULL DEFAULT 10 CHECK (existencia >= 0)
+            disponible INTEGER NOT NULL DEFAULT 1
         )
     """)
 
@@ -31,9 +30,9 @@ def crear_tablas():
         columna["name"]
         for columna in conexion.execute("PRAGMA table_info(productos)").fetchall()
     }
-    if "existencia" not in columnas_productos:
+    if "existencia" in columnas_productos:
         conexion.execute(
-            "ALTER TABLE productos ADD COLUMN existencia INTEGER NOT NULL DEFAULT 10"
+            "ALTER TABLE productos DROP COLUMN existencia"
         )
 
     conexion.execute("""
@@ -92,64 +91,56 @@ def insertar_productos_iniciales():
             "Tacos de pescado capeados con lechuga, col y aderezo de la casa.",
             65.00,
             "Alimentos",
-            1,
-            10
+            1
         ),
         (
             "Burrito",
             "Burrito de tortilla de harina con frijoles, carne y queso.",
             55.00,
             "Alimentos",
-            1,
-            10
+            1
         ),
         (
             "Refresco",
             "Refresco frío de 600 ml. Diferentes sabores disponibles.",
             25.00,
             "Bebidas",
-            1,
-            10
+            1
         ),
         (
             "Agua fresca",
             "Variedad de sabores.",
             20.00,
             "Bebidas",
-            1,
-            10
+            1
         ),
         (
             "Café",
             "Café americano recién preparado.",
             25.00,
             "Bebidas",
-            1,
-            10
+            1
         ),
         (
             "Sándwich sencillo",
             "Sándwich de jamón y queso con lechuga y tomate.",
             45.00,
             "Alimentos",
-            1,
-            10
+            1
         ),
         (
             "Chilaquiles",
             "Totopos con salsa, crema, queso y cebolla.",
             60.00,
             "Alimentos",
-            1,
-            10
+            1
         ),
         (
             "Huevos revueltos",
             "Huevos revueltos acompañados de frijoles.",
             50.00,
             "Alimentos",
-            1,
-            10
+            1
         )
     ]
 
@@ -162,8 +153,8 @@ def insertar_productos_iniciales():
         if existe is None:
             conexion.execute("""
                 INSERT INTO productos
-                (nombre, descripcion, precio, categoria, disponible, existencia)
-                VALUES (?, ?, ?, ?, ?, ?)
+                (nombre, descripcion, precio, categoria, disponible)
+                VALUES (?, ?, ?, ?, ?)
             """, producto)
 
     conexion.commit()
@@ -174,7 +165,7 @@ def insertar_productos_iniciales():
 def obtener_productos():
     conexion = obtener_conexion()
     productos = conexion.execute("""
-        SELECT id, nombre, descripcion, precio, categoria, disponible, existencia
+        SELECT id, nombre, descripcion, precio, categoria, disponible
         FROM productos
         ORDER BY categoria, nombre
     """).fetchall()
@@ -210,31 +201,15 @@ def crear_pedido(nombre_cliente, productos):
 
             for producto_id, cantidad in cantidades.items():
                 producto = conexion.execute("""
-                    SELECT precio, existencia FROM productos
-                    WHERE id = ? AND disponible = 1 AND existencia > 0
+                    SELECT precio FROM productos
+                    WHERE id = ? AND disponible = 1
                 """, (producto_id,)).fetchone()
                 if producto is None:
                     raise ValueError(f"El producto {producto_id} no está disponible.")
-                if cantidad > producto["existencia"]:
-                    raise ValueError(
-                        f"Solo hay {producto['existencia']} unidades disponibles "
-                        f"del producto {producto_id}."
-                    )
 
                 precio = Decimal(str(producto["precio"])).quantize(Decimal("0.01"))
                 total += precio * cantidad
                 detalles.append((producto_id, cantidad, float(precio)))
-
-            for producto_id, cantidad in cantidades.items():
-                conexion.execute("""
-                    UPDATE productos
-                    SET existencia = existencia - ?,
-                        disponible = CASE
-                            WHEN existencia - ? = 0 THEN 0
-                            ELSE disponible
-                        END
-                    WHERE id = ?
-                """, (cantidad, cantidad, producto_id))
 
             estado = "PENDIENTE DE PAGO"
             cursor = conexion.execute("""
