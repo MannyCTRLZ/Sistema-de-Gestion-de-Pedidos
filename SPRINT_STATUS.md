@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 6 — Módulo de caja**
 
-Estado: **EN PROGRESO**
+Estado: **COMPLETADO**
 
 ## Objetivo del sprint
 
@@ -25,10 +25,10 @@ Un pedido aparece en caja con su detalle y puede cambiar de Pendiente de pago a 
 | Mostrar número, cliente, fecha, productos, total y estado | Equipo | Integrada en `main` | `main` |
 | Mostrar un resumen de pedidos por estado | Equipo | Integrada en `main` | `main` |
 | Adaptar el panel de caja a celular | Equipo | Integrada en `main` | `main` |
-| Buscar un pedido por número | Equipo | Pendiente | — |
-| Confirmar el pago físico de un pedido pendiente | Equipo | Pendiente | — |
-| Cancelar un pedido pendiente | Equipo | Pendiente | — |
-| Probar los cambios de estado y sus validaciones | Equipo | Pendiente | — |
+| Buscar un pedido por número | Equipo | Integrada en `main` | `main` |
+| Confirmar el pago físico de un pedido pendiente | Equipo | Integrada en `main` | `main` |
+| Cancelar un pedido pendiente | Equipo | Integrada en `main` | `main` |
+| Probar los cambios de estado y sus validaciones | Equipo | Integrada en `main` | `main` |
 
 ## Trabajo integrado en `main`
 
@@ -38,6 +38,9 @@ Un pedido aparece en caja con su detalle y puede cambiar de Pendiente de pago a 
 - Los estados tienen indicadores visuales diferentes para facilitar su identificación.
 - La interfaz muestra un mensaje claro cuando todavía no existen pedidos.
 - El diseño se adapta a pantallas de escritorio y dispositivos pequeños.
+- El personal puede buscar pedidos por número y regresar fácilmente a la lista completa.
+- Las tarjetas de pedidos pendientes permiten confirmar el pago físico o cancelar con un diálogo de confirmación.
+- Flask cambia el estado solo mientras siga pendiente; rechaza acciones repetidas o inválidas.
 
 ## Trabajo verificado localmente
 
@@ -45,16 +48,21 @@ Un pedido aparece en caja con su detalle y puede cambiar de Pendiente de pago a 
 - Se verificaron pedidos con estados `PENDIENTE DE PAGO` y `PAGADO`.
 - La ruta `/caja` respondió correctamente y mostró números, clientes, productos, cantidades y estados.
 - Se verificó el mensaje de caja vacía sin modificar la base de datos real.
+- Se rechazaron búsquedas malformadas, fuera de rango y de pedidos inexistentes.
+- Se comprobó que los pedidos pagados y cancelados ya no muestran acciones de caja.
+- Se probaron los flujos de pago, cancelación, persistencia, transiciones inválidas, pedidos inexistentes y regresión del menú con seis pruebas automatizadas.
+- En el navegador se confirmó visualmente el diálogo y los mensajes de pago y cancelación usando pedidos temporales.
 
 ## Sprint Review
 
-- El primer incremento del Sprint 6 permite consultar en caja los pedidos reales y sus estados.
-- El sprint permanece abierto hasta implementar la búsqueda y las acciones de pago y cancelación.
+- El módulo permite consultar, buscar, cobrar físicamente y cancelar pedidos en caja.
+- El Sprint 6 cumple su objetivo y quedó integrado localmente en `main`.
 
 ## Sprint Retrospective
 
 - Agrupar los detalles en la consulta de caja mantiene sencilla la plantilla HTML.
 - Las pruebas con una base temporal siguen evitando cambios accidentales en los pedidos reales.
+- Confirmar cada acción con un diálogo claro ayuda a evitar errores al cobrar o cancelar.
 
 ## Impedimentos
 
@@ -62,12 +70,7 @@ Ninguno documentado.
 
 ## Criterios para cerrar el sprint
 
-- Los pedidos pendientes aparecen en el panel de caja con su detalle completo.
-- El personal puede buscar un pedido por número.
-- Solo un pedido `PENDIENTE DE PAGO` puede confirmarse como `PAGADO`.
-- El personal puede cancelar un pedido pendiente.
-- Los cambios de estado quedan almacenados en SQLite.
-- Las acciones muestran mensajes claros y están probadas.
+- Todos los criterios funcionales del Sprint 6 están implementados y verificados.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización

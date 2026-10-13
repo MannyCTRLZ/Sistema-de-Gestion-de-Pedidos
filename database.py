@@ -283,3 +283,31 @@ def crear_pedido(nombre_cliente, productos):
         }
     finally:
         conexion.close()
+
+
+def cambiar_estado_en_caja(numero_pedido, estado):
+    if type(numero_pedido) is not int or not 0 < numero_pedido <= MAX_ENTERO_SQLITE:
+        raise ValueError("El número de pedido no es válido.")
+    if estado not in ("PAGADO", "CANCELADO"):
+        raise ValueError("La acción de caja no es válida.")
+
+    conexion = obtener_conexion()
+    try:
+        with conexion:
+            cursor = conexion.execute("""
+                UPDATE pedidos SET estado = ?
+                WHERE numero_pedido = ? AND estado = 'PENDIENTE DE PAGO'
+            """, (estado, numero_pedido))
+            if cursor.rowcount == 0:
+                pedido = conexion.execute(
+                    "SELECT estado FROM pedidos WHERE numero_pedido = ?",
+                    (numero_pedido,),
+                ).fetchone()
+                if pedido is None:
+                    raise LookupError("No se encontró el pedido.")
+                raise ValueError(
+                    "El pedido ya no está pendiente de pago. Actualiza la lista."
+                )
+        return {"numero_pedido": numero_pedido, "estado": estado}
+    finally:
+        conexion.close()

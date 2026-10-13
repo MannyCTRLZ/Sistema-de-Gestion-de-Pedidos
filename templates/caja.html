@@ -39,9 +39,22 @@
         </section>
 
         <section aria-labelledby="titulo-lista-pedidos">
+            <form class="caja-busqueda" method="get" action="{{ url_for('caja') }}">
+                <label for="numero-pedido">Buscar por número de pedido</label>
+                <div class="caja-busqueda-controles">
+                    <input id="numero-pedido" name="numero" type="text" inputmode="numeric"
+                           placeholder="Ej. 0001" value="{{ busqueda }}" maxlength="20">
+                    <button type="submit">Buscar</button>
+                    <a href="{{ url_for('caja') }}">Ver todos / actualizar</a>
+                </div>
+            </form>
+            <p id="caja-mensaje" class="caja-mensaje" role="status" aria-live="polite" hidden></p>
+            {% if error_busqueda %}
+            <p class="caja-mensaje caja-error" role="alert">{{ error_busqueda }}</p>
+            {% endif %}
             <div class="caja-lista-encabezado">
                 <h2 id="titulo-lista-pedidos">Pedidos registrados</h2>
-                <span>{{ pedidos|length }} en total</span>
+                <span>{{ pedidos|length }} mostrados</span>
             </div>
 
             <div class="lista-pedidos">
@@ -75,20 +88,49 @@
                         <span>Total</span>
                         <strong>${{ "%.2f"|format(pedido.total) }}</strong>
                     </div>
+                    {% if pedido.estado == 'PENDIENTE DE PAGO' %}
+                    <div class="pedido-caja-acciones">
+                        <button type="button" data-estado="PAGADO"
+                                data-numero="{{ pedido.numero_pedido }}"
+                                data-url="{{ url_for('api_cambiar_estado_en_caja', numero_pedido=pedido.numero_pedido) }}">
+                            Confirmar pago
+                        </button>
+                        <button type="button" class="boton-cancelar" data-estado="CANCELADO"
+                                data-numero="{{ pedido.numero_pedido }}"
+                                data-url="{{ url_for('api_cambiar_estado_en_caja', numero_pedido=pedido.numero_pedido) }}">
+                            Cancelar pedido
+                        </button>
+                    </div>
+                    {% endif %}
                 </article>
                 {% else %}
                 <div class="caja-vacia">
                     <span aria-hidden="true">🧾</span>
+                    {% if busqueda %}
+                    <h3>No se encontraron pedidos</h3>
+                    <p>Revisa el número o selecciona «Ver todos» para volver a la lista.</p>
+                    {% else %}
                     <h3>No hay pedidos registrados</h3>
                     <p>Los pedidos confirmados por los estudiantes aparecerán aquí.</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
         </section>
     </main>
 
+    <dialog id="confirmacion-caja" class="confirmacion-caja" aria-labelledby="titulo-confirmacion-caja">
+        <h2 id="titulo-confirmacion-caja">Confirmar acción</h2>
+        <p id="detalle-confirmacion-caja"></p>
+        <form method="dialog" class="pedido-caja-acciones">
+            <button value="volver" class="boton-cancelar" autofocus>Volver</button>
+            <button value="confirmar">Confirmar</button>
+        </form>
+    </dialog>
+
     <footer class="pie-pagina">
         <p>Cafetería Universitaria · Módulo de caja</p>
     </footer>
+    <script src="{{ url_for('static', filename='js/caja.js') }}"></script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 from database import (
+    MAX_ENTERO_SQLITE,
+    cambiar_estado_en_caja,
     crear_pedido,
     crear_tablas,
     insertar_productos_iniciales,
@@ -28,6 +30,8 @@ def menu():
 @app.route("/caja")
 def caja():
     pedidos = obtener_pedidos()
+    busqueda = request.args.get("numero", "").strip()
+    error_busqueda = None
     resumen = {
         "total": len(pedidos),
         "pendientes": sum(
@@ -35,7 +39,35 @@ def caja():
         ),
         "pagados": sum(pedido["estado"] == "PAGADO" for pedido in pedidos),
     }
-    return render_template("caja.html", pedidos=pedidos, resumen=resumen)
+    if busqueda:
+        numero = busqueda.removeprefix("#")
+        if (not numero.isascii() or not numero.isdecimal()
+                or len(numero) > 19 or not 0 < int(numero) <= MAX_ENTERO_SQLITE):
+            error_busqueda = "Ingresa un número de pedido válido, por ejemplo 0001."
+            pedidos = []
+        else:
+            pedidos = [
+                pedido for pedido in pedidos
+                if pedido["numero_pedido"] == int(numero)
+            ]
+    return render_template(
+        "caja.html", pedidos=pedidos, resumen=resumen,
+        busqueda=busqueda, error_busqueda=error_busqueda,
+    )
+
+
+@app.post("/api/pedidos/<int:numero_pedido>/estado")
+def api_cambiar_estado_en_caja(numero_pedido):
+    datos = request.get_json(silent=True)
+    if not isinstance(datos, dict):
+        return jsonify({"error": "Los datos de la acción no son válidos."}), 400
+    try:
+        pedido = cambiar_estado_en_caja(numero_pedido, datos.get("estado"))
+    except LookupError as error:
+        return jsonify({"error": str(error)}), 404
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    return jsonify(pedido)
 
 
 @app.post("/api/pedidos")
