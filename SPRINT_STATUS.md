@@ -4,70 +4,57 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 5 — Creación del pedido**
+**Sprint 6 — Módulo de caja**
 
-Estado: **COMPLETADO**
+Estado: **EN PROGRESO**
 
 ## Objetivo del sprint
 
-Registrar pedidos reales a partir del carrito y entregar un número de pedido al estudiante.
+Recibir los pedidos creados por los estudiantes y permitir confirmar su pago físico.
 
 ## Incremento esperado
 
-Flujo Menú → Carrito → Nombre → Número de pedido funcional.
+Un pedido aparece en caja con su detalle y puede cambiar de Pendiente de pago a Pagado.
 
 ## Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Agregar el botón para continuar desde el carrito | Equipo | Integrada en `main` | `main` |
-| Crear el formulario para el nombre del pedido | Equipo | Integrada en `main` | `main` |
-| Validar que el nombre no esté vacío | Equipo | Integrada en `main` | `main` |
-| Mostrar el resumen previo del pedido | Equipo | Integrada en `main` | `main` |
-| Permitir editar el nombre y volver al carrito | Equipo | Integrada en `main` | `main` |
-| Crear las tablas `pedidos` y `detalle_pedido` | Equipo | Integrada en `main` | `main` |
-| Validar productos y precios en Flask | Equipo | Integrada en `main` | `main` |
-| Guardar el pedido y su detalle | Equipo | Integrada en `main` | `main` |
-| Generar el número de pedido | Equipo | Integrada en `main` | `main` |
-| Mostrar la confirmación final | Equipo | Integrada en `main` | `main` |
-| Probar la persistencia completa | Equipo | Integrada en `main` | `main` |
-| Manejar la disponibilidad como estado manual, sin inventario numérico | Equipo | Integrada en `main` | `main` |
+| Crear la ruta y la interfaz de caja | Equipo | Integrada en `main` | `main` |
+| Consultar los pedidos con sus productos desde SQLite | Equipo | Integrada en `main` | `main` |
+| Mostrar número, cliente, fecha, productos, total y estado | Equipo | Integrada en `main` | `main` |
+| Mostrar un resumen de pedidos por estado | Equipo | Integrada en `main` | `main` |
+| Adaptar el panel de caja a celular | Equipo | Integrada en `main` | `main` |
+| Buscar un pedido por número | Equipo | Pendiente | — |
+| Confirmar el pago físico de un pedido pendiente | Equipo | Pendiente | — |
+| Cancelar un pedido pendiente | Equipo | Pendiente | — |
+| Probar los cambios de estado y sus validaciones | Equipo | Pendiente | — |
 
 ## Trabajo integrado en `main`
 
-- El carrito incluye un botón para continuar que solo se habilita cuando contiene productos.
-- El estudiante puede ingresar únicamente el nombre que usará en caja.
-- El formulario rechaza nombres vacíos.
-- La interfaz muestra un resumen con nombre, productos, cantidades y total.
-- El estudiante puede editar el nombre o regresar al carrito sin perder su selección.
-- Flask recibe el nombre y las cantidades mediante `POST /api/pedidos`.
-- Los precios y la disponibilidad se validan nuevamente desde SQLite.
-- El pedido y sus detalles se guardan en una sola transacción.
-- La confirmación final muestra número, estado y total calculados por el servidor.
-- Los productos se aceptan únicamente cuando están dados de alta y marcados como disponibles.
+- La ruta `/caja` recupera los pedidos guardados y presenta primero los más recientes.
+- Cada tarjeta muestra número, nombre del cliente, fecha, estado, productos y total.
+- La pantalla resume el total de pedidos, los pendientes y los pagados.
+- Los estados tienen indicadores visuales diferentes para facilitar su identificación.
+- La interfaz muestra un mensaje claro cuando todavía no existen pedidos.
+- El diseño se adapta a pantallas de escritorio y dispositivos pequeños.
 
 ## Trabajo verificado localmente
 
-- Se comprobó que el botón para continuar aparece habilitado con productos en el carrito.
-- Se verificó el mensaje de error al intentar continuar con un nombre vacío.
-- El resumen mostró correctamente el nombre `María`, tres unidades y un total de `$170.00`.
-- Se verificó que editar el nombre conserva los datos capturados.
-- Se regresó al carrito y se confirmó que los productos y cantidades permanecen intactos.
-- Se verificó la creación de `pedidos` y `detalle_pedido` con claves foráneas activas.
-- Flask recalculó el total desde SQLite y rechazó un producto agotado sin guardar datos parciales.
-- El flujo completo generó el pedido `#0001`, con estado `PENDIENTE DE PAGO` y total `$170.00`.
-- La base temporal conservó un pedido y dos detalles sin violaciones de integridad referencial.
+- Se crearon dos pedidos en una base temporal y se comprobó su orden del más reciente al más antiguo.
+- Se verificaron pedidos con estados `PENDIENTE DE PAGO` y `PAGADO`.
+- La ruta `/caja` respondió correctamente y mostró números, clientes, productos, cantidades y estados.
+- Se verificó el mensaje de caja vacía sin modificar la base de datos real.
 
 ## Sprint Review
 
-- Se verificó el flujo completo Menú → Carrito → Nombre → Número de pedido.
-- El incremento cumple el objetivo del Sprint 5 y quedó integrado localmente en `main`.
+- El primer incremento del Sprint 6 permite consultar en caja los pedidos reales y sus estados.
+- El sprint permanece abierto hasta implementar la búsqueda y las acciones de pago y cancelación.
 
 ## Sprint Retrospective
 
-- Separar la revisión visual del guardado permitió conectar el backend de forma incremental.
-- Recalcular precios y disponibilidad en Flask evita confiar en datos modificables del navegador.
-- Las pruebas con una base temporal permitieron validar transacciones sin contaminar los datos locales.
+- Agrupar los detalles en la consulta de caja mantiene sencilla la plantilla HTML.
+- Las pruebas con una base temporal siguen evitando cambios accidentales en los pedidos reales.
 
 ## Impedimentos
 
@@ -75,13 +62,12 @@ Ninguno documentado.
 
 ## Criterios para cerrar el sprint
 
-- Existen las tablas `pedidos` y `detalle_pedido`.
-- El nombre del pedido se valida en frontend y backend.
-- Flask valida productos, disponibilidad, cantidades y precios.
-- El pedido y sus detalles se guardan en una sola transacción.
-- Se genera un número de pedido único.
-- La confirmación final muestra el número y el total real almacenado.
-- El pedido queda registrado como `PENDIENTE DE PAGO`.
+- Los pedidos pendientes aparecen en el panel de caja con su detalle completo.
+- El personal puede buscar un pedido por número.
+- Solo un pedido `PENDIENTE DE PAGO` puede confirmarse como `PAGADO`.
+- El personal puede cancelar un pedido pendiente.
+- Los cambios de estado quedan almacenados en SQLite.
+- Las acciones muestran mensajes claros y están probadas.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización
@@ -92,6 +78,24 @@ Ninguno documentado.
 - Al cerrar el sprint, registrar el resultado de la Review y la Retrospective antes de preparar el siguiente Sprint Backlog.
 
 ## Sprints anteriores
+
+### Sprint 5 — Creación del pedido
+
+Estado: **COMPLETADO**
+
+Incremento verificado en `main`: el estudiante puede ingresar su nombre, confirmar el carrito, guardar el pedido y recibir un número único con estado `PENDIENTE DE PAGO`.
+
+#### Sprint Review
+
+- Se verificó el flujo completo Menú → Carrito → Nombre → Número de pedido.
+- Flask valida nuevamente productos, disponibilidad, cantidades y precios antes de guardar.
+- El pedido y sus detalles se almacenan en una sola transacción.
+
+#### Sprint Retrospective
+
+- Separar la revisión visual del guardado permitió conectar el backend de forma incremental.
+- Recalcular precios y disponibilidad en Flask evita confiar en datos modificables del navegador.
+- Las pruebas con una base temporal permitieron validar transacciones sin contaminar los datos locales.
 
 ### Sprint 4 — Carrito de compras
 

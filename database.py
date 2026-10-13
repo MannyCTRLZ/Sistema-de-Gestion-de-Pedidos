@@ -173,6 +173,52 @@ def obtener_productos():
     return [dict(producto) for producto in productos]
 
 
+def obtener_pedidos():
+    conexion = obtener_conexion()
+    filas = conexion.execute("""
+        SELECT
+            pedidos.id,
+            pedidos.numero_pedido,
+            pedidos.nombre_cliente,
+            pedidos.fecha,
+            pedidos.estado,
+            pedidos.total,
+            productos.nombre AS producto_nombre,
+            detalle_pedido.cantidad,
+            detalle_pedido.precio
+        FROM pedidos
+        LEFT JOIN detalle_pedido
+            ON detalle_pedido.pedido_id = pedidos.id
+        LEFT JOIN productos
+            ON productos.id = detalle_pedido.producto_id
+        ORDER BY pedidos.id DESC, detalle_pedido.id
+    """).fetchall()
+    conexion.close()
+
+    pedidos = {}
+    for fila in filas:
+        pedido_id = fila["id"]
+        if pedido_id not in pedidos:
+            pedidos[pedido_id] = {
+                "id": pedido_id,
+                "numero_pedido": fila["numero_pedido"],
+                "nombre_cliente": fila["nombre_cliente"],
+                "fecha": fila["fecha"],
+                "estado": fila["estado"],
+                "total": fila["total"],
+                "productos": [],
+            }
+
+        if fila["producto_nombre"] is not None:
+            pedidos[pedido_id]["productos"].append({
+                "nombre": fila["producto_nombre"],
+                "cantidad": fila["cantidad"],
+                "precio": fila["precio"],
+            })
+
+    return list(pedidos.values())
+
+
 def crear_pedido(nombre_cliente, productos):
     if not isinstance(nombre_cliente, str) or not nombre_cliente.strip():
         raise ValueError("Ingresa un nombre para el pedido.")

@@ -647,6 +647,198 @@ a {
     padding: .8rem;
 }
 
+.pagina-caja {
+    width: min(1180px, 90%);
+    min-height: calc(100vh - 180px);
+    margin-inline: auto;
+    padding: 3.5rem 0 5rem;
+}
+
+.caja-presentacion {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 3rem;
+}
+
+.caja-presentacion h1 {
+    margin: .25rem 0;
+    color: var(--verde);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
+}
+
+.caja-presentacion p {
+    margin-bottom: 0;
+}
+
+.caja-resumen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+    gap: .75rem;
+}
+
+.caja-resumen article {
+    min-width: 110px;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: var(--blanco);
+    box-shadow: 0 8px 24px rgba(33, 78, 52, .08);
+}
+
+.caja-resumen span,
+.caja-resumen strong {
+    display: block;
+}
+
+.caja-resumen span {
+    color: #657068;
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.caja-resumen strong {
+    color: var(--verde);
+    font-size: 1.8rem;
+}
+
+.caja-lista-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.caja-lista-encabezado h2 {
+    margin: 0;
+    color: var(--verde);
+}
+
+.caja-lista-encabezado span {
+    color: #657068;
+    font-weight: 700;
+}
+
+.lista-pedidos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.pedido-caja {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    background: var(--blanco);
+    box-shadow: 0 10px 30px rgba(33, 78, 52, .08);
+}
+
+.pedido-caja-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e3e7e3;
+}
+
+.pedido-numero {
+    color: var(--naranja);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.pedido-caja h3 {
+    margin: .15rem 0 0;
+    color: var(--verde);
+    font-size: 1.35rem;
+}
+
+.pedido-caja time {
+    color: #657068;
+    font-size: .85rem;
+}
+
+.estado-pedido {
+    flex: none;
+    padding: .35rem .7rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.estado-pendiente {
+    color: #75581b;
+    background: #fff0c9;
+}
+
+.estado-pagado {
+    color: var(--verde);
+    background: var(--verde-claro);
+}
+
+.estado-cancelado {
+    color: #8a3028;
+    background: #f8dddd;
+}
+
+.estado-proceso {
+    color: #315678;
+    background: #e0edf8;
+}
+
+.pedido-caja-productos {
+    display: grid;
+    gap: .4rem;
+    padding: 1rem 0;
+}
+
+.pedido-caja-productos p,
+.pedido-caja-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+}
+
+.pedido-caja-productos p {
+    color: #4d5850;
+}
+
+.pedido-caja-total {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #e3e7e3;
+    color: var(--verde);
+    font-size: 1.15rem;
+}
+
+.caja-vacia {
+    grid-column: 1 / -1;
+    padding: 4rem 2rem;
+    border-radius: 1.25rem;
+    background: var(--blanco);
+    text-align: center;
+}
+
+.caja-vacia span {
+    font-size: 3rem;
+}
+
+.caja-vacia h3 {
+    margin-bottom: .25rem;
+    color: var(--verde);
+}
+
+.caja-vacia p {
+    margin: 0;
+}
+
 .pie-pagina {
     padding: 2rem 5%;
     color: var(--blanco);
@@ -682,6 +874,15 @@ a {
     }
 
     .ventajas {
+        grid-template-columns: 1fr;
+    }
+
+    .caja-presentacion {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .lista-pedidos {
         grid-template-columns: 1fr;
     }
 }
@@ -720,5 +921,14 @@ a {
 
     .pedido-acciones {
         grid-template-columns: 1fr;
+    }
+
+    .caja-resumen {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .pedido-caja-encabezado {
+        flex-direction: column;
     }
 }

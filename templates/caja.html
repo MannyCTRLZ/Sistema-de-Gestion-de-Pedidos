@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caja | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="logo" href="{{ url_for('caja') }}">Cafetería Universitaria · Caja</a>
+        <div class="acciones-encabezado">
+            <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
+            <a class="enlace-menu" href="{{ url_for('menu') }}">Menú</a>
+        </div>
+    </header>
+
+    <main class="pagina-caja">
+        <section class="caja-presentacion">
+            <div>
+                <p class="presentacion-etiqueta">Panel del personal</p>
+                <h1>Pedidos en caja</h1>
+                <p>Consulta los pedidos registrados y su estado actual.</p>
+            </div>
+            <div class="caja-resumen" aria-label="Resumen de pedidos">
+                <article>
+                    <span>Total</span>
+                    <strong>{{ resumen.total }}</strong>
+                </article>
+                <article>
+                    <span>Pendientes</span>
+                    <strong>{{ resumen.pendientes }}</strong>
+                </article>
+                <article>
+                    <span>Pagados</span>
+                    <strong>{{ resumen.pagados }}</strong>
+                </article>
+            </div>
+        </section>
+
+        <section aria-labelledby="titulo-lista-pedidos">
+            <div class="caja-lista-encabezado">
+                <h2 id="titulo-lista-pedidos">Pedidos registrados</h2>
+                <span>{{ pedidos|length }} en total</span>
+            </div>
+
+            <div class="lista-pedidos">
+                {% for pedido in pedidos %}
+                <article class="pedido-caja">
+                    <div class="pedido-caja-encabezado">
+                        <div>
+                            <span class="pedido-numero">#{{ "%04d"|format(pedido.numero_pedido) }}</span>
+                            <h3>{{ pedido.nombre_cliente }}</h3>
+                            <time>{{ pedido.fecha }}</time>
+                        </div>
+                        <span class="estado-pedido
+                            {% if pedido.estado == 'PENDIENTE DE PAGO' %}estado-pendiente
+                            {% elif pedido.estado == 'PAGADO' %}estado-pagado
+                            {% elif pedido.estado == 'CANCELADO' %}estado-cancelado
+                            {% else %}estado-proceso{% endif %}">
+                            {{ pedido.estado }}
+                        </span>
+                    </div>
+
+                    <div class="pedido-caja-productos">
+                        {% for producto in pedido.productos %}
+                        <p>
+                            <span>{{ producto.cantidad }} × {{ producto.nombre }}</span>
+                            <strong>${{ "%.2f"|format(producto.precio * producto.cantidad) }}</strong>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="pedido-caja-total">
+                        <span>Total</span>
+                        <strong>${{ "%.2f"|format(pedido.total) }}</strong>
+                    </div>
+                </article>
+                {% else %}
+                <div class="caja-vacia">
+                    <span aria-hidden="true">🧾</span>
+                    <h3>No hay pedidos registrados</h3>
+                    <p>Los pedidos confirmados por los estudiantes aparecerán aquí.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">
+        <p>Cafetería Universitaria · Módulo de caja</p>
+    </footer>
+</body>
+</html>

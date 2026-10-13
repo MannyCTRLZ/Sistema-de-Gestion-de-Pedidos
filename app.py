@@ -3,6 +3,7 @@ from database import (
     crear_pedido,
     crear_tablas,
     insertar_productos_iniciales,
+    obtener_pedidos,
     obtener_productos,
 )
 
@@ -22,6 +23,19 @@ def inicio():
 def menu():
     productos = obtener_productos()
     return render_template("menu.html", productos=productos)
+
+
+@app.route("/caja")
+def caja():
+    pedidos = obtener_pedidos()
+    resumen = {
+        "total": len(pedidos),
+        "pendientes": sum(
+            pedido["estado"] == "PENDIENTE DE PAGO" for pedido in pedidos
+        ),
+        "pagados": sum(pedido["estado"] == "PAGADO" for pedido in pedidos),
+    }
+    return render_template("caja.html", pedidos=pedidos, resumen=resumen)
 
 
 @app.post("/api/pedidos")
