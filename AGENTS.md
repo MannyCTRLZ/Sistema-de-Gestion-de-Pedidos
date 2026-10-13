@@ -46,6 +46,15 @@ Estructura esperada:
 - No hacer push, merge, publicación o cambios remotos sin autorización explícita del usuario.
 - No reemplazar decisiones documentadas sin actualizar `PROJECT_CONTEXT.md`.
 
+## Flujo de ramas
+- Usar únicamente `dev` y `main` para el trabajo activo del proyecto.
+- Realizar todas las modificaciones de frontend y backend y sus pruebas en `dev`.
+- No desarrollar directamente en `main` ni crear ramas adicionales salvo petición explícita.
+- Integrar `dev` en `main` cuando el incremento esté probado y la integración esté autorizada.
+- Publicar `main` en el remoto después de integrar, con autorización explícita para el push.
+- Regresar a `dev` para el siguiente incremento y mantenerla sincronizada con `main`.
+- Conservar referencias antiguas con trabajo exclusivo hasta acordar su integración o eliminación.
+
 ## Estilo de trabajo
 Cuando se solicite una implementación:
 1. Inspeccionar archivos actuales.

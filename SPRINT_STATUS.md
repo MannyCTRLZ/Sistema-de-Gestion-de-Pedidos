@@ -72,6 +72,9 @@ Ninguno documentado.
 
 ## Acuerdos de actualización
 
+- Todo nuevo trabajo de frontend y backend se desarrolla y prueba en `dev`.
+- El flujo acordado es `dev` → pruebas → integración en `main` → push autorizado al remoto.
+- `frontend` y `backend` dejan de utilizarse como ramas de trabajo.
 - Actualizar este archivo cuando una tarea se asigne, cambie de estado, se integre o quede bloqueada.
 - Acordar una sola persona para integrar cada actualización y evitar ediciones simultáneas.
 - Usar estados claros: `Pendiente`, `En progreso`, `Terminada en rama`, `Integrada en main` o `Bloqueada`.

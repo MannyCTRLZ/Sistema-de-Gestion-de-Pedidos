@@ -457,19 +457,22 @@ Antes de modificar código:
 
 ## 23. Estrategia de ramas
 
-El equipo trabajará con cuatro ramas:
+El equipo trabajará con dos ramas activas:
 
 - `main`: versión estable y demostrable del proyecto.
-- `dev`: integración y pruebas conjuntas del frontend y el backend.
-- `frontend`: trabajo del flujo visual y la interacción del cliente.
-- `backend`: trabajo de Flask, SQLite y la lógica del servidor.
+- `dev`: todo el desarrollo del frontend y el backend, correcciones y pruebas.
 
 Flujo de integración:
 
-1. Cada integrante trabaja y crea commits en su rama (`frontend` o `backend`).
-2. El trabajo terminado y probado se integra en `dev`.
-3. En `dev` se comprueba que frontend y backend funcionen juntos.
-4. Solo una versión estable de `dev` se integra en `main`.
+1. Cada integrante trabaja y crea commits en `dev`, coordinando los archivos compartidos.
+2. En `dev` se comprueba que frontend y backend funcionen juntos y se prueban las implementaciones del incremento.
+3. Cuando el incremento esté verificado, se integra `dev` en `main` y se actualiza el seguimiento del sprint.
+4. Después de la integración, se hace push de `main` al repositorio remoto con autorización del usuario.
+5. Se regresa a `dev` para desarrollar el siguiente incremento, manteniéndola al día con `main`.
+
+Las ramas `frontend` y `backend` dejan de utilizarse. Las referencias antiguas con
+trabajo exclusivo se conservan hasta revisar e integrar o descartar ese trabajo
+de forma explícita; no forman parte del flujo activo.
 
 No se debe desarrollar directamente en `main`. Antes de modificar archivos compartidos,
 especialmente plantillas HTML o `app.py`, el equipo debe coordinarse para reducir conflictos.
@@ -510,6 +513,6 @@ Los sprints 9 y 10 reservan tiempo para integración, correcciones y entrega. La
 - `SPRINT_STATUS.md` registra el sprint activo, tareas, responsables, ramas, impedimentos y avance integrado.
 - La versión integrada en `main` es la única fuente oficial del estado.
 - Las ramas de trabajo pueden tener diferencias temporales, pero no deben mantener planes oficiales independientes.
-- Se recomienda una rama por funcionalidad, no una rama permanente por integrante.
+- Se usa `dev` como única rama de desarrollo compartida para frontend y backend; `main` conserva los incrementos verificados.
 - Una tarea puede estar en progreso o terminada en su rama, pero solo se considera parte del incremento cuando se prueba e integra en `main`.
 - Para reducir conflictos, el equipo debe acordar quién actualiza `SPRINT_STATUS.md` al integrar trabajo.
