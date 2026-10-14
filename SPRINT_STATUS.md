@@ -75,6 +75,19 @@ Ninguno documentado.
 
 ## Acuerdos de actualización
 
+### Ajuste del menú solicitado después del Sprint 6
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Mostrar confirmación animada al agregar al carrito y bloquear dobles clics accidentales | Equipo | Terminada en rama | `dev` |
+
+- El botón muestra «✓ Agregado» durante 700 ms, el carrito hace un pulso breve y aparece un aviso con el nombre del producto durante dos segundos.
+- La animación respeta la preferencia de reducir movimiento.
+- Se verificó en el navegador que un doble clic agrega una sola unidad; un clic posterior agrega otra normalmente y actualiza el total.
+- Pendiente de integración en `main`; este ajuste no cambia el cierre del Sprint 6.
+
+### Reglas compartidas
+
 - Todo nuevo trabajo de frontend y backend se desarrolla y prueba en `dev`.
 - El flujo acordado es `dev` → pruebas → integración en `main` → push autorizado al remoto.
 - `frontend` y `backend` dejan de utilizarse como ramas de trabajo.

@@ -2,6 +2,9 @@ const carrito = [];
 
 const botonCarrito = document.querySelector("#boton-carrito");
 const contadorCarrito = document.querySelector("#contador-carrito");
+const avisoCarrito = document.querySelector("#aviso-carrito");
+let temporizadorAviso;
+let temporizadorPulso;
 const panelCarrito = document.querySelector("#carrito-panel");
 const fondoCarrito = document.querySelector("#carrito-fondo");
 const botonCerrar = document.querySelector("#carrito-cerrar");
@@ -183,7 +186,37 @@ async function confirmarPedido() {
     }
 }
 
+function confirmarProductoAgregado(boton) {
+    const textoOriginal = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = "✓ Agregado";
+    boton.classList.add("boton-agregar-confirmado");
+    window.setTimeout(() => {
+        boton.textContent = textoOriginal;
+        boton.classList.remove("boton-agregar-confirmado");
+        boton.disabled = false;
+    }, 700);
+
+    window.clearTimeout(temporizadorAviso);
+    avisoCarrito.textContent = `✓ ${boton.dataset.nombre} agregado al carrito`;
+    avisoCarrito.classList.add("aviso-carrito-visible");
+    temporizadorAviso = window.setTimeout(() => {
+        avisoCarrito.classList.remove("aviso-carrito-visible");
+        avisoCarrito.textContent = "";
+    }, 2000);
+
+    window.clearTimeout(temporizadorPulso);
+    botonCarrito.classList.remove("carrito-pulso");
+    // Reiniciar la animación también cuando se agregan productos consecutivos.
+    void botonCarrito.offsetWidth;
+    botonCarrito.classList.add("carrito-pulso");
+    temporizadorPulso = window.setTimeout(() => {
+        botonCarrito.classList.remove("carrito-pulso");
+    }, 400);
+}
+
 function agregarProducto(boton) {
+    if (boton.disabled) return;
     const id = Number(boton.dataset.id);
     const productoExistente = carrito.find((producto) => producto.id === id);
 
@@ -199,6 +232,7 @@ function agregarProducto(boton) {
     }
 
     actualizarCarrito();
+    confirmarProductoAgregado(boton);
 }
 
 function cambiarCantidad(id, cambio) {

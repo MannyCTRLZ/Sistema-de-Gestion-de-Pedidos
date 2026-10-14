@@ -61,6 +61,7 @@ a {
 
 .boton-carrito,
 .boton-agregar {
+    min-width: 7.5rem;
     border: 0;
     border-radius: 999px;
     cursor: pointer;
@@ -328,6 +329,51 @@ a {
     color: #5f665f;
     background: #d5d9d5;
     cursor: not-allowed;
+}
+
+.boton-agregar-confirmado:disabled {
+    color: var(--blanco);
+    background: var(--verde);
+    cursor: default;
+}
+
+.aviso-carrito {
+    position: fixed;
+    z-index: 9;
+    bottom: 1.5rem;
+    left: 50%;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    margin: 0;
+    padding: .8rem 1.25rem;
+    border-radius: 1rem;
+    color: var(--blanco);
+    background: var(--verde);
+    box-shadow: 0 6px 24px rgba(23, 56, 36, .2);
+    font-weight: 700;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, .75rem);
+    transition: opacity .18s ease, transform .18s ease;
+}
+
+.aviso-carrito-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.carrito-pulso {
+    animation: pulso-carrito .4s ease;
+}
+
+@keyframes pulso-carrito {
+    50% { transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aviso-carrito { transition: none; }
+    .carrito-pulso { animation: none; }
 }
 
 .carrito-visible {
