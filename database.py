@@ -311,3 +311,44 @@ def cambiar_estado_en_caja(numero_pedido, estado):
         return {"numero_pedido": numero_pedido, "estado": estado}
     finally:
         conexion.close()
+
+
+def obtener_pedidos_cocina():
+    estados_activos = ("PAGADO", "EN PREPARACIÓN", "LISTO")
+    return [
+        pedido for pedido in reversed(obtener_pedidos())
+        if pedido["estado"] in estados_activos
+    ]
+
+
+def cambiar_estado_en_cocina(numero_pedido, estado):
+    if type(numero_pedido) is not int or not 0 < numero_pedido <= MAX_ENTERO_SQLITE:
+        raise ValueError("El número de pedido no es válido.")
+    anteriores = {
+        "EN PREPARACIÓN": "PAGADO",
+        "LISTO": "EN PREPARACIÓN",
+        "ENTREGADO": "LISTO",
+    }
+    if not isinstance(estado, str) or estado not in anteriores:
+        raise ValueError("La acción de cocina no es válida.")
+
+    conexion = obtener_conexion()
+    try:
+        with conexion:
+            cursor = conexion.execute("""
+                UPDATE pedidos SET estado = ?
+                WHERE numero_pedido = ? AND estado = ?
+            """, (estado, numero_pedido, anteriores[estado]))
+            if cursor.rowcount == 0:
+                pedido = conexion.execute(
+                    "SELECT estado FROM pedidos WHERE numero_pedido = ?",
+                    (numero_pedido,),
+                ).fetchone()
+                if pedido is None:
+                    raise LookupError("No se encontró el pedido.")
+                raise ValueError(
+                    "El pedido no puede avanzar a ese estado. Actualiza la lista."
+                )
+        return {"numero_pedido": numero_pedido, "estado": estado}
+    finally:
+        conexion.close()

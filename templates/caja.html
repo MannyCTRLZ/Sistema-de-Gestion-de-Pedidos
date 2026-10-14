@@ -10,6 +10,7 @@
     <header class="encabezado">
         <a class="logo" href="{{ url_for('caja') }}">Cafetería Universitaria · Caja</a>
         <div class="acciones-encabezado">
+            <a class="enlace-menu" href="{{ url_for('cocina') }}">Cocina</a>
             <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
             <a class="enlace-menu" href="{{ url_for('menu') }}">Menú</a>
         </div>
@@ -38,14 +39,24 @@
             </div>
         </section>
 
+        <nav class="caja-vistas" aria-label="Secciones de caja">
+            <a href="{{ url_for('caja') }}" {% if vista == 'seguimiento' %}aria-current="page"{% endif %}>
+                Pedidos en seguimiento
+            </a>
+            <a href="{{ url_for('caja', vista='historial') }}" {% if vista == 'historial' %}aria-current="page"{% endif %}>
+                Historial de entregados ({{ cantidad_entregados }})
+            </a>
+        </nav>
+
         <section aria-labelledby="titulo-lista-pedidos">
             <form class="caja-busqueda" method="get" action="{{ url_for('caja') }}">
+                <input type="hidden" name="vista" value="{{ vista }}">
                 <label for="numero-pedido">Buscar por número de pedido</label>
                 <div class="caja-busqueda-controles">
                     <input id="numero-pedido" name="numero" type="text" inputmode="numeric"
                            placeholder="Ej. 0001" value="{{ busqueda }}" maxlength="20">
                     <button type="submit">Buscar</button>
-                    <a href="{{ url_for('caja') }}">Ver todos / actualizar</a>
+                    <a href="{{ url_for('caja', vista=vista) }}">Ver todos / actualizar</a>
                 </div>
             </form>
             <p id="caja-mensaje" class="caja-mensaje" role="status" aria-live="polite" hidden></p>
@@ -53,9 +64,12 @@
             <p class="caja-mensaje caja-error" role="alert">{{ error_busqueda }}</p>
             {% endif %}
             <div class="caja-lista-encabezado">
-                <h2 id="titulo-lista-pedidos">Pedidos registrados</h2>
+                <h2 id="titulo-lista-pedidos">{% if vista == 'historial' %}Historial de pedidos entregados{% else %}Pedidos en seguimiento{% endif %}</h2>
                 <span>{{ pedidos|length }} mostrados</span>
             </div>
+            {% if vista == 'historial' %}
+            <p>Consulta los pedidos finalizados con su detalle y total. La fecha corresponde a la creación del pedido.</p>
+            {% endif %}
 
             <div class="lista-pedidos">
                 {% for pedido in pedidos %}
@@ -64,11 +78,11 @@
                         <div>
                             <span class="pedido-numero">#{{ "%04d"|format(pedido.numero_pedido) }}</span>
                             <h3>{{ pedido.nombre_cliente }}</h3>
-                            <time>{{ pedido.fecha }}</time>
+                            <time>Creado: {{ pedido.fecha }}</time>
                         </div>
                         <span class="estado-pedido
                             {% if pedido.estado == 'PENDIENTE DE PAGO' %}estado-pendiente
-                            {% elif pedido.estado == 'PAGADO' %}estado-pagado
+                            {% elif pedido.estado in ['PAGADO', 'ENTREGADO'] %}estado-pagado
                             {% elif pedido.estado == 'CANCELADO' %}estado-cancelado
                             {% else %}estado-proceso{% endif %}">
                             {{ pedido.estado }}
@@ -109,6 +123,9 @@
                     {% if busqueda %}
                     <h3>No se encontraron pedidos</h3>
                     <p>Revisa el número o selecciona «Ver todos» para volver a la lista.</p>
+                    {% elif vista == 'historial' %}
+                    <h3>Todavía no hay pedidos entregados</h3>
+                    <p>Cuando cocina registre la entrega, el pedido aparecerá en este historial.</p>
                     {% else %}
                     <h3>No hay pedidos registrados</h3>
                     <p>Los pedidos confirmados por los estudiantes aparecerán aquí.</p>

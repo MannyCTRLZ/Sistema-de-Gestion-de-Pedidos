@@ -749,6 +749,27 @@ a {
     font-size: 1.8rem;
 }
 
+.caja-vistas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-bottom: 2rem;
+}
+
+.caja-vistas a {
+    padding: .75rem 1rem;
+    border: 1px solid var(--verde);
+    border-radius: .65rem;
+    color: var(--verde);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.caja-vistas a[aria-current="page"] {
+    color: var(--blanco);
+    background: var(--verde);
+}
+
 .caja-lista-encabezado {
     display: flex;
     justify-content: space-between;
@@ -950,6 +971,37 @@ a {
 .pedido-caja h3,
 .pedido-caja-productos span {
     overflow-wrap: anywhere;
+}
+
+.cocina-lista-encabezado {
+    flex-wrap: wrap;
+}
+
+.cocina-lista-encabezado p {
+    margin: .3rem 0 0;
+    color: #657068;
+}
+
+.enlace-actualizar-cocina {
+    padding: .6rem 1rem;
+    border: 1px solid var(--verde);
+    border-radius: .6rem;
+    color: var(--verde);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.cocina-productos {
+    font-size: 1.15rem;
+}
+
+.cocina-acciones {
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.cocina-acciones button {
+    width: 100%;
 }
 
 .caja-vacia {

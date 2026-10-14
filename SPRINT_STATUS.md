@@ -4,65 +4,62 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 6 — Módulo de caja**
+**Sprint 7 — Módulo de cocina**
 
-Estado: **COMPLETADO**
+Estado: **EN PROGRESO**
 
 ## Objetivo del sprint
 
-Recibir los pedidos creados por los estudiantes y permitir confirmar su pago físico.
+Gestionar la preparación y entrega de los pedidos pagados.
 
 ## Incremento esperado
 
-Un pedido aparece en caja con su detalle y puede cambiar de Pendiente de pago a Pagado.
+Flujo Pagado → En preparación → Listo → Entregado funcional.
 
 ## Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Crear la ruta y la interfaz de caja | Equipo | Integrada en `main` | `main` |
-| Consultar los pedidos con sus productos desde SQLite | Equipo | Integrada en `main` | `main` |
-| Mostrar número, cliente, fecha, productos, total y estado | Equipo | Integrada en `main` | `main` |
-| Mostrar un resumen de pedidos por estado | Equipo | Integrada en `main` | `main` |
-| Adaptar el panel de caja a celular | Equipo | Integrada en `main` | `main` |
-| Buscar un pedido por número | Equipo | Integrada en `main` | `main` |
-| Confirmar el pago físico de un pedido pendiente | Equipo | Integrada en `main` | `main` |
-| Cancelar un pedido pendiente | Equipo | Integrada en `main` | `main` |
-| Probar los cambios de estado y sus validaciones | Equipo | Integrada en `main` | `main` |
+| Crear la ruta e interfaz de cocina | Equipo | Integrada en `main` | `dev` → `main` |
+| Mostrar pedidos pagados, en preparación y listos con sus cantidades | Equipo | Integrada en `main` | `dev` → `main` |
+| Agregar acciones de preparación, listo y entrega | Equipo | Integrada en `main` | `dev` → `main` |
+| Validar las transiciones básicas en Flask | Equipo | Integrada en `main` | `dev` → `main` |
+| Separar en caja el historial de pedidos entregados con búsqueda por número | Equipo | Integrada en `main` | `dev` → `main` |
+| Validar interfaz, errores, concurrencia y persistencia completa | Equipo | Pendiente | `dev` |
+| Probar el flujo completo Menú → Caja → Cocina → Entrega | Equipo | Pendiente | `dev` |
+| Integrar el incremento con comprobación básica en main | Equipo | Integrada en `main` | `dev` → `main` |
 
 ## Trabajo integrado en `main`
 
-- La ruta `/caja` recupera los pedidos guardados y presenta primero los más recientes.
-- Cada tarjeta muestra número, nombre del cliente, fecha, estado, productos y total.
-- La pantalla resume el total de pedidos, los pendientes y los pagados.
-- Los estados tienen indicadores visuales diferentes para facilitar su identificación.
-- La interfaz muestra un mensaje claro cuando todavía no existen pedidos.
-- El diseño se adapta a pantallas de escritorio y dispositivos pequeños.
-- El personal puede buscar pedidos por número y regresar fácilmente a la lista completa.
-- Las tarjetas de pedidos pendientes permiten confirmar el pago físico o cancelar con un diálogo de confirmación.
-- Flask cambia el estado solo mientras siga pendiente; rechaza acciones repetidas o inválidas.
+- `/cocina` muestra pedidos activos pagados, en preparación y listos, del más antiguo al más reciente.
+- Cada tarjeta muestra número, cliente, fecha, estado, productos y cantidades.
+- El resumen cuenta los pedidos por preparar, en preparación y listos.
+- Cada estado ofrece únicamente su siguiente acción con un diálogo de confirmación.
+- Flask permite PAGADO → EN PREPARACIÓN → LISTO → ENTREGADO y comprueba el estado anterior al actualizar.
+- Los pendientes de pago, cancelados y entregados quedan fuera de la lista activa.
+- Caja incluye un enlace a cocina y cocina permite volver a caja o actualizar la lista manualmente.
+- La interfaz reutiliza los estilos responsive de caja.
+- Caja separa los pedidos en seguimiento del historial de entregados; la búsqueda se aplica a la sección seleccionada.
+- El historial conserva número, cliente, fecha de creación, productos, cantidades y total sin acciones de caja.
+- El incremento fue desarrollado en `dev` e integrado en `main` tras su comprobación básica, por autorización del usuario.
 
 ## Trabajo verificado localmente
 
-- Se crearon dos pedidos en una base temporal y se comprobó su orden del más reciente al más antiguo.
-- Se verificaron pedidos con estados `PENDIENTE DE PAGO` y `PAGADO`.
-- La ruta `/caja` respondió correctamente y mostró números, clientes, productos, cantidades y estados.
-- Se verificó el mensaje de caja vacía sin modificar la base de datos real.
-- Se rechazaron búsquedas malformadas, fuera de rango y de pedidos inexistentes.
-- Se comprobó que los pedidos pagados y cancelados ya no muestran acciones de caja.
-- Se probaron los flujos de pago, cancelación, persistencia, transiciones inválidas, pedidos inexistentes y regresión del menú con seis pruebas automatizadas.
-- En el navegador se confirmó visualmente el diálogo y los mensajes de pago y cancelación usando pedidos temporales.
+- Comprobación básica con una base temporal: `/cocina` carga, excluye pedidos sin pagar y muestra los productos y cantidades de un pedido pagado.
+- La API recorrió preparación, listo y entrega; rechazó un salto directo de pagado a listo.
+- El pedido entregado salió de la lista activa y `/caja` siguió respondiendo.
+- Se comprobó con una base temporal que un pedido entregado aparece en el historial de caja, conserva sus cantidades y total, se puede buscar por número y no muestra acciones de pago o cancelación.
+- Las seis pruebas existentes de caja siguen pasando después de separar el historial.
+- Quedan pendientes la revisión en navegador y las validaciones completas solicitadas para el siguiente incremento.
 
 ## Sprint Review
 
-- El módulo permite consultar, buscar, cobrar físicamente y cancelar pedidos en caja.
-- El Sprint 6 cumple su objetivo y quedó integrado localmente en `main`.
+- Cocina y el historial de entregados quedaron integrados en `main`.
+- El Sprint 7 permanece abierto hasta completar la revisión en navegador y las validaciones del flujo completo, errores, concurrencia y persistencia.
 
 ## Sprint Retrospective
 
-- Agrupar los detalles en la consulta de caja mantiene sencilla la plantilla HTML.
-- Las pruebas con una base temporal siguen evitando cambios accidentales en los pedidos reales.
-- Confirmar cada acción con un diálogo claro ayuda a evitar errores al cobrar o cancelar.
+- Pendiente al cierre del sprint.
 
 ## Impedimentos
 
@@ -70,7 +67,10 @@ Ninguno documentado.
 
 ## Criterios para cerrar el sprint
 
-- Todos los criterios funcionales del Sprint 6 están implementados y verificados.
+- Solo los pedidos pagados pueden entrar a preparación.
+- Cada acción avanza al siguiente estado permitido y persiste en SQLite.
+- Los pedidos entregados dejan de aparecer como activos.
+- La interfaz y el flujo completo están probados e integrados en `main`.
 - `SPRINT_STATUS.md` queda actualizado con responsables, ramas y resultados reales.
 
 ## Acuerdos de actualización
@@ -79,12 +79,12 @@ Ninguno documentado.
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Mostrar confirmación animada al agregar al carrito y bloquear dobles clics accidentales | Equipo | Terminada en rama | `dev` |
+| Mostrar confirmación animada al agregar al carrito y bloquear dobles clics accidentales | Equipo | Integrada en `main` | `main` |
 
 - El botón muestra «✓ Agregado» durante 700 ms, el carrito hace un pulso breve y aparece un aviso con el nombre del producto durante dos segundos.
 - La animación respeta la preferencia de reducir movimiento.
 - Se verificó en el navegador que un doble clic agrega una sola unidad; un clic posterior agrega otra normalmente y actualiza el total.
-- Pendiente de integración en `main`; este ajuste no cambia el cierre del Sprint 6.
+- Integrado y publicado en `main` en el commit `34b6b18`; este ajuste no cambia el cierre del Sprint 6.
 
 ### Reglas compartidas
 
@@ -97,6 +97,24 @@ Ninguno documentado.
 - Al cerrar el sprint, registrar el resultado de la Review y la Retrospective antes de preparar el siguiente Sprint Backlog.
 
 ## Sprints anteriores
+
+### Sprint 6 — Módulo de caja
+
+Estado: **COMPLETADO**
+
+Incremento verificado en `main`: el personal consulta pedidos, busca por número, confirma el pago físico o cancela pedidos pendientes.
+
+#### Sprint Review
+
+- El módulo muestra el detalle completo, total y estado de los pedidos.
+- Las acciones persisten en SQLite y rechazan cambios repetidos o inválidos.
+- Se verificaron seis pruebas automatizadas y los controles de pago y cancelación en navegador con datos temporales.
+
+#### Sprint Retrospective
+
+- Reutilizar la consulta de detalles simplificó la interfaz.
+- Las pruebas temporales evitaron modificar pedidos reales.
+- Confirmar las acciones mediante un diálogo claro ayudó a evitar errores.
 
 ### Sprint 5 — Creación del pedido
 

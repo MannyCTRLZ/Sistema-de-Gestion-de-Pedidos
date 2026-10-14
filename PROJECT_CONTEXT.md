@@ -115,6 +115,10 @@ Las vistas lógicas del personal son:
 - Ver detalle y total.
 - Confirmar pago.
 - Cancelar un pedido cuando corresponda.
+- Consultar en una sección separada el historial de pedidos entregados, con búsqueda por número, detalle y total.
+
+El historial muestra la fecha de creación del pedido. Por ahora no se registra
+una fecha de entrega independiente ni una bitácora de cada cambio de estado.
 
 #### Cocina
 - Ver pedidos pagados.

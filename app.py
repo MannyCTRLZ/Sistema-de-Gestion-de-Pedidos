@@ -2,10 +2,12 @@ from flask import Flask, jsonify, render_template, request
 from database import (
     MAX_ENTERO_SQLITE,
     cambiar_estado_en_caja,
+    cambiar_estado_en_cocina,
     crear_pedido,
     crear_tablas,
     insertar_productos_iniciales,
     obtener_pedidos,
+    obtener_pedidos_cocina,
     obtener_productos,
 )
 
@@ -30,6 +32,8 @@ def menu():
 @app.route("/caja")
 def caja():
     pedidos = obtener_pedidos()
+    vista = "historial" if request.args.get("vista") == "historial" else "seguimiento"
+    cantidad_entregados = sum(pedido["estado"] == "ENTREGADO" for pedido in pedidos)
     busqueda = request.args.get("numero", "").strip()
     error_busqueda = None
     resumen = {
@@ -39,6 +43,10 @@ def caja():
         ),
         "pagados": sum(pedido["estado"] == "PAGADO" for pedido in pedidos),
     }
+    pedidos = [
+        pedido for pedido in pedidos
+        if (pedido["estado"] == "ENTREGADO") == (vista == "historial")
+    ]
     if busqueda:
         numero = busqueda.removeprefix("#")
         if (not numero.isascii() or not numero.isdecimal()
@@ -53,7 +61,33 @@ def caja():
     return render_template(
         "caja.html", pedidos=pedidos, resumen=resumen,
         busqueda=busqueda, error_busqueda=error_busqueda,
+        vista=vista, cantidad_entregados=cantidad_entregados,
     )
+
+
+@app.route("/cocina")
+def cocina():
+    pedidos = obtener_pedidos_cocina()
+    resumen = {
+        "pagados": sum(pedido["estado"] == "PAGADO" for pedido in pedidos),
+        "preparacion": sum(pedido["estado"] == "EN PREPARACIÓN" for pedido in pedidos),
+        "listos": sum(pedido["estado"] == "LISTO" for pedido in pedidos),
+    }
+    return render_template("cocina.html", pedidos=pedidos, resumen=resumen)
+
+
+@app.post("/api/cocina/pedidos/<int:numero_pedido>/estado")
+def api_cambiar_estado_en_cocina(numero_pedido):
+    datos = request.get_json(silent=True)
+    if not isinstance(datos, dict):
+        return jsonify({"error": "Los datos de la acción no son válidos."}), 400
+    try:
+        pedido = cambiar_estado_en_cocina(numero_pedido, datos.get("estado"))
+    except LookupError as error:
+        return jsonify({"error": str(error)}), 404
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    return jsonify(pedido)
 
 
 @app.post("/api/pedidos/<int:numero_pedido>/estado")

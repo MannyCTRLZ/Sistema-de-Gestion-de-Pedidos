@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocina | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="logo" href="{{ url_for('cocina') }}">Cafetería Universitaria · Cocina</a>
+        <div class="acciones-encabezado">
+            <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
+            <a class="enlace-menu" href="{{ url_for('caja') }}">Caja</a>
+        </div>
+    </header>
+
+    <main class="pagina-caja pagina-cocina">
+        <section class="caja-presentacion">
+            <div>
+                <p class="presentacion-etiqueta">Panel del personal</p>
+                <h1>Pedidos en cocina</h1>
+                <p>Prepara los pedidos pagados y registra su entrega.</p>
+            </div>
+            <div class="caja-resumen" aria-label="Resumen de cocina">
+                <article><span>Por preparar</span><strong>{{ resumen.pagados }}</strong></article>
+                <article><span>En preparación</span><strong>{{ resumen.preparacion }}</strong></article>
+                <article><span>Listos</span><strong>{{ resumen.listos }}</strong></article>
+            </div>
+        </section>
+
+        <p id="cocina-mensaje" class="caja-mensaje" role="status" aria-live="polite" hidden></p>
+        <section aria-labelledby="titulo-pedidos-cocina">
+            <div class="caja-lista-encabezado cocina-lista-encabezado">
+                <div>
+                    <h2 id="titulo-pedidos-cocina">Pedidos activos</h2>
+                    <p>Los más antiguos aparecen primero. Actualiza para consultar nuevos pedidos.</p>
+                </div>
+                <a class="enlace-actualizar-cocina" href="{{ url_for('cocina') }}">Actualizar pedidos</a>
+            </div>
+            <div class="lista-pedidos">
+                {% for pedido in pedidos %}
+                <article class="pedido-caja pedido-cocina">
+                    <div class="pedido-caja-encabezado">
+                        <div>
+                            <span class="pedido-numero">#{{ "%04d"|format(pedido.numero_pedido) }}</span>
+                            <h3>{{ pedido.nombre_cliente }}</h3>
+                            <time>{{ pedido.fecha }}</time>
+                        </div>
+                        <span class="estado-pedido {% if pedido.estado == 'PAGADO' %}estado-pendiente{% elif pedido.estado == 'LISTO' %}estado-pagado{% else %}estado-proceso{% endif %}">
+                            {{ pedido.estado }}
+                        </span>
+                    </div>
+                    <div class="pedido-caja-productos cocina-productos">
+                        {% for producto in pedido.productos %}
+                        <p><span><strong>{{ producto.cantidad }} ×</strong> {{ producto.nombre }}</span></p>
+                        {% endfor %}
+                    </div>
+                    {% if pedido.estado == 'PAGADO' %}
+                        {% set siguiente_estado = 'EN PREPARACIÓN' %}
+                        {% set accion = 'Comenzar preparación' %}
+                    {% elif pedido.estado == 'EN PREPARACIÓN' %}
+                        {% set siguiente_estado = 'LISTO' %}
+                        {% set accion = 'Marcar como listo' %}
+                    {% else %}
+                        {% set siguiente_estado = 'ENTREGADO' %}
+                        {% set accion = 'Marcar como entregado' %}
+                    {% endif %}
+                    <div class="pedido-caja-acciones cocina-acciones">
+                        <button type="button" data-estado="{{ siguiente_estado }}"
+                                data-numero="{{ pedido.numero_pedido }}"
+                                data-url="{{ url_for('api_cambiar_estado_en_cocina', numero_pedido=pedido.numero_pedido) }}">
+                            {{ accion }}
+                        </button>
+                    </div>
+                </article>
+                {% else %}
+                <div class="caja-vacia">
+                    <h3>No hay pedidos activos en cocina</h3>
+                    <p>Los pedidos aparecerán después de confirmar su pago en caja.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <dialog id="confirmacion-cocina" class="confirmacion-caja" aria-labelledby="titulo-confirmacion-cocina">
+        <h2 id="titulo-confirmacion-cocina">Confirmar avance del pedido</h2>
+        <p id="detalle-confirmacion-cocina"></p>
+        <form method="dialog" class="pedido-caja-acciones">
+            <button value="volver" class="boton-cancelar" autofocus>Volver</button>
+            <button value="confirmar">Confirmar</button>
+        </form>
+    </dialog>
+    <footer class="pie-pagina"><p>Cafetería Universitaria · Módulo de cocina</p></footer>
+    <script src="{{ url_for('static', filename='js/cocina.js') }}"></script>
+</body>
+</html>
