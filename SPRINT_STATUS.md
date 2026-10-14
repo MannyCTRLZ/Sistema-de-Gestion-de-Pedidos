@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 7 — Módulo de cocina**
 
-Estado: **EN PROGRESO**
+Estado: **COMPLETADO**
 
 ## Objetivo del sprint
 
@@ -25,8 +25,8 @@ Flujo Pagado → En preparación → Listo → Entregado funcional.
 | Agregar acciones de preparación, listo y entrega | Equipo | Integrada en `main` | `dev` → `main` |
 | Validar las transiciones básicas en Flask | Equipo | Integrada en `main` | `dev` → `main` |
 | Separar en caja el historial de pedidos entregados con búsqueda por número | Equipo | Integrada en `main` | `dev` → `main` |
-| Validar interfaz, errores, concurrencia y persistencia completa | Equipo | Pendiente | `dev` |
-| Probar el flujo completo Menú → Caja → Cocina → Entrega | Equipo | Pendiente | `dev` |
+| Validar interfaz, errores, concurrencia y persistencia completa | Equipo | Integrada en `main` | `dev` → `main` |
+| Probar el flujo completo Menú → Caja → Cocina → Entrega | Equipo | Integrada en `main` | `dev` → `main` |
 | Integrar el incremento con comprobación básica en main | Equipo | Integrada en `main` | `dev` → `main` |
 
 ## Trabajo integrado en `main`
@@ -60,16 +60,28 @@ filtrada en caja; las siete pruebas de caja pasan.
 - El pedido entregado salió de la lista activa y `/caja` siguió respondiendo.
 - Se comprobó con una base temporal que un pedido entregado aparece en el historial de caja, conserva sus cantidades y total, se puede buscar por número y no muestra acciones de pago o cancelación.
 - Las seis pruebas existentes de caja siguen pasando después de separar el historial.
-- Quedan pendientes la revisión en navegador y las validaciones completas solicitadas para el siguiente incremento.
+- El 14 de octubre de 2026 pasaron 13 pruebas automatizadas: seis de caja y siete de cocina e historial.
+- Se comprobaron las 18 combinaciones de estados de origen y destino de cocina; solo las tres transiciones permitidas avanzan el pedido.
+- Los datos inválidos, pedidos inexistentes, saltos de estado y reintentos se rechazan sin modificar el pedido.
+- Dos solicitudes simultáneas de preparación producen un avance correcto y un rechazo, sin duplicar acciones.
+- Se reabrió la conexión para verificar estado final, detalle, cantidades, total, cliente y fecha; SQLite pasó las comprobaciones de integridad y claves foráneas.
+- En navegador se completó Menú → Carrito → Nombre → Número → Caja → Pago → Cocina → Preparación → Listo → Entregado → Historial.
+- El pedido de prueba #0001 de Ana Sprint 7 conservó un Burrito y total $55.00 al llegar al historial; se verificó la búsqueda por número.
+- Se revisó cocina en escritorio y cocina e historial a 375 px de ancho sin desbordamiento horizontal.
+- El diálogo «Volver» conserva el estado; una segunda ventana desactualizada mostró el error de acción repetida y recuperó el estado correcto al actualizar.
+- Todas las pruebas usaron bases temporales; no se modificaron los pedidos reales.
 
 ## Sprint Review
 
 - Cocina y el historial de entregados quedaron integrados en `main`.
-- El Sprint 7 permanece abierto hasta completar la revisión en navegador y las validaciones del flujo completo, errores, concurrencia y persistencia.
+- Se verificaron el flujo completo, la interfaz, los errores, la concurrencia y la persistencia.
+- El Sprint 7 cumple sus criterios de cierre. Sus pruebas y resultados quedan integrados en `main`.
 
 ## Sprint Retrospective
 
-- Pendiente al cierre del sprint.
+- Probar con una base temporal permitió recorrer todo el flujo sin alterar datos reales.
+- La actualización condicional del estado evita que dos ventanas avancen dos veces la misma acción.
+- Validar los diálogos y mensajes en navegador complementó las pruebas automatizadas de Flask y SQLite.
 
 ## Impedimentos
 
