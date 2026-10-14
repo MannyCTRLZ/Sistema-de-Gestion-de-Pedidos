@@ -1,8 +1,13 @@
+import base64
+import os
 import tempfile
 import unittest
+from contextlib import closing
 from pathlib import Path
+from unittest.mock import patch
 
 import database
+import segno
 
 # Importar Flask con una base temporal evita tocar cafeteria.db.
 BASE_IMPORTACION = tempfile.TemporaryDirectory()
@@ -49,7 +54,7 @@ class CajaTest(unittest.TestCase):
         self.assertIn("$155.00", html)
         self.assertIn("Confirmar pago", html)
         self.assertEqual(self.cambiar(numero, "PAGADO").status_code, 200)
-        with database.obtener_conexion() as conexion:
+        with closing(database.obtener_conexion()) as conexion:
             fila = conexion.execute(
                 "SELECT estado, total FROM pedidos WHERE numero_pedido = ?", (numero,)
             ).fetchone()
@@ -59,6 +64,39 @@ class CajaTest(unittest.TestCase):
         self.assertIn("PAGADO", html)
         self.assertNotIn("Confirmar pago", html)
         self.assertNotIn("Cancelar pedido", html)
+
+    def test_qr_del_pedido_abre_caja_con_su_numero_filtrado(self):
+        self.crear_pedido("Carlos")
+        with patch.dict(os.environ, {"PUBLIC_BASE_URL": "https://cafeteria.example"}):
+            with patch("app.segno.make_qr", wraps=segno.make_qr) as generar:
+                respuesta = self.cliente.post("/api/pedidos", json={
+                    "nombre_cliente": "María",
+                    "productos": [{"id": 1, "cantidad": 1}],
+                })
+
+        self.assertEqual(respuesta.status_code, 201)
+        datos = respuesta.get_json()
+        numero = datos["numero_pedido"]
+        generar.assert_called_once_with(
+            f"https://cafeteria.example/caja?numero={numero}", error="m"
+        )
+        self.assertTrue(datos["codigo_qr"].startswith("data:image/svg+xml;base64,"))
+        imagen = base64.b64decode(datos["codigo_qr"].split(",", 1)[1])
+        self.assertIn(b"<svg", imagen)
+
+        caja = self.cliente.get("/caja", query_string={"numero": numero})
+        html = caja.get_data(as_text=True)
+        self.assertEqual(caja.status_code, 200)
+        self.assertIn(f'value="{numero}"', html)
+        self.assertIn("María", html)
+        self.assertNotIn("Carlos", html)
+
+        with patch.dict(os.environ, {"PUBLIC_BASE_URL": ""}):
+            with patch("app.segno.make_qr", wraps=segno.make_qr) as generar_local:
+                numero_local = self.crear_pedido("Luis")
+        generar_local.assert_called_once_with(
+            f"http://localhost/caja?numero={numero_local}", error="m"
+        )
 
     def test_cancelar_no_borra_detalles_y_no_permite_pagar_despues(self):
         numero = self.crear_pedido()

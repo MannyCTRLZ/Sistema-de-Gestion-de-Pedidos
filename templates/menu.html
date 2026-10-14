@@ -152,10 +152,14 @@
         <div id="paso-confirmacion" hidden>
             <p class="presentacion-etiqueta">Pedido registrado</p>
             <h2>Tu número es <span id="numero-pedido"></span></h2>
-            <p>Presenta este número en caja para realizar el pago.</p>
+            <p>Presenta este número o el código QR en caja para realizar el pago.</p>
             <div class="pedido-confirmado-datos">
                 <p><span>Estado</span><strong id="estado-pedido"></strong></p>
                 <p><span>Total</span><strong id="total-confirmado"></strong></p>
+            </div>
+            <div class="pedido-confirmado-qr">
+                <img id="codigo-qr" alt="Código QR para buscar tu pedido en caja" width="200" height="200">
+                <p>Muestra este código al personal de caja.</p>
             </div>
             <button class="boton-volver" id="nuevo-pedido" type="button">Volver al menú</button>
         </div>

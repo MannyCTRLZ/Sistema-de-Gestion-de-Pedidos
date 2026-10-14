@@ -32,6 +32,7 @@ const pasoConfirmacion = document.querySelector("#paso-confirmacion");
 const numeroPedido = document.querySelector("#numero-pedido");
 const estadoPedido = document.querySelector("#estado-pedido");
 const totalConfirmado = document.querySelector("#total-confirmado");
+const codigoQr = document.querySelector("#codigo-qr");
 const botonNuevoPedido = document.querySelector("#nuevo-pedido");
 
 function formatearPrecio(precio) {
@@ -173,6 +174,8 @@ async function confirmarPedido() {
         numeroPedido.textContent = `#${String(datos.numero_pedido).padStart(4, "0")}`;
         estadoPedido.textContent = datos.estado;
         totalConfirmado.textContent = formatearPrecio(datos.total);
+        codigoQr.src = datos.codigo_qr;
+        codigoQr.alt = `Código QR del pedido #${datos.numero_pedido} para buscarlo en caja`;
         pasoResumen.hidden = true;
         pasoConfirmacion.hidden = false;
         carrito.length = 0;

@@ -80,6 +80,9 @@ Menú -> Selección de productos -> Carrito -> Nombre -> Confirmar -> Número de
 Caja:
 Número de pedido -> Ver pedido -> Cobrar físicamente -> Confirmar pago -> Entregar localizador físico
 
+La confirmación del estudiante muestra un QR con la URL de caja y el número
+del pedido en el filtro `numero`. Caja conserva su búsqueda y sus acciones.
+
 Cocina:
 Ver pedidos pagados -> Comenzar preparación -> Marcar como listo
 

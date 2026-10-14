@@ -1,4 +1,10 @@
-from flask import Flask, jsonify, render_template, request
+import base64
+import io
+import os
+from urllib.parse import urljoin
+
+import segno
+from flask import Flask, jsonify, render_template, request, url_for
 from database import (
     MAX_ENTERO_SQLITE,
     cambiar_estado_en_caja,
@@ -119,6 +125,22 @@ def api_crear_pedido():
     except ValueError as error:
         return jsonify({"error": str(error)}), 400
 
+    numero = pedido["numero_pedido"]
+    ruta_caja = url_for("caja", numero=numero)
+    base_publica = os.environ.get("PUBLIC_BASE_URL", "").strip()
+    if base_publica:
+        enlace_caja = urljoin(base_publica.rstrip("/") + "/", ruta_caja.lstrip("/"))
+    else:
+        enlace_caja = url_for("caja", numero=numero, _external=True)
+
+    imagen = io.BytesIO()
+    segno.make_qr(enlace_caja, error="m").save(
+        imagen, kind="svg", scale=5, border=4
+    )
+    pedido["codigo_qr"] = (
+        "data:image/svg+xml;base64,"
+        + base64.b64encode(imagen.getvalue()).decode("ascii")
+    )
     return jsonify(pedido), 201
 
 

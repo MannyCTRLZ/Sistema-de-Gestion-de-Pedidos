@@ -43,6 +43,16 @@ Flujo Pagado → En preparación → Listo → Entregado funcional.
 - El historial conserva número, cliente, fecha de creación, productos, cantidades y total sin acciones de caja.
 - El incremento fue desarrollado en `dev` e integrado en `main` tras su comprobación básica, por autorización del usuario.
 
+### Ajuste solicitado: QR para localizar pedidos en caja
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Mostrar un QR al confirmar cada pedido que abra caja con el filtro `numero` | Equipo | En progreso; pendiente de integrar en `main` | `codigoQr` |
+
+Este ajuste no modifica el flujo de cocina ni las acciones existentes de caja.
+La prueba local confirmó el enlace codificado, la imagen SVG y la búsqueda
+filtrada en caja; las siete pruebas de caja pasan.
+
 ## Trabajo verificado localmente
 
 - Comprobación básica con una base temporal: `/cocina` carga, excluye pedidos sin pagar y muestra los productos y cantidades de un pedido pagado.
