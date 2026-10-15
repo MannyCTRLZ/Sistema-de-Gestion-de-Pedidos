@@ -47,11 +47,12 @@ Flujo Pagado → En preparación → Listo → Entregado funcional.
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Mostrar un QR al confirmar cada pedido que abra caja con el filtro `numero` | Equipo | En progreso; pendiente de integrar en `main` | `codigoQr` |
+| Mostrar un QR al confirmar cada pedido que abra caja con el filtro `numero` | Equipo | Integrada en `main` | `main` |
 
 Este ajuste no modifica el flujo de cocina ni las acciones existentes de caja.
 La prueba local confirmó el enlace codificado, la imagen SVG y la búsqueda
 filtrada en caja; las siete pruebas de caja pasan.
+Integración del QR confirmada en `main` en el commit `3af503a`.
 
 ## Trabajo verificado localmente
 
@@ -101,14 +102,27 @@ Ninguno documentado.
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Reemplazar la taza del inicio por la imagen proporcionada | Equipo | Terminada en rama | `dev` |
-| Añadir una animación breve al pulsar botones y enlaces de acción | Equipo | Terminada en rama | `dev` |
+| Reemplazar la taza del inicio por la imagen proporcionada | Equipo | Integrada en `main` | `main` |
+| Añadir una animación breve al pulsar botones y enlaces de acción | Equipo | Integrada en `main` | `main` |
 
 - La portada utiliza `static/img/cafeteria-universitaria.png`, conservando el emblema completo y su proporción, con transparencia fuera del borde circular por petición del usuario.
 - Inicio, menú, caja y cocina cargan una animación compartida de 180 ms; incluye los botones dinámicos del carrito y la activación con teclado.
 - Los botones deshabilitados quedan excluidos y se respeta la preferencia de reducir movimiento.
 - Se revisó la portada en navegador y se comprobó que agregar con doble clic conserva una sola unidad y que el control de cantidad funciona.
-- Pendiente de integración en `main`; estos ajustes no cambian el cierre del Sprint 7.
+- Los ajustes visuales quedaron integrados y publicados en `main` en el commit `f8cc160`; `dev` se sincronizó con esa versión.
+- El 15 de octubre de 2026 pasaron las 14 pruebas existentes, incluida la generación del QR y su enlace filtrado en caja.
+- Estos ajustes no cambian el cierre del Sprint 7.
+
+### Preparación del Sprint 8 — Administración
+
+Las tareas siguientes están pendientes y se desarrollarán en `dev`:
+
+- Crear el panel para consultar y administrar productos.
+- Agregar productos con nombre, descripción, categoría, precio y disponibilidad.
+- Editar los datos de un producto existente.
+- Activar o desactivar su disponibilidad manualmente.
+- Verificar que los cambios aparezcan en el menú y que los no disponibles permanezcan visibles como «Agotado».
+- Probar el incremento antes de integrarlo en `main`.
 
 ### Ajuste del menú solicitado después del Sprint 6
 
