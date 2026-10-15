@@ -36,9 +36,10 @@
                 </a>
             </div>
 
-            <div class="hero-ilustracion" aria-hidden="true">
-                <span>☕</span>
-                <p>Un descanso con buen sabor</p>
+            <div class="hero-ilustracion">
+                <img src="{{ url_for('static', filename='img/cafeteria-universitaria.png') }}"
+                     alt="Cafetería Universitaria: taza de café con birrete sobre un libro abierto"
+                     width="1254" height="1254" fetchpriority="high">
             </div>
         </section>
 
@@ -87,5 +88,6 @@
         <p>Cafetería Universitaria</p>
         <p>Realiza tu pedido y paga directamente en caja.</p>
     </footer>
+    <script src="{{ url_for('static', filename='js/botones.js') }}"></script>
 </body>
 </html>

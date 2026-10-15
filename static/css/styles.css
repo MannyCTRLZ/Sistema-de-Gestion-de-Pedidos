@@ -150,21 +150,35 @@ a {
 .hero-ilustracion {
     display: grid;
     place-items: center;
-    min-height: 360px;
-    padding: 2rem;
-    border-radius: 48% 48% 18% 18%;
-    color: var(--verde);
-    background: var(--verde-claro);
-    text-align: center;
+    width: 100%;
 }
 
-.hero-ilustracion span {
-    font-size: clamp(7rem, 15vw, 11rem);
+.hero-ilustracion img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    border-radius: 1.5rem;
 }
 
-.hero-ilustracion p {
-    margin: 0;
-    font-weight: 700;
+/* Respuesta al mantener pulsado, también en enlaces que actúan como botones. */
+button:enabled:active,
+a:not(.logo):active {
+    scale: .97;
+    filter: brightness(.92);
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--naranja);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button:enabled:active,
+    a:not(.logo):active {
+        scale: none;
+    }
 }
 
 .bienvenida,
@@ -1062,10 +1076,6 @@ a {
     .hero {
         gap: 1rem;
         padding-top: 3rem;
-    }
-
-    .hero-ilustracion {
-        min-height: 260px;
     }
 
     .bienvenida,

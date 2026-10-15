@@ -97,6 +97,19 @@ Ninguno documentado.
 
 ## Acuerdos de actualización
 
+### Ajustes visuales solicitados después del Sprint 7
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Reemplazar la taza del inicio por la imagen proporcionada | Equipo | Terminada en rama | `dev` |
+| Añadir una animación breve al pulsar botones y enlaces de acción | Equipo | Terminada en rama | `dev` |
+
+- La portada utiliza `static/img/cafeteria-universitaria.png`, conservando el emblema completo y su proporción, con transparencia fuera del borde circular por petición del usuario.
+- Inicio, menú, caja y cocina cargan una animación compartida de 180 ms; incluye los botones dinámicos del carrito y la activación con teclado.
+- Los botones deshabilitados quedan excluidos y se respeta la preferencia de reducir movimiento.
+- Se revisó la portada en navegador y se comprobó que agregar con doble clic conserva una sola unidad y que el control de cantidad funciona.
+- Pendiente de integración en `main`; estos ajustes no cambian el cierre del Sprint 7.
+
 ### Ajuste del menú solicitado después del Sprint 6
 
 | Tarea | Responsable | Estado | Rama |
