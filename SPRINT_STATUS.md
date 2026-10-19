@@ -4,19 +4,59 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 7 — Módulo de cocina**
+**Sprint 8 — Administración**
 
-Estado: **COMPLETADO**
+Estado: **EN PROGRESO**. Incremento implementado y probado localmente en `dev`; pendiente de integración autorizada en `main`.
 
 ## Objetivo del sprint
 
-Gestionar la preparación y entrega de los pedidos pagados.
+Permitir al personal administrar los datos y la disponibilidad de los productos sin modificar la base manualmente.
 
 ## Incremento esperado
 
-Flujo Pagado → En preparación → Listo → Entregado funcional.
+Panel `/admin` para consultar, agregar, editar y marcar productos como disponibles o agotados; cambios persistidos en SQLite y reflejados en el menú.
 
 ## Sprint Backlog
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Crear panel y catálogo de productos con acceso desde caja y cocina | Equipo / Codex | Terminada en rama | `dev` |
+| Agregar y editar nombre, descripción, categoría, precio y disponibilidad | Equipo / Codex | Terminada en rama | `dev` |
+| Activar o desactivar disponibilidad sin eliminar productos | Equipo / Codex | Terminada en rama | `dev` |
+| Validar datos en Flask y reflejar cambios en el menú | Equipo / Codex | Terminada en rama | `dev` |
+| Probar persistencia, errores e interfaz | Equipo / Codex | Terminada en rama | `dev` |
+| Integrar el incremento probado en main con autorización | Equipo | Pendiente | `dev` → `main` |
+
+## Trabajo verificado del Sprint 8
+
+- El 15 de octubre de 2026 pasaron las 20 pruebas automatizadas: las 14 existentes y seis nuevas de administración.
+- Se verificaron altas, edición, disponibilidad, datos inválidos y productos inexistentes sin escrituras parciales.
+- Marcar un producto agotado impide nuevos pedidos que lo incluyan, pero conserva los pedidos anteriores y permite reactivarlo.
+- Los textos del catálogo se escapan en HTML; el carrito muestra los nombres editables como texto.
+- Renombrar un producto inicial ya no provoca que se vuelva a insertar al reiniciar: los datos iniciales solo se cargan en un catálogo vacío.
+- En navegador se agregó un producto, se cambió su nombre y precio, se marcó agotado y se reactivó; el menú conservó su tarjeta con «Agotado» y el botón deshabilitado.
+- Se revisaron el catálogo en escritorio y el formulario a 375 px de ancho, sin desbordamiento horizontal.
+- Todas las pruebas usaron bases temporales, sin modificar productos ni pedidos reales.
+- La autenticación y los roles internos siguen pendientes para el Sprint 9; este incremento no debe exponerse públicamente sin ese control.
+
+## Pendientes de cierre
+
+- Integrar y comprobar el incremento en `main` con autorización del usuario.
+- Registrar Review y Retrospective al cerrar el sprint; no se considera completado por estar probado solo en `dev`.
+
+## Registro del Sprint 7 — Módulo de cocina
+
+Estado: **COMPLETADO**
+
+### Objetivo del sprint
+
+Gestionar la preparación y entrega de los pedidos pagados.
+
+### Incremento esperado
+
+Flujo Pagado → En preparación → Listo → Entregado funcional.
+
+### Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
@@ -29,7 +69,7 @@ Flujo Pagado → En preparación → Listo → Entregado funcional.
 | Probar el flujo completo Menú → Caja → Cocina → Entrega | Equipo | Integrada en `main` | `dev` → `main` |
 | Integrar el incremento con comprobación básica en main | Equipo | Integrada en `main` | `dev` → `main` |
 
-## Trabajo integrado en `main`
+### Trabajo integrado en `main`
 
 - `/cocina` muestra pedidos activos pagados, en preparación y listos, del más antiguo al más reciente.
 - Cada tarjeta muestra número, cliente, fecha, estado, productos y cantidades.
@@ -54,7 +94,7 @@ La prueba local confirmó el enlace codificado, la imagen SVG y la búsqueda
 filtrada en caja; las siete pruebas de caja pasan.
 Integración del QR confirmada en `main` en el commit `3af503a`.
 
-## Trabajo verificado localmente
+### Trabajo verificado localmente
 
 - Comprobación básica con una base temporal: `/cocina` carga, excluye pedidos sin pagar y muestra los productos y cantidades de un pedido pagado.
 - La API recorrió preparación, listo y entrega; rechazó un salto directo de pagado a listo.
@@ -72,23 +112,23 @@ Integración del QR confirmada en `main` en el commit `3af503a`.
 - El diálogo «Volver» conserva el estado; una segunda ventana desactualizada mostró el error de acción repetida y recuperó el estado correcto al actualizar.
 - Todas las pruebas usaron bases temporales; no se modificaron los pedidos reales.
 
-## Sprint Review
+### Sprint Review
 
 - Cocina y el historial de entregados quedaron integrados en `main`.
 - Se verificaron el flujo completo, la interfaz, los errores, la concurrencia y la persistencia.
 - El Sprint 7 cumple sus criterios de cierre. Sus pruebas y resultados quedan integrados en `main`.
 
-## Sprint Retrospective
+### Sprint Retrospective
 
 - Probar con una base temporal permitió recorrer todo el flujo sin alterar datos reales.
 - La actualización condicional del estado evita que dos ventanas avancen dos veces la misma acción.
 - Validar los diálogos y mensajes en navegador complementó las pruebas automatizadas de Flask y SQLite.
 
-## Impedimentos
+### Impedimentos
 
 Ninguno documentado.
 
-## Criterios para cerrar el sprint
+### Criterios para cerrar el sprint
 
 - Solo los pedidos pagados pueden entrar a preparación.
 - Cada acción avanza al siguiente estado permitido y persiste en SQLite.
@@ -112,17 +152,6 @@ Ninguno documentado.
 - Los ajustes visuales quedaron integrados y publicados en `main` en el commit `f8cc160`; `dev` se sincronizó con esa versión.
 - El 15 de octubre de 2026 pasaron las 14 pruebas existentes, incluida la generación del QR y su enlace filtrado en caja.
 - Estos ajustes no cambian el cierre del Sprint 7.
-
-### Preparación del Sprint 8 — Administración
-
-Las tareas siguientes están pendientes y se desarrollarán en `dev`:
-
-- Crear el panel para consultar y administrar productos.
-- Agregar productos con nombre, descripción, categoría, precio y disponibilidad.
-- Editar los datos de un producto existente.
-- Activar o desactivar su disponibilidad manualmente.
-- Verificar que los cambios aparezcan en el menú y que los no disponibles permanezcan visibles como «Agotado».
-- Probar el incremento antes de integrarlo en `main`.
 
 ### Ajuste del menú solicitado después del Sprint 6
 

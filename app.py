@@ -9,9 +9,11 @@ from database import (
     MAX_ENTERO_SQLITE,
     cambiar_estado_en_caja,
     cambiar_estado_en_cocina,
+    cambiar_disponibilidad,
     crear_pedido,
     crear_tablas,
     insertar_productos_iniciales,
+    guardar_producto,
     obtener_pedidos,
     obtener_pedidos_cocina,
     obtener_productos,
@@ -69,6 +71,41 @@ def caja():
         busqueda=busqueda, error_busqueda=error_busqueda,
         vista=vista, cantidad_entregados=cantidad_entregados,
     )
+
+
+@app.route("/admin")
+def administracion():
+    productos = obtener_productos()
+    disponibles = sum(bool(producto["disponible"]) for producto in productos)
+    return render_template(
+        "admin.html", productos=productos, disponibles=disponibles,
+    )
+
+
+@app.post("/api/productos")
+@app.put("/api/productos/<int:producto_id>")
+def api_guardar_producto(producto_id=None):
+    try:
+        producto = guardar_producto(request.get_json(silent=True), producto_id)
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    except LookupError as error:
+        return jsonify({"error": str(error)}), 404
+    return jsonify(producto), 201 if producto_id is None else 200
+
+
+@app.patch("/api/productos/<int:producto_id>/disponibilidad")
+def api_cambiar_disponibilidad(producto_id):
+    datos = request.get_json(silent=True)
+    if not isinstance(datos, dict):
+        return jsonify({"error": "Los datos no son válidos."}), 400
+    try:
+        producto = cambiar_disponibilidad(producto_id, datos.get("disponible"))
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    except LookupError as error:
+        return jsonify({"error": str(error)}), 404
+    return jsonify(producto)
 
 
 @app.route("/cocina")

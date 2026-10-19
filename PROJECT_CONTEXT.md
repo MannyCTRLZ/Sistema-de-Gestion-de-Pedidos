@@ -222,6 +222,13 @@ Debe permitir:
 - Precio.
 - Categoría.
 
+El panel `/admin` permite crear y editar productos y marcar su disponibilidad.
+No se borran productos asociados a pedidos: se desactivan cuando no pueden ofrecerse.
+Los datos de ejemplo se insertan solo si el catálogo está vacío al iniciar, para
+evitar recrear productos que el personal haya renombrado. Los campos admiten
+100 caracteres en nombre, 50 en categoría y 500 en descripción; el precio debe
+ser positivo, con hasta dos decimales y un máximo de $999999.99.
+
 ## 11. Fuera del MVP / fuera de alcance inicial
 
 No incluir de inicio:

@@ -85,14 +85,14 @@ function actualizarCarrito() {
         elemento.className = "carrito-producto";
         elemento.innerHTML = `
             <div class="carrito-producto-datos">
-                <h3>${producto.nombre}</h3>
+                <h3></h3>
                 <span>${formatearPrecio(producto.precio)} c/u</span>
             </div>
             <div class="carrito-producto-acciones">
-                <div class="control-cantidad" aria-label="Cantidad de ${producto.nombre}">
-                    <button type="button" data-accion="disminuir" data-id="${producto.id}" aria-label="Disminuir ${producto.nombre}">−</button>
+                <div class="control-cantidad">
+                    <button type="button" data-accion="disminuir" data-id="${producto.id}">−</button>
                     <span>${producto.cantidad}</span>
-                    <button type="button" data-accion="aumentar" data-id="${producto.id}" aria-label="Aumentar ${producto.nombre}">+</button>
+                    <button type="button" data-accion="aumentar" data-id="${producto.id}">+</button>
                 </div>
                 <strong>${formatearPrecio(producto.precio * producto.cantidad)}</strong>
                 <button class="carrito-eliminar" type="button" data-accion="eliminar" data-id="${producto.id}">
@@ -100,6 +100,11 @@ function actualizarCarrito() {
                 </button>
             </div>
         `;
+        // Los nombres editables del catálogo se muestran como texto, no como HTML.
+        elemento.querySelector("h3").textContent = producto.nombre;
+        elemento.querySelector(".control-cantidad").setAttribute("aria-label", `Cantidad de ${producto.nombre}`);
+        elemento.querySelector('[data-accion="disminuir"]').setAttribute("aria-label", `Disminuir ${producto.nombre}`);
+        elemento.querySelector('[data-accion="aumentar"]').setAttribute("aria-label", `Aumentar ${producto.nombre}`);
         listaCarrito.appendChild(elemento);
     });
 

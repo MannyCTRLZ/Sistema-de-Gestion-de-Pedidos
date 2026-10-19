@@ -1,5 +1,5 @@
 import sqlite3
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 
 DATABASE = "cafeteria.db"
@@ -84,6 +84,9 @@ def crear_tablas():
 
 def insertar_productos_iniciales():
     conexion = obtener_conexion()
+    if conexion.execute("SELECT 1 FROM productos LIMIT 1").fetchone() is not None:
+        conexion.close()
+        return
 
     productos = [
         (
@@ -217,6 +220,80 @@ def obtener_pedidos():
             })
 
     return list(pedidos.values())
+
+
+def validar_producto(datos):
+    if not isinstance(datos, dict):
+        raise ValueError("Los datos del producto no son válidos.")
+    campos = {}
+    for campo, limite in (("nombre", 100), ("categoria", 50), ("descripcion", 500)):
+        valor = datos.get(campo, "")
+        if not isinstance(valor, str) or len(valor.strip()) > limite:
+            raise ValueError(f"El campo {campo} debe ser texto de hasta {limite} caracteres.")
+        campos[campo] = valor.strip()
+    if not campos["nombre"] or not campos["categoria"]:
+        raise ValueError("El nombre y la categoría son obligatorios.")
+    precio = datos.get("precio")
+    if type(precio) not in (str, int, float):
+        raise ValueError("Ingresa un precio válido.")
+    try:
+        precio = Decimal(str(precio))
+        if not precio.is_finite() or not Decimal("0") < precio <= Decimal("999999.99"):
+            raise ValueError("El precio debe ser mayor que cero y hasta $999999.99.")
+        if precio != precio.quantize(Decimal("0.01")):
+            raise ValueError("El precio admite como máximo dos decimales.")
+    except InvalidOperation:
+        raise ValueError("Ingresa un precio válido.") from None
+    if type(datos.get("disponible")) is not bool:
+        raise ValueError("Indica si el producto está disponible.")
+    campos.update(precio=float(precio), disponible=int(datos["disponible"]))
+    return campos
+
+
+def guardar_producto(datos, producto_id=None):
+    producto = validar_producto(datos)
+    conexion = obtener_conexion()
+    try:
+        with conexion:
+            valores = (producto["nombre"], producto["descripcion"], producto["precio"],
+                       producto["categoria"], producto["disponible"])
+            if producto_id is None:
+                cursor = conexion.execute("""
+                    INSERT INTO productos (nombre, descripcion, precio, categoria, disponible)
+                    VALUES (?, ?, ?, ?, ?)
+                """, valores)
+                producto_id = cursor.lastrowid
+            else:
+                if type(producto_id) is not int or not 0 < producto_id <= MAX_ENTERO_SQLITE:
+                    raise ValueError("El producto no es válido.")
+                cursor = conexion.execute("""
+                    UPDATE productos SET nombre = ?, descripcion = ?, precio = ?,
+                        categoria = ?, disponible = ? WHERE id = ?
+                """, valores + (producto_id,))
+                if cursor.rowcount == 0:
+                    raise LookupError("No se encontró el producto.")
+        return {"id": producto_id, **producto}
+    finally:
+        conexion.close()
+
+
+def cambiar_disponibilidad(producto_id, disponible):
+    if type(producto_id) is not int or not 0 < producto_id <= MAX_ENTERO_SQLITE:
+        raise ValueError("El producto no es válido.")
+    if type(disponible) is not bool:
+        raise ValueError("La disponibilidad debe ser sí o no.")
+    conexion = obtener_conexion()
+    try:
+        with conexion:
+            cursor = conexion.execute(
+                "UPDATE productos SET disponible = ? WHERE id = ?",
+                (int(disponible), producto_id),
+            )
+            if cursor.rowcount == 0:
+                raise LookupError("No se encontró el producto.")
+        return {"id": producto_id, "disponible": disponible}
+    finally:
+        conexion.close()
 
 
 def crear_pedido(nombre_cliente, productos):

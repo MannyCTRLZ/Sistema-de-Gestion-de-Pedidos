@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="logo" href="{{ url_for('administracion') }}">Cafetería Universitaria · Administración</a>
+        <nav class="acciones-encabezado" aria-label="Áreas del sistema">
+            <a class="enlace-menu" href="{{ url_for('menu') }}">Menú</a>
+            <a class="enlace-menu" href="{{ url_for('caja') }}">Caja</a>
+            <a class="enlace-menu" href="{{ url_for('cocina') }}">Cocina</a>
+        </nav>
+    </header>
+    <main class="pagina-caja">
+        <section class="caja-presentacion">
+            <div>
+                <p class="presentacion-etiqueta">Panel del personal</p>
+                <h1>Administrar productos</h1>
+                <p>Actualiza el menú y marca como agotados los productos sin insumos.</p>
+            </div>
+            <div class="caja-resumen" aria-label="Resumen del catálogo">
+                <article><span>Productos</span><strong>{{ productos|length }}</strong></article>
+                <article><span>Disponibles</span><strong>{{ disponibles }}</strong></article>
+                <article><span>Agotados</span><strong>{{ productos|length - disponibles }}</strong></article>
+            </div>
+        </section>
+        <p id="admin-mensaje" class="caja-mensaje" role="status" aria-live="polite" hidden></p>
+        <section class="admin-formulario" aria-labelledby="titulo-formulario-producto">
+            <h2 id="titulo-formulario-producto">Nuevo producto</h2>
+            <form id="formulario-producto" data-url="{{ url_for('api_guardar_producto') }}">
+                <input id="producto-id" type="hidden">
+                <div class="admin-campos">
+                    <div>
+                        <label for="producto-nombre">Nombre</label>
+                        <input id="producto-nombre" type="text" maxlength="100" required>
+                    </div>
+                    <div>
+                        <label for="producto-categoria">Categoría</label>
+                        <input id="producto-categoria" type="text" list="categorias-productos" maxlength="50" required>
+                        <datalist id="categorias-productos">
+                            {% for categoria in productos|map(attribute='categoria')|unique %}
+                            <option value="{{ categoria }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div>
+                        <label for="producto-precio">Precio ($)</label>
+                        <input id="producto-precio" type="number" min="0.01" max="999999.99" step="0.01" required>
+                    </div>
+                    <div class="admin-descripcion">
+                        <label for="producto-descripcion">Descripción (opcional)</label>
+                        <textarea id="producto-descripcion" maxlength="500" rows="3"></textarea>
+                    </div>
+                </div>
+                <label class="admin-disponibilidad" for="producto-disponible">
+                    <input id="producto-disponible" type="checkbox" checked> Disponible para pedir
+                </label>
+                <p>Si lo desactivas, permanecerá visible en el menú como «Agotado».</p>
+                <p id="producto-error" class="campo-error" role="alert" hidden></p>
+                <div class="pedido-caja-acciones">
+                    <button id="guardar-producto" type="submit">Agregar producto</button>
+                    <button id="cancelar-edicion" class="boton-cancelar" type="button" hidden>Cancelar edición</button>
+                </div>
+            </form>
+        </section>
+        <section aria-labelledby="titulo-catalogo-admin">
+            <div class="caja-lista-encabezado">
+                <h2 id="titulo-catalogo-admin">Catálogo</h2>
+                <a href="{{ url_for('administracion') }}">Actualizar</a>
+            </div>
+            <div class="lista-pedidos">
+                {% for producto in productos %}
+                <article class="pedido-caja admin-producto">
+                    <div class="pedido-caja-encabezado">
+                        <div>
+                            <span class="producto-categoria">{{ producto.categoria }}</span>
+                            <h3>{{ producto.nombre }}</h3>
+                        </div>
+                        <span class="estado-pedido {% if producto.disponible %}estado-pagado{% else %}estado-cancelado{% endif %}">
+                            {% if producto.disponible %}Disponible{% else %}Agotado{% endif %}
+                        </span>
+                    </div>
+                    <p class="admin-producto-descripcion">{{ producto.descripcion or 'Sin descripción' }}</p>
+                    <strong class="producto-precio">${{ '%.2f'|format(producto.precio) }}</strong>
+                    <div class="pedido-caja-acciones">
+                        <button type="button" data-editar="{{ producto|tojson|forceescape }}"
+                                data-url="{{ url_for('api_guardar_producto', producto_id=producto.id) }}">Editar</button>
+                        <button type="button" class="boton-cancelar"
+                                data-disponible="{{ 'false' if producto.disponible else 'true' }}"
+                                data-url="{{ url_for('api_cambiar_disponibilidad', producto_id=producto.id) }}">
+                            {% if producto.disponible %}Marcar agotado{% else %}Activar producto{% endif %}
+                        </button>
+                    </div>
+                </article>
+                {% else %}
+                <div class="caja-vacia"><h3>No hay productos registrados</h3><p>Agrega el primero con el formulario.</p></div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    <footer class="pie-pagina"><p>Cafetería Universitaria · Administración</p></footer>
+    <script src="{{ url_for('static', filename='js/botones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
