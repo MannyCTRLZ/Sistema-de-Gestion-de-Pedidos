@@ -43,6 +43,31 @@
             </div>
         </section>
 
+        <section class="carrusel" aria-label="Platillos de nuestra cafetería" aria-roledescription="carrusel">
+            <div class="carrusel-diapositivas" aria-live="off">
+                {% for archivo, nombre in [('capeados.jpeg', 'Tacos capeados'), ('chilaquiles.jpeg', 'Chilaquiles'), ('sandwich.jpg', 'Sándwich')] %}
+                <figure class="carrusel-diapositiva"{% if not loop.first %} hidden{% endif %} role="group" aria-roledescription="diapositiva" aria-label="{{ loop.index }} de 3">
+                    <img src="{{ url_for('static', filename='img/' ~ archivo) }}" alt="{{ nombre }}" width="1200" height="650">
+                    <figcaption>
+                        <span>Un antojo entre clases</span>
+                        <h2>{{ nombre }}</h2>
+                        <a href="{{ url_for('menu') }}">Explorar el menú →</a>
+                    </figcaption>
+                </figure>
+                {% endfor %}
+            </div>
+            <div class="carrusel-controles" hidden>
+                <button type="button" id="carrusel-anterior" aria-label="Imagen anterior">←</button>
+                <div class="carrusel-indicadores" aria-label="Elegir imagen">
+                    <button type="button" aria-label="Ver tacos capeados" aria-current="true"></button>
+                    <button type="button" aria-label="Ver chilaquiles" aria-current="false"></button>
+                    <button type="button" aria-label="Ver sándwich" aria-current="false"></button>
+                </div>
+                <button type="button" id="carrusel-siguiente" aria-label="Imagen siguiente">→</button>
+                <button type="button" id="carrusel-pausa">Pausar</button>
+            </div>
+        </section>
+
         <section class="bienvenida" aria-labelledby="titulo-bienvenida">
             <div>
                 <p class="presentacion-etiqueta">Nuestra cafetería</p>
@@ -88,6 +113,7 @@
         <p>Cafetería Universitaria</p>
         <p>Realiza tu pedido y paga directamente en caja.</p>
     </footer>
+    <script src="{{ url_for('static', filename='js/carrusel.js') }}"></script>
     <script src="{{ url_for('static', filename='js/botones.js') }}"></script>
 </body>
 </html>

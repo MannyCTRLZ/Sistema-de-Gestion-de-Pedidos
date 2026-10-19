@@ -1173,3 +1173,93 @@ a:focus-visible {
         flex-direction: column;
     }
 }
+
+/* Carrusel de platillos de la página de inicio. */
+.carrusel {
+    overflow: hidden;
+    margin-bottom: 3rem;
+    border-radius: 1.5rem;
+    background: var(--verde);
+    box-shadow: 0 12px 35px rgba(33, 78, 52, .12);
+}
+
+.carrusel-diapositiva {
+    position: relative;
+    margin: 0;
+    isolation: isolate;
+}
+
+.carrusel-diapositiva img {
+    display: block;
+    width: 100%;
+    height: clamp(300px, 42vw, 480px);
+    object-fit: cover;
+    animation: entrada-carrusel .5s ease;
+}
+
+.carrusel-diapositiva::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 25%, rgba(0, 0, 0, .8));
+    z-index: 1;
+    pointer-events: none;
+}
+
+.carrusel-diapositiva figcaption {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    color: #fff;
+}
+
+.carrusel-diapositiva figcaption span { font-size: .9rem; }
+.carrusel-diapositiva h2 {
+    margin: .25rem 0 .75rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+}
+.carrusel-diapositiva a { color: #fff; font-weight: 700; }
+.carrusel-controles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+}
+.carrusel-controles[hidden] { display: none; }
+.carrusel-controles button {
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid #fff;
+    border-radius: 999px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+#carrusel-pausa { padding-inline: 1rem; }
+.carrusel-indicadores { display: flex; gap: .25rem; }
+.carrusel-indicadores button { border: 0; position: relative; }
+.carrusel-indicadores button::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #fff;
+    border-radius: 50%;
+}
+.carrusel-indicadores button[aria-current="true"]::after { background: #fff; }
+@keyframes entrada-carrusel {
+    from { opacity: .6; }
+    to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .carrusel-diapositiva img { animation: none; }
+}
