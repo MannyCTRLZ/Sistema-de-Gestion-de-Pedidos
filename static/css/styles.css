@@ -1004,6 +1004,34 @@ a:focus-visible {
     overflow-wrap: anywhere;
 }
 
+.admin-formulario {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 1.25rem;
+    background: var(--blanco);
+}
+
+.admin-formulario h2 { margin-top: 0; color: var(--verde); }
+.admin-campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1rem;
+}
+.admin-campos label { display: block; font-weight: 700; }
+.admin-campos input, .admin-campos textarea {
+    width: 100%;
+    padding: .75rem;
+    border: 1px solid #a6b8ab;
+    border-radius: .6rem;
+    font: inherit;
+}
+.admin-campos textarea { resize: vertical; }
+.admin-descripcion { grid-column: 1 / -1; }
+.admin-disponibilidad { display: block; margin-top: 1rem; font-weight: 700; }
+.admin-producto-descripcion { overflow-wrap: anywhere; white-space: pre-wrap; }
+.admin-producto .pedido-caja-acciones { margin-top: auto; padding-top: 1rem; }
+.admin-formulario button:disabled { opacity: .6; cursor: wait; }
+
 .cocina-lista-encabezado {
     flex-wrap: wrap;
 }
