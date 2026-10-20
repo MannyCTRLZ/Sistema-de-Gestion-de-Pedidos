@@ -4,30 +4,55 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 ## Sprint actual
 
-**Sprint 8 — Administración**
+**Sprint 9 — Integración, seguridad y pruebas**
 
-Estado: **EN PROGRESO**. Incremento implementado y probado localmente en `dev`; pendiente de integración autorizada en `main`.
+Estado: **EN PROGRESO**. Planificación abierta tras el cierre del Sprint 8; las implementaciones siguientes se realizarán en `dev`.
 
 ## Objetivo del sprint
 
-Permitir al personal administrar los datos y la disponibilidad de los productos sin modificar la base manualmente.
+Proteger el área interna, integrar los módulos y corregir problemas importantes del flujo completo.
 
 ## Incremento esperado
 
-Panel `/admin` para consultar, agregar, editar y marcar productos como disponibles o agotados; cambios persistidos en SQLite y reflejados en el menú.
+Versión candidata estable con acceso interno protegido y flujo Menú → Caja → Cocina → Entrega verificado.
 
 ## Sprint Backlog
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Crear panel y catálogo de productos con acceso desde caja y cocina | Equipo / Codex | Terminada en rama | `dev` |
-| Agregar y editar nombre, descripción, categoría, precio y disponibilidad | Equipo / Codex | Terminada en rama | `dev` |
-| Activar o desactivar disponibilidad sin eliminar productos | Equipo / Codex | Terminada en rama | `dev` |
-| Validar datos en Flask y reflejar cambios en el menú | Equipo / Codex | Terminada en rama | `dev` |
-| Probar persistencia, errores e interfaz | Equipo / Codex | Terminada en rama | `dev` |
-| Integrar el incremento probado en main con autorización | Equipo | Pendiente | `dev` → `main` |
+| Implementar inicio y cierre de sesión del personal, con contraseñas almacenadas como hash | Equipo / Codex | Pendiente | `dev` |
+| Proteger caja, cocina, administración y sus acciones del servidor; conservar el acceso público del estudiante | Equipo / Codex | Pendiente | `dev` |
+| Revisar validaciones y manejo de errores de los módulos integrados | Equipo / Codex | Pendiente | `dev` |
+| Probar el flujo completo y los accesos autorizados y rechazados, incluido el enlace QR a caja | Equipo / Codex | Pendiente | `dev` |
+| Revisar navegación, accesibilidad y diseño responsive | Equipo / Codex | Pendiente | `dev` |
+| Integrar la versión candidata probada en main con autorización | Equipo | Pendiente | `dev` → `main` |
 
-## Trabajo verificado del Sprint 8
+## Prioridad de inicio y criterios de cierre del Sprint 9
+
+- Comenzar con una sola cuenta interna, según el alcance del MVP; el estudiante sigue sin crear cuenta ni iniciar sesión.
+- Proteger tanto las páginas internas como sus acciones de escritura; verificar el retorno a caja con el número del QR después del acceso.
+- No almacenar contraseñas reales, claves de sesión ni secretos en Git.
+- Cerrar el sprint cuando el acceso interno y el flujo completo estén probados, los problemas importantes resueltos y el incremento integrado en `main`.
+- La apertura del sprint registra su planificación; todavía no se ha implementado la autenticación.
+
+## Registro del Sprint 8 — Administración
+
+Estado: **COMPLETADO**.
+
+Objetivo cumplido: administrar productos desde `/admin`, con altas, edición, precios y disponibilidad persistidos en SQLite y reflejados en el menú.
+
+### Sprint Backlog
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Crear panel y catálogo de productos con acceso desde caja y cocina | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Agregar y editar nombre, descripción, categoría, precio y disponibilidad | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Activar o desactivar disponibilidad sin eliminar productos | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Validar datos en Flask y reflejar cambios en el menú | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Probar persistencia, errores e interfaz | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Integrar el incremento probado en main con autorización | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+
+### Trabajo verificado del Sprint 8
 
 - El 15 de octubre de 2026 pasaron las 20 pruebas automatizadas: las 14 existentes y seis nuevas de administración.
 - Se verificaron altas, edición, disponibilidad, datos inválidos y productos inexistentes sin escrituras parciales.
@@ -39,10 +64,24 @@ Panel `/admin` para consultar, agregar, editar y marcar productos como disponibl
 - Todas las pruebas usaron bases temporales, sin modificar productos ni pedidos reales.
 - La autenticación y los roles internos siguen pendientes para el Sprint 9; este incremento no debe exponerse públicamente sin ese control.
 
-## Pendientes de cierre
+### Sprint Review
 
-- Integrar y comprobar el incremento en `main` con autorización del usuario.
-- Registrar Review y Retrospective al cerrar el sprint; no se considera completado por estar probado solo en `dev`.
+- El panel de administración cumple el incremento del Sprint 8 y se integra en `main` por autorización del usuario el 20 de octubre de 2026.
+- Antes de integrar volvieron a pasar las 20 pruebas automatizadas con bases temporales; se comprobaron nuevamente en `main` después de integrar.
+- Los productos agotados siguen visibles y no se aceptan en nuevos pedidos; el historial se conserva.
+
+### Sprint Retrospective
+
+- Probar las altas, ediciones y disponibilidad con bases temporales permitió verificar el módulo sin alterar los datos reales.
+- Separar la disponibilidad del inventario numérico mantuvo sencilla la administración.
+- Documentar el carrusel aparte evita confundir un ajuste visual con los criterios de cierre de administración.
+
+### Aclaración del carrusel del inicio
+
+- El commit `0886a51` añade un carrusel de tres platillos en la portada, con controles anterior/siguiente, indicadores y pausa; respeta la preferencia de reducir movimiento.
+- Se integra junto con administración como ajuste visual adicional, no como requisito del Sprint 8 ni como implementación de seguridad del Sprint 9.
+- Sus fotos y nombres se configuran en la plantilla y los archivos estáticos; editar productos en `/admin` no actualiza este carrusel.
+- Se revisaron su código, el HTML generado y la disponibilidad de sus tres imágenes y del script; esta comprobación no sustituye una prueba interactiva en navegador.
 
 ## Registro del Sprint 7 — Módulo de cocina
 

@@ -407,6 +407,11 @@ Orden propuesto:
 
 ## 19. Primera pantalla prevista
 
+La portada actual incluye además un carrusel de tres platillos, integrado como
+ajuste visual junto al cierre del Sprint 8. Sus imágenes y nombres se configuran
+en la plantilla y archivos estáticos, de forma independiente del catálogo de
+administración; no se sincronizan al editar productos desde `/admin`.
+
 La primera pantalla debe incluir:
 - Nombre/logo de cafetería.
 - Navegación sencilla.
