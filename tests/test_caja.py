@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 import database
 import segno
+from ayuda_acceso import autenticar
 
 # Importar Flask con una base temporal evita tocar cafeteria.db.
 BASE_IMPORTACION = tempfile.TemporaryDirectory()
@@ -26,6 +27,7 @@ class CajaTest(unittest.TestCase):
         database.crear_tablas()
         database.insertar_productos_iniciales()
         self.cliente = app.test_client()
+        autenticar(self.cliente)
 
     def tearDown(self):
         database.DATABASE = self.base_original

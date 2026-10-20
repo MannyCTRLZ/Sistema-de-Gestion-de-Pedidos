@@ -32,13 +32,11 @@ document.querySelectorAll(".pedido-caja .pedido-caja-acciones button").forEach((
         controles.forEach((control) => { control.disabled = true; });
         mensajeCaja.hidden = true;
         try {
-            const respuesta = await fetch(boton.dataset.url, {
+            await solicitarPersonal(boton.dataset.url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ estado }),
             });
-            const datos = await respuesta.json();
-            if (!respuesta.ok) throw new Error(datos.error || "No se pudo actualizar el pedido.");
             sessionStorage.setItem("resultado-caja", estado === "PAGADO"
                 ? `Pago del pedido #${numero} confirmado.`
                 : `Pedido #${numero} cancelado.`);

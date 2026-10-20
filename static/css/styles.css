@@ -57,7 +57,15 @@ a {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
 }
+
+.sesion-personal { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
+.sesion-personal button { background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.sesion-personal span { overflow-wrap: anywhere; max-width: 10rem; }
+.pagina-acceso { width: min(560px, 90%); margin: 3rem auto; }
+.pagina-acceso h1 { color: var(--verde); }
+.pagina-acceso .admin-campos { grid-template-columns: 1fr; }
 
 .boton-carrito,
 .boton-agregar {

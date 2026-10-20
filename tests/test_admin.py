@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 import database
+from ayuda_acceso import autenticar
 
 with tempfile.TemporaryDirectory() as temporal_importacion:
     base_original = database.DATABASE
@@ -19,6 +20,7 @@ class AdministracionTest(unittest.TestCase):
         database.crear_tablas()
         database.insertar_productos_iniciales()
         self.cliente = app.test_client()
+        autenticar(self.cliente)
         self.datos = {"nombre": "Pan de prueba", "descripcion": "Recién horneado",
                       "categoria": "Panadería", "precio": "22.50", "disponible": True}
 

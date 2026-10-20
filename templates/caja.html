@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ token_csrf() }}">
     <title>Caja | Cafetería Universitaria</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
@@ -14,6 +15,7 @@
             <a class="enlace-menu" href="{{ url_for('cocina') }}">Cocina</a>
             <a class="enlace-inicio" href="{{ url_for('inicio') }}">Inicio</a>
             <a class="enlace-menu" href="{{ url_for('menu') }}">Menú</a>
+            {% include 'sesion_personal.html' %}
         </div>
     </header>
 
@@ -150,6 +152,7 @@
         <p>Cafetería Universitaria · Módulo de caja</p>
     </footer>
     <script src="{{ url_for('static', filename='js/botones.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/seguridad.js') }}"></script>
     <script src="{{ url_for('static', filename='js/caja.js') }}"></script>
 </body>
 </html>

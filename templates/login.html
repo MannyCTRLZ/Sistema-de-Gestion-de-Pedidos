@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso del personal | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="encabezado">
+        <a class="logo" href="{{ url_for('inicio') }}">Cafetería Universitaria</a>
+        <a class="enlace-menu" href="{{ url_for('menu') }}">Menú</a>
+    </header>
+    <main class="pagina-acceso">
+        <section class="admin-formulario">
+            <h1>Acceso del personal</h1>
+            <p>Para consultar o modificar pedidos necesitas iniciar sesión como personal de la cafetería.</p>
+            <p>Si eres estudiante, presenta tu número o QR en caja.</p>
+            {% if error %}<p class="caja-mensaje caja-error" role="alert">{{ error }}</p>{% endif %}
+            <form method="post" action="{{ url_for('login') }}">
+                <input type="hidden" name="csrf_token" value="{{ token_csrf() }}">
+                <input type="hidden" name="next" value="{{ siguiente }}">
+                <div class="admin-campos">
+                    <label>Usuario
+                        <input name="usuario" autocomplete="username" maxlength="50" required autofocus>
+                    </label>
+                    <label>Contraseña
+                        <input name="password" type="password" autocomplete="current-password" maxlength="128" required>
+                    </label>
+                </div>
+                <div class="pedido-caja-acciones"><button type="submit">Iniciar sesión</button></div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

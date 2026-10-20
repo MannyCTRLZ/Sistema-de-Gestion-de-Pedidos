@@ -1,0 +1,5 @@
+<form action="{{ url_for('logout') }}" method="post" class="sesion-personal">
+    <input type="hidden" name="csrf_token" value="{{ token_csrf() }}">
+    <span>{{ g.personal.usuario }}</span>
+    <button type="submit" class="enlace-menu">Cerrar sesión</button>
+</form>

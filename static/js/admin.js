@@ -21,17 +21,11 @@ if (resultadoAdmin) {
 }
 
 async function enviarProducto(url, metodo, datos) {
-    const respuesta = await fetch(url, {
+    return solicitarPersonal(url, {
         method: metodo,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datos),
     });
-    if (!respuesta.headers.get("Content-Type")?.includes("application/json")) {
-        throw new Error("El servidor no pudo procesar la solicitud. Intenta nuevamente.");
-    }
-    const resultado = await respuesta.json();
-    if (!respuesta.ok) throw new Error(resultado.error || "No se pudo guardar el producto.");
-    return resultado;
 }
 
 function finalizarCambio(mensaje) {
