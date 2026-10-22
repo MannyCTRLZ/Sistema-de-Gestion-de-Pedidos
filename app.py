@@ -1,10 +1,11 @@
 import base64
 import io
 import os
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import segno
 from flask import Flask, jsonify, render_template, request, url_for
+from acceso import instalar_acceso
 from database import (
     MAX_ENTERO_SQLITE,
     cambiar_estado_en_caja,
@@ -23,6 +24,19 @@ app = Flask(__name__)
 
 crear_tablas()
 insertar_productos_iniciales()
+instalar_acceso(app)
+
+
+@app.errorhandler(413)
+def peticion_grande(error):
+    return jsonify(error="La solicitud es demasiado grande. Reduce su contenido."), 413
+
+
+@app.errorhandler(500)
+def error_interno(error):
+    if request.path.startswith("/api/"):
+        return jsonify(error="No se pudo completar la operación. Actualiza antes de reintentar."), 500
+    return render_template("error.html", mensaje="No se pudo completar la operación. Intenta más tarde."), 500
 
 
 @app.route("/")
@@ -154,6 +168,15 @@ def api_crear_pedido():
     if not isinstance(datos, dict):
         return jsonify({"error": "Los datos del pedido no son válidos."}), 400
 
+    base_publica = os.environ.get("PUBLIC_BASE_URL", "").strip()
+    try:
+        base = urlsplit(base_publica)
+    except ValueError:
+        return jsonify(error="La dirección del QR no está configurada correctamente. Avisa al personal."), 503
+    if base_publica and (base.scheme not in ("http", "https") or not base.netloc
+                         or base.username or base.password or base.query or base.fragment
+                         or len(base_publica) > 2000):
+        return jsonify(error="La dirección del QR no está configurada correctamente. Avisa al personal."), 503
     try:
         pedido = crear_pedido(
             datos.get("nombre_cliente"),
@@ -164,7 +187,6 @@ def api_crear_pedido():
 
     numero = pedido["numero_pedido"]
     ruta_caja = url_for("caja", numero=numero)
-    base_publica = os.environ.get("PUBLIC_BASE_URL", "").strip()
     if base_publica:
         enlace_caja = urljoin(base_publica.rstrip("/") + "/", ruta_caja.lstrip("/"))
     else:
@@ -182,4 +204,4 @@ def api_crear_pedido():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

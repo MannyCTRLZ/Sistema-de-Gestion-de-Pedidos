@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 9 — Integración, seguridad y pruebas**
 
-Estado: **EN PROGRESO**. Planificación abierta tras el cierre del Sprint 8; las implementaciones siguientes se realizarán en `dev`.
+Estado: **EN PROGRESO**. Incremento implementado y verificado en `dev`; pendiente de autorización para integrar en `main` y cerrar oficialmente el sprint.
 
 ## Objetivo del sprint
 
@@ -20,11 +20,12 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Implementar inicio y cierre de sesión del personal, con contraseñas almacenadas como hash | Equipo / Codex | Pendiente | `dev` |
-| Proteger caja, cocina, administración y sus acciones del servidor; conservar el acceso público del estudiante | Equipo / Codex | Pendiente | `dev` |
-| Revisar validaciones y manejo de errores de los módulos integrados | Equipo / Codex | Pendiente | `dev` |
-| Probar el flujo completo y los accesos autorizados y rechazados, incluido el enlace QR a caja | Equipo / Codex | Pendiente | `dev` |
-| Revisar navegación, accesibilidad y diseño responsive | Equipo / Codex | Pendiente | `dev` |
+| Implementar inicio y cierre de sesión del personal, con contraseñas almacenadas como hash | Equipo / Codex | Terminada en rama | `dev` |
+| Proteger caja, cocina, administración y sus acciones del servidor; conservar el acceso público del estudiante | Equipo / Codex | Terminada en rama | `dev` |
+| Corregir el acceso del QR: exigir sesión del personal y conservar el filtro, sin reemplazar la búsqueda manual | Equipo / Codex | Terminada en rama | `dev` |
+| Revisar validaciones y manejo de errores de los módulos integrados | Equipo / Codex | Terminada en rama | `dev` |
+| Probar el flujo completo y los accesos autorizados y rechazados, incluido el enlace QR a caja | Equipo / Codex | Terminada en rama | `dev` |
+| Revisar navegación, accesibilidad y diseño responsive | Equipo / Codex | Terminada en rama | `dev` |
 | Integrar la versión candidata probada en main con autorización | Equipo | Pendiente | `dev` → `main` |
 
 ## Prioridad de inicio y criterios de cierre del Sprint 9
@@ -33,7 +34,27 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 - Proteger tanto las páginas internas como sus acciones de escritura; verificar el retorno a caja con el número del QR después del acceso.
 - No almacenar contraseñas reales, claves de sesión ni secretos en Git.
 - Cerrar el sprint cuando el acceso interno y el flujo completo estén probados, los problemas importantes resueltos y el incremento integrado en `main`.
-- La apertura del sprint registra su planificación; todavía no se ha implementado la autenticación.
+- La autenticación está implementada en `dev`, sin cuenta ni contraseña predeterminadas. La cuenta real se crea localmente con `flask --app app crear-personal`.
+
+## Corrección del QR y trabajo verificado en dev
+
+- Causa: `/caja` y las API de cambios estaban abiertas. El QR solo codificaba `/caja?numero=...`; no era un mecanismo de autorización.
+- Abrir el QR sin sesión ahora conduce al acceso del personal y conserva el número para después del inicio de sesión. La búsqueda manual continúa disponible para el personal autenticado.
+- Caja, historial, cocina y administración requieren sesión; las acciones directas del servidor sin sesión responden 401 y no modifican datos.
+- Las acciones internas y el acceso verifican CSRF. Las sesiones caducan a las ocho horas y se revocan en SQLite al salir, incluso si alguien intenta reutilizar una cookie copiada.
+- La clave de firma queda en el entorno o en `instance/`, ignorada por Git. No se crearon credenciales reales ni se añadieron dependencias.
+- Se limita el tamaño de las solicitudes y se validan nombre, tamaño del pedido, total y configuración del enlace QR antes de guardar. El modo debug queda desactivado y los errores de API mantienen respuestas JSON comprensibles.
+- Pasaron 30 pruebas automatizadas con bases temporales: las 20 existentes adaptadas al acceso real y diez de seguridad, QR, sesión, límites y errores.
+- Se completó en navegador Menú → Carrito → Nombre → QR → Acceso del personal → Caja → Pago → Cocina → Preparación → Listo → Entregado → Historial.
+- El pedido temporal #0001 de Ana Sprint 9 conservó un Burrito y total $55.00. Se verificó además el alta de un producto desde administración con el token de sesión.
+- Se revisaron acceso, caja, cocina y administración a 375 px sin desbordamiento horizontal. Cerrar sesión y volver al enlace del QR vuelve a pedir acceso.
+- La cuenta y todos los pedidos de revisión fueron ficticios y temporales. La creación de la cuenta real y la configuración para HTTPS están documentadas en `README.md`.
+
+## Review y Retrospective preliminares
+
+- El incremento técnico cubre las tareas del Sprint 9, incluida la corrección del QR solicitada; falta integrar y comprobar en `main` con autorización antes de registrar su cierre.
+- Proteger las acciones en el servidor evita depender de ocultar botones o enlaces en el navegador.
+- Recorrer el QR sin sesión y después del acceso confirmó que seguridad y rapidez de búsqueda pueden coexistir.
 
 ## Registro del Sprint 8 — Administración
 

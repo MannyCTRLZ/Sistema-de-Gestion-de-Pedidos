@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No se pudo completar | Cafetería Universitaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <main class="pagina-acceso">
+        <h1>No se pudo completar la solicitud</h1>
+        <p role="alert">{{ mensaje }}</p>
+        <p><a href="{{ url_for('login') }}">Volver al acceso del personal</a></p>
+        <p><a href="{{ url_for('menu') }}">Volver al menú</a></p>
+    </main>
+</body>
+</html>

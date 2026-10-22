@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import database
+from ayuda_acceso import autenticar
 
 # El arranque de Flask también queda aislado de la base real.
 with tempfile.TemporaryDirectory() as temporal_importacion:
@@ -22,6 +23,7 @@ class CocinaTest(unittest.TestCase):
         database.crear_tablas()
         database.insertar_productos_iniciales()
         self.cliente = app.test_client()
+        autenticar(self.cliente)
 
     def tearDown(self):
         database.DATABASE = self.base_original
@@ -131,6 +133,7 @@ class CocinaTest(unittest.TestCase):
 
         def avanzar():
             cliente = app.test_client()
+            autenticar(cliente, crear=False)
             barrera.wait(timeout=5)
             return cliente.post(
                 f"/api/cocina/pedidos/{numero}/estado", json={"estado": "EN PREPARACIÓN"}

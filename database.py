@@ -16,6 +16,21 @@ def crear_tablas():
     conexion = obtener_conexion()
 
     conexion.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario TEXT UNIQUE NOT NULL,
+            hash_password TEXT NOT NULL
+        )
+    """)
+    conexion.execute("""
+        CREATE TABLE IF NOT EXISTS sesiones_personal (
+            token_hash TEXT PRIMARY KEY,
+            usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+            vence TEXT NOT NULL
+        )
+    """)
+
+    conexion.execute("""
         CREATE TABLE IF NOT EXISTS productos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
@@ -299,8 +314,12 @@ def cambiar_disponibilidad(producto_id, disponible):
 def crear_pedido(nombre_cliente, productos):
     if not isinstance(nombre_cliente, str) or not nombre_cliente.strip():
         raise ValueError("Ingresa un nombre para el pedido.")
+    if len(nombre_cliente.strip()) > 50:
+        raise ValueError("El nombre del pedido admite hasta 50 caracteres.")
     if not isinstance(productos, list) or not productos:
         raise ValueError("El pedido debe incluir al menos un producto.")
+    if len(productos) > 100:
+        raise ValueError("El pedido admite hasta 100 productos distintos.")
 
     cantidades = {}
     for item in productos:
@@ -332,6 +351,8 @@ def crear_pedido(nombre_cliente, productos):
 
                 precio = Decimal(str(producto["precio"])).quantize(Decimal("0.01"))
                 total += precio * cantidad
+                if not total.is_finite() or total > Decimal("999999999.99"):
+                    raise ValueError("El total del pedido supera el máximo permitido.")
                 detalles.append((producto_id, cantidad, float(precio)))
 
             estado = "PENDIENTE DE PAGO"

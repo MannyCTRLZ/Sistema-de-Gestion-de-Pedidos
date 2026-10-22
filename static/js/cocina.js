@@ -32,13 +32,11 @@ document.querySelectorAll(".pedido-cocina .cocina-acciones button").forEach((bot
         boton.disabled = true;
         mensajeCocina.hidden = true;
         try {
-            const respuesta = await fetch(boton.dataset.url, {
+            await solicitarPersonal(boton.dataset.url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ estado }),
             });
-            const datos = await respuesta.json();
-            if (!respuesta.ok) throw new Error(datos.error || "No se pudo actualizar el pedido.");
             sessionStorage.setItem("resultado-cocina", `Pedido #${numero}: ${estado.toLowerCase()}.`);
             window.location.reload();
         } catch (error) {

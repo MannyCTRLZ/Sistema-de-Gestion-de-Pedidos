@@ -82,6 +82,9 @@ Número de pedido -> Ver pedido -> Cobrar físicamente -> Confirmar pago -> Entr
 
 La confirmación del estudiante muestra un QR con la URL de caja y el número
 del pedido en el filtro `numero`. Caja conserva su búsqueda y sus acciones.
+El QR es únicamente un atajo de búsqueda: caja y sus acciones requieren sesión
+del personal. Al abrirlo sin sesión se solicita el acceso y se recupera el filtro
+después de autenticar. El estudiante puede presentar el QR o su número en caja.
 
 Cocina:
 Ver pedidos pagados -> Comenzar preparación -> Marcar como listo
@@ -109,6 +112,15 @@ Puede:
 El acceso interno sí debe estar protegido.
 
 Para reducir complejidad en el MVP se puede comenzar con una sola cuenta o tipo de acceso interno y separar después permisos/roles.
+
+En el Sprint 9 se implementa una cuenta interna creada con el comando
+`flask --app app crear-personal`, sin credenciales predeterminadas y con hash de
+contraseña en SQLite. Esta cuenta accede a caja, cocina y administración; no hay
+registro web de personal. Las sesiones caducan a las ocho horas y el cierre de
+sesión las revoca en el servidor. Se validan tokens CSRF en el acceso y las
+acciones internas. La clave de firma se configura por entorno o se genera en
+`instance/`, fuera de Git. Las API internas requieren autenticación igual que
+las páginas; la creación de pedidos del estudiante permanece pública.
 
 Las vistas lógicas del personal son:
 
@@ -307,6 +319,10 @@ Campos iniciales:
 - usuario
 - password / hash_password
 - rol
+
+Implementación inicial del MVP: `id`, `usuario`, `hash_password`, sin separación
+por roles. `sesiones_personal` guarda el hash del identificador de sesión, su
+usuario y vencimiento para poder revocar el acceso al salir.
 
 ### productos
 - id
