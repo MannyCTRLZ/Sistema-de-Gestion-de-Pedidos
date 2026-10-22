@@ -6,7 +6,7 @@ Este documento es el seguimiento compartido del sprint. La versión integrada en
 
 **Sprint 9 — Integración, seguridad y pruebas**
 
-Estado: **EN PROGRESO**. Incremento implementado y verificado en `dev`; pendiente de autorización para integrar en `main` y cerrar oficialmente el sprint.
+Estado: **COMPLETADO**. Incremento probado e integrado en `main` con autorización del usuario el 22 de octubre de 2026, mediante el merge `9aa0d6a`.
 
 ## Objetivo del sprint
 
@@ -20,13 +20,13 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Implementar inicio y cierre de sesión del personal, con contraseñas almacenadas como hash | Equipo / Codex | Terminada en rama | `dev` |
-| Proteger caja, cocina, administración y sus acciones del servidor; conservar el acceso público del estudiante | Equipo / Codex | Terminada en rama | `dev` |
-| Corregir el acceso del QR: exigir sesión del personal y conservar el filtro, sin reemplazar la búsqueda manual | Equipo / Codex | Terminada en rama | `dev` |
-| Revisar validaciones y manejo de errores de los módulos integrados | Equipo / Codex | Terminada en rama | `dev` |
-| Probar el flujo completo y los accesos autorizados y rechazados, incluido el enlace QR a caja | Equipo / Codex | Terminada en rama | `dev` |
-| Revisar navegación, accesibilidad y diseño responsive | Equipo / Codex | Terminada en rama | `dev` |
-| Integrar la versión candidata probada en main con autorización | Equipo | Pendiente | `dev` → `main` |
+| Implementar inicio y cierre de sesión del personal, con contraseñas almacenadas como hash | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Proteger caja, cocina, administración y sus acciones del servidor; conservar el acceso público del estudiante | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Corregir el acceso del QR: exigir sesión del personal y conservar el filtro, sin reemplazar la búsqueda manual | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Revisar validaciones y manejo de errores de los módulos integrados | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Probar el flujo completo y los accesos autorizados y rechazados, incluido el enlace QR a caja | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Revisar navegación, accesibilidad y diseño responsive | Equipo / Codex | Integrada en `main` | `dev` → `main` |
+| Integrar la versión candidata probada en main con autorización | Equipo / Codex | Integrada en `main` | `dev` → `main` |
 
 ## Prioridad de inicio y criterios de cierre del Sprint 9
 
@@ -34,9 +34,9 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 - Proteger tanto las páginas internas como sus acciones de escritura; verificar el retorno a caja con el número del QR después del acceso.
 - No almacenar contraseñas reales, claves de sesión ni secretos en Git.
 - Cerrar el sprint cuando el acceso interno y el flujo completo estén probados, los problemas importantes resueltos y el incremento integrado en `main`.
-- La autenticación está implementada en `dev`, sin cuenta ni contraseña predeterminadas. La cuenta real se crea localmente con `flask --app app crear-personal`.
+- La autenticación está integrada en `main`, sin cuenta ni contraseña predeterminadas. La cuenta real se crea localmente con `flask --app app crear-personal`.
 
-## Corrección del QR y trabajo verificado en dev
+## Corrección del QR y trabajo integrado en main
 
 - Causa: `/caja` y las API de cambios estaban abiertas. El QR solo codificaba `/caja?numero=...`; no era un mecanismo de autorización.
 - Abrir el QR sin sesión ahora conduce al acceso del personal y conserva el número para después del inicio de sesión. La búsqueda manual continúa disponible para el personal autenticado.
@@ -50,9 +50,14 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 - Se revisaron acceso, caja, cocina y administración a 375 px sin desbordamiento horizontal. Cerrar sesión y volver al enlace del QR vuelve a pedir acceso.
 - La cuenta y todos los pedidos de revisión fueron ficticios y temporales. La creación de la cuenta real y la configuración para HTTPS están documentadas en `README.md`.
 
-## Review y Retrospective preliminares
+## Sprint Review
 
-- El incremento técnico cubre las tareas del Sprint 9, incluida la corrección del QR solicitada; falta integrar y comprobar en `main` con autorización antes de registrar su cierre.
+- El incremento cubre las tareas del Sprint 9, incluida la corrección del QR solicitada, y quedó integrado en `main` por autorización del usuario.
+- El 22 de octubre de 2026 pasaron las 30 pruebas automatizadas sobre el contenido del merge en `main`, usando bases temporales sin alterar datos reales.
+- El Sprint 9 queda cerrado; la preparación de la demostración y entrega final corresponde al Sprint 10 y no se adelanta en esta integración.
+
+## Sprint Retrospective
+
 - Proteger las acciones en el servidor evita depender de ocultar botones o enlaces en el navegador.
 - Recorrer el QR sin sesión y después del acceso confirmó que seguridad y rapidez de búsqueda pueden coexistir.
 
