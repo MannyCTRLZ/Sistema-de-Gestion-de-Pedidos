@@ -235,7 +235,9 @@ Debe permitir:
 - Categoría.
 
 El panel `/admin` permite crear y editar productos y marcar su disponibilidad.
-No se borran productos asociados a pedidos: se desactivan cuando no pueden ofrecerse.
+También permite asignar, reemplazar o quitar una imagen JPEG, PNG o WebP de hasta
+5 MB. Los productos sin pedidos asociados se pueden borrar; si ya forman parte
+del historial, se conservan y se desactivan cuando no pueden ofrecerse.
 Los datos de ejemplo se insertan solo si el catálogo está vacío al iniciar, para
 evitar recrear productos que el personal haya renombrado. Los campos admiten
 100 caracteres en nombre, 50 en categoría y 500 en descripción; el precio debe

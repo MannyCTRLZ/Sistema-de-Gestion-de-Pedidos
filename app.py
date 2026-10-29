@@ -1,6 +1,8 @@
 import base64
 import io
 import os
+import secrets
+from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 import segno
@@ -13,14 +15,55 @@ from database import (
     cambiar_disponibilidad,
     crear_pedido,
     crear_tablas,
+    eliminar_producto,
     insertar_productos_iniciales,
     guardar_producto,
     obtener_pedidos,
     obtener_pedidos_cocina,
+    obtener_producto,
     obtener_productos,
 )
 
 app = Flask(__name__)
+app.config["CARPETA_IMAGENES_PRODUCTOS"] = str(
+    Path(app.static_folder) / "img" / "productos"
+)
+
+TIPOS_IMAGEN_PRODUCTO = {
+    "jpeg": lambda cabecera: cabecera.startswith(b"\xff\xd8\xff"),
+    "png": lambda cabecera: cabecera.startswith(b"\x89PNG\r\n\x1a\n"),
+    "webp": lambda cabecera: cabecera.startswith(b"RIFF") and cabecera[8:12] == b"WEBP",
+}
+
+
+def guardar_imagen_producto(archivo):
+    cabecera = archivo.stream.read(16)
+    archivo.stream.seek(0)
+    extension = next(
+        (tipo for tipo, coincide in TIPOS_IMAGEN_PRODUCTO.items() if coincide(cabecera)),
+        None,
+    )
+    if extension is None:
+        raise ValueError("La imagen debe ser un archivo JPEG, PNG o WebP válido.")
+
+    carpeta = Path(app.config["CARPETA_IMAGENES_PRODUCTOS"])
+    carpeta.mkdir(parents=True, exist_ok=True)
+    nombre = f"{secrets.token_hex(16)}.{extension}"
+    archivo.save(carpeta / nombre)
+    return f"img/productos/{nombre}"
+
+
+def borrar_archivo_imagen(imagen):
+    if not isinstance(imagen, str) or not imagen.startswith("img/productos/"):
+        return
+    nombre = Path(imagen).name
+    if nombre != imagen.removeprefix("img/productos/"):
+        return
+    try:
+        (Path(app.config["CARPETA_IMAGENES_PRODUCTOS"]) / nombre).unlink(missing_ok=True)
+    except OSError:
+        pass
+
 
 crear_tablas()
 insertar_productos_iniciales()
@@ -99,13 +142,59 @@ def administracion():
 @app.post("/api/productos")
 @app.put("/api/productos/<int:producto_id>")
 def api_guardar_producto(producto_id=None):
+    es_formulario = request.mimetype == "multipart/form-data"
+    if es_formulario:
+        datos = request.form.to_dict()
+        datos["disponible"] = request.form.get("disponible") == "true"
+    else:
+        datos = request.get_json(silent=True)
+
+    imagen_nueva = None
+    cambiar_imagen = False
+    imagen_anterior = None
     try:
-        producto = guardar_producto(request.get_json(silent=True), producto_id)
+        if producto_id is not None:
+            imagen_anterior = obtener_producto(producto_id)["imagen"]
+        if es_formulario:
+            archivo = request.files.get("imagen")
+            quitar_imagen = request.form.get("quitar_imagen") == "true"
+            if archivo and archivo.filename and quitar_imagen:
+                raise ValueError("Elige una imagen nueva o quita la actual, no ambas opciones.")
+            if archivo and archivo.filename:
+                imagen_nueva = guardar_imagen_producto(archivo)
+                cambiar_imagen = True
+            elif quitar_imagen:
+                cambiar_imagen = True
+
+        if cambiar_imagen:
+            producto = guardar_producto(datos, producto_id, imagen_nueva)
+        else:
+            producto = guardar_producto(datos, producto_id)
     except ValueError as error:
+        borrar_archivo_imagen(imagen_nueva)
         return jsonify({"error": str(error)}), 400
     except LookupError as error:
+        borrar_archivo_imagen(imagen_nueva)
         return jsonify({"error": str(error)}), 404
+    except OSError:
+        borrar_archivo_imagen(imagen_nueva)
+        return jsonify({"error": "No se pudo guardar la imagen. Intenta nuevamente."}), 500
+
+    if cambiar_imagen and imagen_anterior != imagen_nueva:
+        borrar_archivo_imagen(imagen_anterior)
     return jsonify(producto), 201 if producto_id is None else 200
+
+
+@app.delete("/api/productos/<int:producto_id>")
+def api_eliminar_producto(producto_id):
+    try:
+        producto = eliminar_producto(producto_id)
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 409
+    except LookupError as error:
+        return jsonify({"error": str(error)}), 404
+    borrar_archivo_imagen(producto["imagen"])
+    return jsonify({"id": producto_id})
 
 
 @app.patch("/api/productos/<int:producto_id>/disponibilidad")

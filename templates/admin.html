@@ -33,7 +33,8 @@
         <p id="admin-mensaje" class="caja-mensaje" role="status" aria-live="polite" hidden></p>
         <section class="admin-formulario" aria-labelledby="titulo-formulario-producto">
             <h2 id="titulo-formulario-producto">Nuevo producto</h2>
-            <form id="formulario-producto" data-url="{{ url_for('api_guardar_producto') }}">
+            <form id="formulario-producto" data-url="{{ url_for('api_guardar_producto') }}"
+                  data-static-url="{{ url_for('static', filename='') }}" enctype="multipart/form-data">
                 <input id="producto-id" type="hidden">
                 <div class="admin-campos">
                     <div>
@@ -57,6 +58,17 @@
                         <label for="producto-descripcion">Descripción (opcional)</label>
                         <textarea id="producto-descripcion" maxlength="500" rows="3"></textarea>
                     </div>
+                    <div class="admin-imagen-campo">
+                        <label for="producto-imagen">Imagen (opcional)</label>
+                        <input id="producto-imagen" type="file" accept="image/jpeg,image/png,image/webp">
+                        <small>JPEG, PNG o WebP. Tamaño máximo: 5 MB.</small>
+                    </div>
+                    <div id="producto-imagen-actual" class="admin-imagen-actual" hidden>
+                        <img id="producto-imagen-vista" alt="Vista previa de la imagen actual">
+                        <label for="quitar-producto-imagen">
+                            <input id="quitar-producto-imagen" type="checkbox"> Quitar imagen actual
+                        </label>
+                    </div>
                 </div>
                 <label class="admin-disponibilidad" for="producto-disponible">
                     <input id="producto-disponible" type="checkbox" checked> Disponible para pedir
@@ -77,6 +89,13 @@
             <div class="lista-pedidos">
                 {% for producto in productos %}
                 <article class="pedido-caja admin-producto">
+                    <div class="admin-producto-imagen">
+                        {% if producto.imagen %}
+                        <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}" loading="lazy">
+                        {% else %}
+                        <span aria-hidden="true">{% if producto.categoria == "Bebidas" %}🥤{% else %}🍽️{% endif %}</span>
+                        {% endif %}
+                    </div>
                     <div class="pedido-caja-encabezado">
                         <div>
                             <span class="producto-categoria">{{ producto.categoria }}</span>
@@ -95,6 +114,11 @@
                                 data-disponible="{{ 'false' if producto.disponible else 'true' }}"
                                 data-url="{{ url_for('api_cambiar_disponibilidad', producto_id=producto.id) }}">
                             {% if producto.disponible %}Marcar agotado{% else %}Activar producto{% endif %}
+                        </button>
+                        <button type="button" class="boton-eliminar"
+                                data-eliminar="{{ producto.nombre }}"
+                                data-url="{{ url_for('api_eliminar_producto', producto_id=producto.id) }}">
+                            Borrar producto
                         </button>
                     </div>
                 </article>

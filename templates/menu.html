@@ -32,8 +32,18 @@
             <div class="lista-productos">
                 {% for producto in productos %}
                 <article class="producto{% if not producto.disponible %} producto-agotado{% endif %}">
-                    <div class="producto-imagen" aria-hidden="true">
+                    <div class="producto-imagen">
+                        {% if producto.imagen %}
+                        <img
+                            src="{{ url_for('static', filename=producto.imagen) }}"
+                            alt="{{ producto.nombre }}"
+                            loading="lazy"
+                        >
+                        {% else %}
+                        <span aria-hidden="true">
                         {% if producto.categoria == "Bebidas" %}🥤{% else %}🍽️{% endif %}
+                        </span>
+                        {% endif %}
                     </div>
                     <div class="producto-informacion">
                         <span class="producto-categoria">

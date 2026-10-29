@@ -4,6 +4,19 @@ from decimal import Decimal, InvalidOperation
 
 DATABASE = "cafeteria.db"
 MAX_ENTERO_SQLITE = 2**63 - 1
+CONSERVAR_IMAGEN = object()
+
+IMAGENES_INICIALES = {
+    "Tacos capeados": "img/capeadosIconos.jpeg",
+    "Burrito": "img/burritoIcono.jpeg",
+    "Refresco": "img/refrescoIcono.jpeg",
+    "Agua fresca": "img/aguaFrescaIcono.jpeg",
+    "Café": "img/cafeIcono.jpeg",
+    "Sándwich sencillo": "img/sandwichIcono.jpeg",
+    "Chilaquiles": "img/chilaquilesIcono.jpeg",
+    "Huevos revueltos": "img/huevosRevueltosIcono.jpeg",
+    "Quesadilla": "img/quesadillaImagen.jpeg",
+}
 
 
 def obtener_conexion():
@@ -37,7 +50,8 @@ def crear_tablas():
             descripcion TEXT,
             precio REAL NOT NULL,
             categoria TEXT NOT NULL,
-            disponible INTEGER NOT NULL DEFAULT 1
+            disponible INTEGER NOT NULL DEFAULT 1,
+            imagen TEXT
         )
     """)
 
@@ -48,6 +62,12 @@ def crear_tablas():
     if "existencia" in columnas_productos:
         conexion.execute(
             "ALTER TABLE productos DROP COLUMN existencia"
+        )
+    if "imagen" not in columnas_productos:
+        conexion.execute("ALTER TABLE productos ADD COLUMN imagen TEXT")
+        conexion.executemany(
+            "UPDATE productos SET imagen = ? WHERE nombre = ?",
+            [(imagen, nombre) for nombre, imagen in IMAGENES_INICIALES.items()],
         )
 
     conexion.execute("""
@@ -109,56 +129,64 @@ def insertar_productos_iniciales():
             "Tacos de pescado capeados con lechuga, col y aderezo de la casa.",
             65.00,
             "Alimentos",
-            1
+            1,
+            IMAGENES_INICIALES["Tacos capeados"]
         ),
         (
             "Burrito",
             "Burrito de tortilla de harina con frijoles, carne y queso.",
             55.00,
             "Alimentos",
-            1
+            1,
+            IMAGENES_INICIALES["Burrito"]
         ),
         (
             "Refresco",
             "Refresco frío de 600 ml. Diferentes sabores disponibles.",
             25.00,
             "Bebidas",
-            1
+            1,
+            IMAGENES_INICIALES["Refresco"]
         ),
         (
             "Agua fresca",
             "Variedad de sabores.",
             20.00,
             "Bebidas",
-            1
+            1,
+            IMAGENES_INICIALES["Agua fresca"]
         ),
         (
             "Café",
             "Café americano recién preparado.",
             25.00,
             "Bebidas",
-            1
+            1,
+            IMAGENES_INICIALES["Café"]
         ),
         (
             "Sándwich sencillo",
             "Sándwich de jamón y queso con lechuga y tomate.",
             45.00,
             "Alimentos",
-            1
+            1,
+            IMAGENES_INICIALES["Sándwich sencillo"]
         ),
         (
             "Chilaquiles",
             "Totopos con salsa, crema, queso y cebolla.",
             60.00,
             "Alimentos",
-            1
+            1,
+            IMAGENES_INICIALES["Chilaquiles"]
         ),
         (
             "Huevos revueltos",
             "Huevos revueltos acompañados de frijoles.",
             50.00,
             "Alimentos",
-            1
+            1,
+            IMAGENES_INICIALES["Huevos revueltos"]
         )
     ]
 
@@ -171,8 +199,8 @@ def insertar_productos_iniciales():
         if existe is None:
             conexion.execute("""
                 INSERT INTO productos
-                (nombre, descripcion, precio, categoria, disponible)
-                VALUES (?, ?, ?, ?, ?)
+                (nombre, descripcion, precio, categoria, disponible, imagen)
+                VALUES (?, ?, ?, ?, ?, ?)
             """, producto)
 
     conexion.commit()
@@ -183,12 +211,26 @@ def insertar_productos_iniciales():
 def obtener_productos():
     conexion = obtener_conexion()
     productos = conexion.execute("""
-        SELECT id, nombre, descripcion, precio, categoria, disponible
+        SELECT id, nombre, descripcion, precio, categoria, disponible, imagen
         FROM productos
         ORDER BY categoria, nombre
     """).fetchall()
     conexion.close()
     return [dict(producto) for producto in productos]
+
+
+def obtener_producto(producto_id):
+    if type(producto_id) is not int or not 0 < producto_id <= MAX_ENTERO_SQLITE:
+        raise ValueError("El producto no es válido.")
+    conexion = obtener_conexion()
+    producto = conexion.execute("""
+        SELECT id, nombre, descripcion, precio, categoria, disponible, imagen
+        FROM productos WHERE id = ?
+    """, (producto_id,)).fetchone()
+    conexion.close()
+    if producto is None:
+        raise LookupError("No se encontró el producto.")
+    return dict(producto)
 
 
 def obtener_pedidos():
@@ -265,7 +307,7 @@ def validar_producto(datos):
     return campos
 
 
-def guardar_producto(datos, producto_id=None):
+def guardar_producto(datos, producto_id=None, imagen=CONSERVAR_IMAGEN):
     producto = validar_producto(datos)
     conexion = obtener_conexion()
     try:
@@ -273,10 +315,12 @@ def guardar_producto(datos, producto_id=None):
             valores = (producto["nombre"], producto["descripcion"], producto["precio"],
                        producto["categoria"], producto["disponible"])
             if producto_id is None:
+                imagen_guardada = None if imagen is CONSERVAR_IMAGEN else imagen
                 cursor = conexion.execute("""
-                    INSERT INTO productos (nombre, descripcion, precio, categoria, disponible)
-                    VALUES (?, ?, ?, ?, ?)
-                """, valores)
+                    INSERT INTO productos
+                        (nombre, descripcion, precio, categoria, disponible, imagen)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, valores + (imagen_guardada,))
                 producto_id = cursor.lastrowid
             else:
                 if type(producto_id) is not int or not 0 < producto_id <= MAX_ENTERO_SQLITE:
@@ -287,7 +331,15 @@ def guardar_producto(datos, producto_id=None):
                 """, valores + (producto_id,))
                 if cursor.rowcount == 0:
                     raise LookupError("No se encontró el producto.")
-        return {"id": producto_id, **producto}
+                if imagen is not CONSERVAR_IMAGEN:
+                    conexion.execute(
+                        "UPDATE productos SET imagen = ? WHERE id = ?",
+                        (imagen, producto_id),
+                    )
+            fila = conexion.execute(
+                "SELECT imagen FROM productos WHERE id = ?", (producto_id,)
+            ).fetchone()
+        return {"id": producto_id, **producto, "imagen": fila["imagen"]}
     finally:
         conexion.close()
 
@@ -307,6 +359,31 @@ def cambiar_disponibilidad(producto_id, disponible):
             if cursor.rowcount == 0:
                 raise LookupError("No se encontró el producto.")
         return {"id": producto_id, "disponible": disponible}
+    finally:
+        conexion.close()
+
+
+def eliminar_producto(producto_id):
+    if type(producto_id) is not int or not 0 < producto_id <= MAX_ENTERO_SQLITE:
+        raise ValueError("El producto no es válido.")
+    conexion = obtener_conexion()
+    try:
+        with conexion:
+            producto = conexion.execute(
+                "SELECT imagen FROM productos WHERE id = ?", (producto_id,)
+            ).fetchone()
+            if producto is None:
+                raise LookupError("No se encontró el producto.")
+            asociado = conexion.execute(
+                "SELECT 1 FROM detalle_pedido WHERE producto_id = ? LIMIT 1",
+                (producto_id,),
+            ).fetchone()
+            if asociado is not None:
+                raise ValueError(
+                    "No se puede borrar porque forma parte de pedidos. Márcalo como agotado."
+                )
+            conexion.execute("DELETE FROM productos WHERE id = ?", (producto_id,))
+        return {"id": producto_id, "imagen": producto["imagen"]}
     finally:
         conexion.close()
 

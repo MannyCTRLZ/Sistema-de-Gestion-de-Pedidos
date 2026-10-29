@@ -1,11 +1,14 @@
 // Todas las acciones internas envían el token de la sesión actual.
 async function solicitarPersonal(url, opciones) {
+    const cuerpoEsFormulario = opciones.body instanceof FormData;
+    const encabezados = {
+        ...opciones.headers,
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+    };
+    if (cuerpoEsFormulario) delete encabezados["Content-Type"];
     const respuesta = await fetch(url, {
         ...opciones,
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
-        },
+        headers: encabezados,
     });
     if (respuesta.status === 401) {
         const regreso = window.location.pathname + window.location.search;

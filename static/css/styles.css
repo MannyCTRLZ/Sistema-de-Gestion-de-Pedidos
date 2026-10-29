@@ -299,6 +299,14 @@ a:focus-visible {
     background: var(--verde-claro);
 }
 
+.producto-imagen img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    object-fit: cover;
+}
+
 .producto-informacion {
     display: flex;
     flex-direction: column;
@@ -1035,10 +1043,35 @@ a:focus-visible {
 }
 .admin-campos textarea { resize: vertical; }
 .admin-descripcion { grid-column: 1 / -1; }
+.admin-imagen-campo small { display: block; margin-top: .4rem; color: #657068; }
+.admin-imagen-actual { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.admin-imagen-actual[hidden] { display: none; }
+.admin-imagen-actual img {
+    width: 120px;
+    height: 90px;
+    border-radius: .75rem;
+    object-fit: cover;
+}
+.admin-producto-imagen {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    height: 170px;
+    margin: -1.5rem -1.5rem 1.25rem;
+    background: var(--verde-claro);
+    font-size: 3rem;
+}
+.admin-producto-imagen img { width: 100%; height: 100%; object-fit: cover; }
 .admin-disponibilidad { display: block; margin-top: 1rem; font-weight: 700; }
 .admin-producto-descripcion { overflow-wrap: anywhere; white-space: pre-wrap; }
 .admin-producto .pedido-caja-acciones { margin-top: auto; padding-top: 1rem; }
 .admin-formulario button:disabled { opacity: .6; cursor: wait; }
+
+.pedido-caja-acciones .boton-eliminar {
+    color: var(--blanco);
+    border-color: #8a3028;
+    background: #8a3028;
+}
 
 .cocina-lista-encabezado {
     flex-wrap: wrap;
@@ -1153,6 +1186,11 @@ a:focus-visible {
 
     .producto-imagen {
         min-height: 150px;
+    }
+
+    .producto-imagen img {
+        min-height: 150px;
+        max-height: 240px;
     }
 
     .carrito-panel {

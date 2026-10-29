@@ -1,3 +1,4 @@
+import io
 import tempfile
 import unittest
 from pathlib import Path
@@ -20,11 +21,14 @@ class AdministracionTest(unittest.TestCase):
         database.crear_tablas()
         database.insertar_productos_iniciales()
         self.cliente = app.test_client()
+        self.carpeta_imagenes_original = app.config["CARPETA_IMAGENES_PRODUCTOS"]
+        app.config["CARPETA_IMAGENES_PRODUCTOS"] = str(Path(self.temporal.name) / "imagenes")
         autenticar(self.cliente)
         self.datos = {"nombre": "Pan de prueba", "descripcion": "Recién horneado",
                       "categoria": "Panadería", "precio": "22.50", "disponible": True}
 
     def tearDown(self):
+        app.config["CARPETA_IMAGENES_PRODUCTOS"] = self.carpeta_imagenes_original
         database.DATABASE = self.base_original
         self.temporal.cleanup()
 
@@ -81,7 +85,63 @@ class AdministracionTest(unittest.TestCase):
         self.assertEqual(self.cliente.put(f"/api/productos/{2**63}", json=self.datos).status_code, 400)
         self.assertEqual(self.cliente.patch("/api/productos/999/disponibilidad", json={"disponible": True}).status_code, 404)
         self.assertEqual(self.cliente.patch("/api/productos/1/disponibilidad", json={"disponible": 0}).status_code, 400)
-        self.assertEqual(self.cliente.delete("/api/productos/1").status_code, 405)
+        self.assertEqual(self.cliente.delete("/api/productos/999").status_code, 404)
+
+    def test_agregar_reemplazar_y_quitar_imagen(self):
+        datos = {
+            **{clave: str(valor) for clave, valor in self.datos.items() if clave != "disponible"},
+            "disponible": "true",
+            "quitar_imagen": "false",
+            "imagen": (io.BytesIO(b"\xff\xd8\xff\xe0imagen-jpeg"), "pan.jpg"),
+        }
+        respuesta = self.cliente.post(
+            "/api/productos", data=datos, content_type="multipart/form-data"
+        )
+        self.assertEqual(respuesta.status_code, 201)
+        producto = respuesta.get_json()
+        primera = producto["imagen"]
+        self.assertTrue(primera.startswith("img/productos/"))
+        self.assertTrue((Path(app.config["CARPETA_IMAGENES_PRODUCTOS"]) / Path(primera).name).is_file())
+        self.assertIn(primera, self.cliente.get("/menu").get_data(as_text=True))
+
+        datos["imagen"] = (io.BytesIO(b"\x89PNG\r\n\x1a\nimagen-png"), "pan.png")
+        respuesta = self.cliente.put(
+            f"/api/productos/{producto['id']}", data=datos, content_type="multipart/form-data"
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        segunda = respuesta.get_json()["imagen"]
+        self.assertNotEqual(primera, segunda)
+        self.assertFalse((Path(app.config["CARPETA_IMAGENES_PRODUCTOS"]) / Path(primera).name).exists())
+
+        datos.pop("imagen")
+        datos["quitar_imagen"] = "true"
+        respuesta = self.cliente.put(
+            f"/api/productos/{producto['id']}", data=datos, content_type="multipart/form-data"
+        )
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertIsNone(respuesta.get_json()["imagen"])
+        self.assertFalse((Path(app.config["CARPETA_IMAGENES_PRODUCTOS"]) / Path(segunda).name).exists())
+
+    def test_imagen_invalida_y_borrado_protegido(self):
+        datos = {
+            **{clave: str(valor) for clave, valor in self.datos.items() if clave != "disponible"},
+            "disponible": "true",
+            "quitar_imagen": "false",
+            "imagen": (io.BytesIO(b"esto no es una imagen"), "archivo.txt"),
+        }
+        self.assertEqual(self.cliente.post(
+            "/api/productos", data=datos, content_type="multipart/form-data"
+        ).status_code, 400)
+
+        creado = self.cliente.post("/api/productos", json=self.datos).get_json()
+        self.assertEqual(self.cliente.delete(f"/api/productos/{creado['id']}").status_code, 200)
+        self.assertNotIn(creado["id"], [p["id"] for p in database.obtener_productos()])
+
+        database.crear_pedido("Ana", [{"id": 1, "cantidad": 1}])
+        respuesta = self.cliente.delete("/api/productos/1")
+        self.assertEqual(respuesta.status_code, 409)
+        self.assertIn("pedidos", respuesta.get_json()["error"])
+        self.assertIn(1, [p["id"] for p in database.obtener_productos()])
 
     def test_renombrar_no_recrea_productos_iniciales(self):
         producto = next(p for p in database.obtener_productos() if p["id"] == 1)

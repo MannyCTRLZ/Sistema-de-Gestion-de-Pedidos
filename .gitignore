@@ -5,4 +5,5 @@ __pycache__/
 instance/
 *.sqlite3
 *.db
-
+static/img/productos/*
+!static/img/productos/.gitkeep

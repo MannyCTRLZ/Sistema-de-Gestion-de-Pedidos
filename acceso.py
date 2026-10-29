@@ -75,7 +75,7 @@ def instalar_acceso(app):
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE") == "1",
         PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
-        MAX_CONTENT_LENGTH=65536,
+        MAX_CONTENT_LENGTH=5 * 1024 * 1024,
     )
     hosts = os.environ.get("TRUSTED_HOSTS", "")
     if hosts:
