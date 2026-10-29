@@ -93,12 +93,36 @@ class CajaTest(unittest.TestCase):
         self.assertIn("María", html)
         self.assertNotIn("Carlos", html)
 
-        with patch.dict(os.environ, {"PUBLIC_BASE_URL": ""}):
+        with patch.dict(os.environ, {"PUBLIC_BASE_URL": "", "RENDER_EXTERNAL_URL": "https://pedidos-campus.onrender.com"}):
+            with patch("app.segno.make_qr", wraps=segno.make_qr) as generar_render:
+                numero_render = self.crear_pedido("Render")
+        generar_render.assert_called_once_with(
+            f"https://pedidos-campus.onrender.com/caja?numero={numero_render}", error="m"
+        )
+
+        with patch.dict(os.environ, {"PUBLIC_BASE_URL": "", "RENDER_EXTERNAL_URL": ""}):
             with patch("app.segno.make_qr", wraps=segno.make_qr) as generar_local:
                 numero_local = self.crear_pedido("Luis")
         generar_local.assert_called_once_with(
             f"http://localhost/caja?numero={numero_local}", error="m"
         )
+
+    def test_ticket_recibe_detalle_validado_por_el_servidor(self):
+        respuesta = self.cliente.post("/api/pedidos", json={
+            "nombre_cliente": " Ana ",
+            "productos": [{"id": 1, "cantidad": 2}, {"id": 3, "cantidad": 1}],
+        })
+        self.assertEqual(respuesta.status_code, 201)
+        datos = respuesta.get_json()
+        self.assertEqual(datos["nombre_cliente"], "Ana")
+        self.assertEqual(datos["total"], 155.0)
+        self.assertEqual(datos["productos"], [
+            {"nombre": "Tacos capeados", "cantidad": 2, "precio": 65.0},
+            {"nombre": "Refresco", "cantidad": 1, "precio": 25.0},
+        ])
+        menu = self.cliente.get("/menu").get_data(as_text=True)
+        self.assertIn('id="ticket-productos"', menu)
+        self.assertIn('id="guardar-ticket"', menu)
 
     def test_cancelar_no_borra_detalles_y_no_permite_pagar_despues(self):
         numero = self.crear_pedido()
