@@ -85,6 +85,10 @@ del pedido en el filtro `numero`. Caja conserva su búsqueda y sus acciones.
 El QR es únicamente un atajo de búsqueda: caja y sus acciones requieren sesión
 del personal. Al abrirlo sin sesión se solicita el acceso y se recupera el filtro
 después de autenticar. El estudiante puede presentar el QR o su número en caja.
+La confirmación permite guardar una imagen PNG del ticket con número, nombre,
+productos, cantidades, total y el mismo QR para presentarla en caja. En Render, el QR usa
+la URL pública HTTPS proporcionada por el servicio, salvo que se configure
+`PUBLIC_BASE_URL` para un dominio propio.
 
 Cocina:
 Ver pedidos pagados -> Comenzar preparación -> Marcar como listo

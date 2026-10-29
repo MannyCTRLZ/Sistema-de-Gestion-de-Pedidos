@@ -257,7 +257,9 @@ def api_crear_pedido():
     if not isinstance(datos, dict):
         return jsonify({"error": "Los datos del pedido no son válidos."}), 400
 
-    base_publica = os.environ.get("PUBLIC_BASE_URL", "").strip()
+    # Render publica su URL HTTPS; una dirección explícita permite usar un dominio propio.
+    base_publica = (os.environ.get("PUBLIC_BASE_URL", "").strip()
+                    or os.environ.get("RENDER_EXTERNAL_URL", "").strip())
     try:
         base = urlsplit(base_publica)
     except ValueError:

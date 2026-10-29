@@ -712,6 +712,45 @@ a:focus-visible {
     background: var(--verde-claro);
 }
 
+.ticket-pedido {
+    color: var(--texto);
+}
+
+.ticket-marca {
+    margin: 0 0 .75rem;
+    color: var(--verde);
+    font-weight: 700;
+    text-align: center;
+}
+
+.ticket-productos {
+    display: grid;
+    gap: .5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #d8ded8;
+}
+
+.ticket-productos p {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+}
+
+.ticket-productos span {
+    overflow-wrap: anywhere;
+}
+
+.ticket-productos strong {
+    flex-shrink: 0;
+}
+
+.ticket-acciones {
+    display: grid;
+    gap: .75rem;
+}
+
 .pedido-confirmado-datos p {
     display: flex;
     justify-content: space-between;

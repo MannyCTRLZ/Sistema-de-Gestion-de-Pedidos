@@ -30,10 +30,15 @@ const botonConfirmarPedido = document.querySelector("#confirmar-pedido");
 const errorPedido = document.querySelector("#pedido-error");
 const pasoConfirmacion = document.querySelector("#paso-confirmacion");
 const numeroPedido = document.querySelector("#numero-pedido");
+const ticketNombre = document.querySelector("#ticket-nombre");
+const ticketProductos = document.querySelector("#ticket-productos");
 const estadoPedido = document.querySelector("#estado-pedido");
 const totalConfirmado = document.querySelector("#total-confirmado");
 const codigoQr = document.querySelector("#codigo-qr");
 const botonNuevoPedido = document.querySelector("#nuevo-pedido");
+const botonGuardarTicket = document.querySelector("#guardar-ticket");
+const errorTicket = document.querySelector("#ticket-error");
+let pedidoConfirmado = null;
 
 function formatearPrecio(precio) {
     return `$${precio.toFixed(2)}`;
@@ -177,12 +182,25 @@ async function confirmarPedido() {
         }
 
         numeroPedido.textContent = `#${String(datos.numero_pedido).padStart(4, "0")}`;
+        ticketNombre.textContent = datos.nombre_cliente;
+        ticketProductos.replaceChildren();
+        datos.productos.forEach((producto) => {
+            const renglon = document.createElement("p");
+            const descripcion = document.createElement("span");
+            const subtotal = document.createElement("strong");
+            descripcion.textContent = `${producto.cantidad} × ${producto.nombre}`;
+            subtotal.textContent = formatearPrecio(producto.precio * producto.cantidad);
+            renglon.append(descripcion, subtotal);
+            ticketProductos.appendChild(renglon);
+        });
         estadoPedido.textContent = datos.estado;
         totalConfirmado.textContent = formatearPrecio(datos.total);
         codigoQr.src = datos.codigo_qr;
         codigoQr.alt = `Código QR del pedido #${datos.numero_pedido} para buscarlo en caja`;
         pasoResumen.hidden = true;
         pasoConfirmacion.hidden = false;
+        pedidoConfirmado = datos;
+        errorTicket.hidden = true;
         carrito.length = 0;
         actualizarCarrito();
     } catch (error) {
@@ -191,6 +209,128 @@ async function confirmarPedido() {
     } finally {
         botonConfirmarPedido.disabled = false;
         botonConfirmarPedido.textContent = "Confirmar pedido";
+    }
+}
+
+function dividirLineas(contexto, texto, anchoMaximo) {
+    const lineas = [];
+    let linea = "";
+
+    for (const palabra of texto.split(/\s+/)) {
+        const candidata = linea ? `${linea} ${palabra}` : palabra;
+        if (contexto.measureText(candidata).width <= anchoMaximo) {
+            linea = candidata;
+            continue;
+        }
+        if (linea) lineas.push(linea);
+        linea = "";
+        for (const letra of palabra) {
+            if (contexto.measureText(linea + letra).width > anchoMaximo && linea) {
+                lineas.push(linea);
+                linea = "";
+            }
+            linea += letra;
+        }
+    }
+    if (linea) lineas.push(linea);
+    return lineas;
+}
+
+async function guardarTicket() {
+    if (!pedidoConfirmado) return;
+    botonGuardarTicket.disabled = true;
+    botonGuardarTicket.textContent = "Preparando imagen...";
+    errorTicket.hidden = true;
+
+    try {
+        const imagenQr = new Image();
+        imagenQr.src = pedidoConfirmado.codigo_qr;
+        await imagenQr.decode();
+
+        const lienzo = document.createElement("canvas");
+        const contexto = lienzo.getContext("2d");
+        if (!contexto) throw new Error("Canvas no disponible");
+
+        const ancho = 720;
+        const margen = 54;
+        const anchoTexto = ancho - 2 * margen;
+        contexto.font = "28px Arial, sans-serif";
+        const lineasNombre = dividirLineas(contexto, `A nombre de: ${pedidoConfirmado.nombre_cliente}`, anchoTexto);
+        const productos = pedidoConfirmado.productos.map((producto) => ({
+            lineas: dividirLineas(contexto, `${producto.cantidad} × ${producto.nombre}`, anchoTexto),
+            subtotal: formatearPrecio(producto.precio * producto.cantidad),
+        }));
+        const altoProductos = productos.reduce((alto, producto) => alto + producto.lineas.length * 36 + 52, 0);
+        lienzo.width = ancho;
+        lienzo.height = 900 + lineasNombre.length * 38 + altoProductos;
+
+        contexto.fillStyle = "#ffffff";
+        contexto.fillRect(0, 0, lienzo.width, lienzo.height);
+        contexto.fillStyle = "#1b1b1b";
+        contexto.textAlign = "center";
+        contexto.font = "bold 34px Arial, sans-serif";
+        contexto.fillText("Cafetería Universitaria", ancho / 2, 78);
+        contexto.font = "26px Arial, sans-serif";
+        contexto.fillText("Pedido registrado", ancho / 2, 122);
+        contexto.font = "bold 52px Arial, sans-serif";
+        const numero = String(pedidoConfirmado.numero_pedido).padStart(4, "0");
+        contexto.fillText(`Pedido #${numero}`, ancho / 2, 194);
+
+        contexto.textAlign = "left";
+        contexto.font = "28px Arial, sans-serif";
+        let y = 258;
+        for (const linea of lineasNombre) {
+            contexto.fillText(linea, margen, y);
+            y += 38;
+        }
+        y += 20;
+        contexto.fillRect(margen, y, anchoTexto, 2);
+        y += 48;
+        contexto.font = "bold 28px Arial, sans-serif";
+        contexto.fillText("Tu pedido", margen, y);
+        y += 46;
+
+        for (const producto of productos) {
+            contexto.font = "28px Arial, sans-serif";
+            for (const linea of producto.lineas) {
+                contexto.fillText(linea, margen, y);
+                y += 36;
+            }
+            contexto.textAlign = "right";
+            contexto.font = "bold 28px Arial, sans-serif";
+            contexto.fillText(producto.subtotal, ancho - margen, y);
+            contexto.textAlign = "left";
+            y += 52;
+        }
+
+        contexto.fillRect(margen, y, anchoTexto, 2);
+        y += 50;
+        contexto.font = "bold 32px Arial, sans-serif";
+        contexto.fillText("Total", margen, y);
+        contexto.textAlign = "right";
+        contexto.fillText(formatearPrecio(pedidoConfirmado.total), ancho - margen, y);
+        contexto.textAlign = "center";
+        contexto.font = "25px Arial, sans-serif";
+        contexto.fillText("Pago pendiente en caja", ancho / 2, y + 52);
+        contexto.drawImage(imagenQr, (ancho - 290) / 2, y + 75, 290, 290);
+        contexto.fillText("Muestra este ticket en caja", ancho / 2, y + 400);
+
+        const imagen = await new Promise((resolver) => lienzo.toBlob(resolver, "image/png"));
+        if (!imagen) throw new Error("No se pudo generar el PNG");
+        const enlace = document.createElement("a");
+        const url = URL.createObjectURL(imagen);
+        enlace.href = url;
+        enlace.download = `pedido-${numero}.png`;
+        document.body.appendChild(enlace);
+        enlace.click();
+        enlace.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (error) {
+        errorTicket.textContent = "No se pudo guardar la imagen. Intenta de nuevo.";
+        errorTicket.hidden = false;
+    } finally {
+        botonGuardarTicket.disabled = false;
+        botonGuardarTicket.textContent = "Guardar imagen del ticket";
     }
 }
 
@@ -339,6 +479,8 @@ botonVolverCarrito.addEventListener("click", () => {
 });
 
 botonConfirmarPedido.addEventListener("click", confirmarPedido);
+
+botonGuardarTicket.addEventListener("click", guardarTicket);
 
 botonNuevoPedido.addEventListener("click", () => {
     window.location.reload();

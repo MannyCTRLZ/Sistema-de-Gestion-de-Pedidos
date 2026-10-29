@@ -56,6 +56,16 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 - El 22 de octubre de 2026 pasaron las 30 pruebas automatizadas sobre el contenido del merge en `main`, usando bases temporales sin alterar datos reales.
 - El Sprint 9 queda cerrado; la preparación de la demostración y entrega final corresponde al Sprint 10 y no se adelanta en esta integración.
 
+### Ajuste solicitado después del Sprint 9 — ticket y QR público
+
+| Tarea | Responsable | Estado | Rama |
+|---|---|---|---|
+| Mostrar y descargar como imagen un ticket con detalle del pedido y su QR | Equipo / Codex | Implementada en `dev`; falta prueba visual e integración | `dev` |
+| Usar la URL pública de Render para el QR cuando no haya `PUBLIC_BASE_URL` | Equipo / Codex | Probada en `dev`; pendiente de integración | `dev` |
+
+Las pruebas automatizadas pasan en `dev` con bases temporales; falta revisar la
+descarga en un navegador. El ajuste no está integrado en `main` ni publicado en Render.
+
 ## Sprint Retrospective
 
 - Proteger las acciones en el servidor evita depender de ocultar botones o enlaces en el navegador.

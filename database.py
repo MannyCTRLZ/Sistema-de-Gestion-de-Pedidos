@@ -420,7 +420,7 @@ def crear_pedido(nombre_cliente, productos):
 
             for producto_id, cantidad in cantidades.items():
                 producto = conexion.execute("""
-                    SELECT precio FROM productos
+                    SELECT nombre, precio FROM productos
                     WHERE id = ? AND disponible = 1
                 """, (producto_id,)).fetchone()
                 if producto is None:
@@ -430,7 +430,7 @@ def crear_pedido(nombre_cliente, productos):
                 total += precio * cantidad
                 if not total.is_finite() or total > Decimal("999999999.99"):
                     raise ValueError("El total del pedido supera el máximo permitido.")
-                detalles.append((producto_id, cantidad, float(precio)))
+                detalles.append((producto_id, producto["nombre"], cantidad, float(precio)))
 
             estado = "PENDIENTE DE PAGO"
             cursor = conexion.execute("""
@@ -448,13 +448,18 @@ def crear_pedido(nombre_cliente, productos):
                 VALUES (?, ?, ?, ?)
             """, [
                 (numero_pedido, producto_id, cantidad, precio)
-                for producto_id, cantidad, precio in detalles
+                for producto_id, _, cantidad, precio in detalles
             ])
 
         return {
             "numero_pedido": numero_pedido,
+            "nombre_cliente": nombre_cliente.strip(),
             "estado": estado,
             "total": float(total),
+            "productos": [
+                {"nombre": nombre, "cantidad": cantidad, "precio": precio}
+                for _, nombre, cantidad, precio in detalles
+            ],
         }
     finally:
         conexion.close()
