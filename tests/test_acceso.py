@@ -152,7 +152,7 @@ class AccesoTest(unittest.TestCase):
             })
             self.assertEqual(respuesta.status_code, 400)
         for base in ("javascript:alert(1)", "http://[", "https://u:p@example.com"):
-            with patch.dict(os.environ, {"PUBLIC_BASE_URL": base}):
+            with patch.dict(os.environ, {"PUBLIC_BASE_URL": base, "RENDER_EXTERNAL_URL": ""}):
                 respuesta = self.cliente.post("/api/pedidos", json={
                     "nombre_cliente": "Ana", "productos": [{"id": 1, "cantidad": 1}],
                 })

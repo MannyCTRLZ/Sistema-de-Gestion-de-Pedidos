@@ -30,11 +30,13 @@ flask --app app run --host 0.0.0.0
 
 En Render, si `PUBLIC_BASE_URL` está vacío, se usa automáticamente
 `RENDER_EXTERNAL_URL` (la URL pública HTTPS del servicio). Para un dominio
-propio, configura `PUBLIC_BASE_URL` con esa dirección. Fuera de Render, si no
-configuras ninguna de las dos, el QR usa la dirección con la que se hizo el
-pedido. Una dirección `localhost` solo funciona en el mismo dispositivo.
-Si quedó un valor antiguo de `PUBLIC_BASE_URL` con `localhost` en Render,
-elimínalo o sustitúyelo por la URL pública.
+propio, configura `PUBLIC_BASE_URL` con esa dirección. Si `PUBLIC_BASE_URL`
+está mal formada o apunta a `localhost`, se usa la URL de Render. En el panel
+**Environment** de Render puedes eliminar `PUBLIC_BASE_URL` para usar siempre
+la dirección automática; si la editas, guarda y despliega el servicio para
+aplicar el cambio. Fuera de Render, si no configuras ninguna de las dos, el QR
+usa la dirección con la que se hizo el pedido. Una dirección `localhost` solo
+funciona en el mismo dispositivo.
 
 ## Acceso interno del personal (Sprint 9)
 

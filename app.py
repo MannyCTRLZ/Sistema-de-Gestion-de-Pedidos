@@ -250,6 +250,16 @@ def api_cambiar_estado_en_caja(numero_pedido):
     return jsonify(pedido)
 
 
+def base_qr_valida(direccion):
+    try:
+        partes = urlsplit(direccion)
+        return (partes.scheme in ("http", "https") and partes.hostname is not None
+                and partes.port != 0 and not partes.username and not partes.password
+                and not partes.query and not partes.fragment and len(direccion) <= 2000)
+    except ValueError:
+        return False
+
+
 @app.post("/api/pedidos")
 def api_crear_pedido():
     datos = request.get_json(silent=True)
@@ -257,17 +267,19 @@ def api_crear_pedido():
     if not isinstance(datos, dict):
         return jsonify({"error": "Los datos del pedido no son válidos."}), 400
 
-    # Render publica su URL HTTPS; una dirección explícita permite usar un dominio propio.
-    base_publica = (os.environ.get("PUBLIC_BASE_URL", "").strip()
-                    or os.environ.get("RENDER_EXTERNAL_URL", "").strip())
-    try:
-        base = urlsplit(base_publica)
-    except ValueError:
+    # Una URL personalizada incorrecta no debe bloquear los pedidos en Render.
+    configurada = os.environ.get("PUBLIC_BASE_URL", "").strip()
+    render = os.environ.get("RENDER_EXTERNAL_URL", "").strip()
+    configurada_local = (base_qr_valida(configurada)
+                         and urlsplit(configurada).hostname in ("localhost", "127.0.0.1", "::1"))
+    if base_qr_valida(configurada) and not (render and configurada_local):
+        base_publica = configurada
+    elif base_qr_valida(render):
+        base_publica = render
+    elif configurada or render:
         return jsonify(error="La dirección del QR no está configurada correctamente. Avisa al personal."), 503
-    if base_publica and (base.scheme not in ("http", "https") or not base.netloc
-                         or base.username or base.password or base.query or base.fragment
-                         or len(base_publica) > 2000):
-        return jsonify(error="La dirección del QR no está configurada correctamente. Avisa al personal."), 503
+    else:
+        base_publica = ""
     try:
         pedido = crear_pedido(
             datos.get("nombre_cliente"),
