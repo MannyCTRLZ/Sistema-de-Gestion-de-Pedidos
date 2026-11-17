@@ -426,6 +426,9 @@ a:focus-visible {
     flex-direction: column;
     width: min(440px, 100%);
     height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
     padding: 1.5rem;
     background: var(--crema);
     box-shadow: -12px 0 35px rgba(23, 56, 36, .2);
@@ -447,6 +450,7 @@ a:focus-visible {
 }
 
 .carrito-encabezado {
+    flex: 0 0 auto;
     padding-bottom: 1rem;
     border-bottom: 1px solid #d8ded8;
 }
@@ -475,9 +479,13 @@ a:focus-visible {
 
 .carrito-productos {
     display: grid;
+    flex: 1 1 auto;
     gap: 1rem;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 1.25rem 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .carrito-producto {
@@ -532,6 +540,7 @@ a:focus-visible {
 }
 
 .carrito-resumen {
+    flex: 0 0 auto;
     margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid #d8ded8;
@@ -1209,14 +1218,28 @@ a:focus-visible {
 }
 
 @media (max-width: 520px) {
-    .encabezado,
-    .acciones-encabezado {
-        align-items: flex-start;
+    .encabezado-menu {
+        align-items: stretch;
         flex-direction: column;
+        gap: .65rem;
+        padding-block: .85rem;
     }
 
-    .acciones-encabezado {
+    .encabezado-menu .acciones-encabezado {
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: .75rem;
         width: 100%;
+    }
+
+    .encabezado-menu .enlace-inicio {
+        padding: .5rem 0;
+    }
+
+    .encabezado-menu .boton-carrito {
+        min-width: auto;
     }
 
     .producto {
@@ -1233,7 +1256,7 @@ a:focus-visible {
     }
 
     .carrito-panel {
-        padding: 1.25rem;
+        padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
     }
 
     .carrito-producto-acciones {
