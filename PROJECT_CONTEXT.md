@@ -119,7 +119,10 @@ Para reducir complejidad en el MVP se puede comenzar con una sola cuenta o tipo 
 
 En el Sprint 9 se implementa una cuenta interna creada con el comando
 `flask --app app crear-personal`, sin credenciales predeterminadas y con hash de
-contraseña en SQLite. Esta cuenta accede a caja, cocina y administración; no hay
+contraseña en SQLite. Para despliegues sin terminal, el arranque puede crearla de
+forma idempotente desde `ADMIN_USUARIO` y `ADMIN_PASSWORD`; los valores permanecen
+en el entorno y nunca se incluyen en el repositorio. Esta cuenta accede a caja,
+cocina y administración; no hay
 registro web de personal. Las sesiones caducan a las ocho horas y el cierre de
 sesión las revoca en el servidor. Se validan tokens CSRF en el acceso y las
 acciones internas. La clave de firma se configura por entorno o se genera en

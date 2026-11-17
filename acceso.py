@@ -18,11 +18,18 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from database import obtener_conexion
 
 
-def crear_personal(usuario, password):
+def validar_credenciales_personal(usuario, password):
+    if not isinstance(usuario, str) or not isinstance(password, str):
+        raise ValueError("Configura un usuario y una contraseña válidos.")
     usuario = usuario.strip()
     if (not usuario or len(usuario) > 50 or len(password) < 12
             or len(password) > 128 or not password.strip()):
         raise ValueError("Usa un usuario de hasta 50 caracteres y una contraseña de 12 a 128 caracteres.")
+    return usuario
+
+
+def crear_personal(usuario, password):
+    usuario = validar_credenciales_personal(usuario, password)
     with closing(obtener_conexion()) as conexion, conexion:
         try:
             conexion.execute(
@@ -31,6 +38,29 @@ def crear_personal(usuario, password):
             )
         except sqlite3.IntegrityError:
             raise ValueError("Ese usuario ya existe.") from None
+
+
+def inicializar_personal_desde_entorno():
+    usuario = os.environ.get("ADMIN_USUARIO")
+    password = os.environ.get("ADMIN_PASSWORD")
+    if usuario is None and password is None:
+        return False
+    if usuario is None or password is None:
+        raise RuntimeError(
+            "Configura juntas las variables ADMIN_USUARIO y ADMIN_PASSWORD."
+        )
+    try:
+        usuario = validar_credenciales_personal(usuario, password)
+    except ValueError as error:
+        raise RuntimeError(f"Configuración del administrador inválida: {error}") from None
+
+    # INSERT OR IGNORE evita errores si varios procesos arrancan al mismo tiempo.
+    with closing(obtener_conexion()) as conexion, conexion:
+        cursor = conexion.execute(
+            "INSERT OR IGNORE INTO usuarios (usuario, hash_password) VALUES (?, ?)",
+            (usuario, generate_password_hash(password)),
+        )
+    return cursor.rowcount == 1
 
 
 def destino_interno(valor):
