@@ -8,7 +8,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs, urlsplit
 
 import database
-from acceso import crear_personal
+from acceso import crear_personal, inicializar_personal_desde_entorno
 from ayuda_acceso import USUARIO_PRUEBA, PASSWORD_PRUEBA, autenticar
 
 with tempfile.TemporaryDirectory() as temporal_importacion:
@@ -168,6 +168,42 @@ class AccesoTest(unittest.TestCase):
         respuesta = ejecutor.invoke(args=["crear-personal", "--usuario", "cajera"],
                                     input="otra-contrasena-prueba\notra-contrasena-prueba\n")
         self.assertNotEqual(respuesta.exit_code, 0)
+
+    def test_arranque_crea_personal_desde_entorno_sin_duplicarlo(self):
+        password = "contrasena-render-prueba"
+        with patch.dict(os.environ, {
+            "ADMIN_USUARIO": "administrador-render",
+            "ADMIN_PASSWORD": password,
+        }, clear=True):
+            self.assertTrue(inicializar_personal_desde_entorno())
+            self.assertFalse(inicializar_personal_desde_entorno())
+
+        with closing(database.obtener_conexion()) as conexion:
+            personal = conexion.execute(
+                "SELECT usuario, hash_password FROM usuarios"
+            ).fetchone()
+        self.assertEqual(personal["usuario"], "administrador-render")
+        self.assertNotEqual(personal["hash_password"], password)
+
+        respuesta = self.cliente.post("/login", data={
+            "usuario": "administrador-render",
+            "password": password,
+            "csrf_token": self.token(),
+            "next": "/admin",
+        })
+        self.assertEqual(respuesta.status_code, 302)
+        self.assertEqual(respuesta.location, "/admin")
+
+    def test_arranque_rechaza_variables_incompletas_o_invalidas(self):
+        with patch.dict(os.environ, {"ADMIN_USUARIO": "administrador"}, clear=True):
+            with self.assertRaisesRegex(RuntimeError, "ADMIN_PASSWORD"):
+                inicializar_personal_desde_entorno()
+        with patch.dict(os.environ, {
+            "ADMIN_USUARIO": "administrador",
+            "ADMIN_PASSWORD": "corta",
+        }, clear=True):
+            with self.assertRaisesRegex(RuntimeError, "12 a 128"):
+                inicializar_personal_desde_entorno()
 
 
 if __name__ == "__main__":

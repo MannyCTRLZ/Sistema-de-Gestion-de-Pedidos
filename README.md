@@ -58,6 +58,17 @@ El comando pide el usuario y una contraseña de 12 a 128 caracteres, sin mostrar
 en pantalla. No existe cuenta ni contraseña por defecto. SQLite guarda únicamente
 su hash. No agregues credenciales reales al código, ejemplos, capturas o Git.
 
+En un despliegue sin terminal, como un servicio gratuito de Render, configura
+`ADMIN_USUARIO` y `ADMIN_PASSWORD` en **Environment**. Al arrancar, la aplicación
+crea esa cuenta únicamente si aún no existe; la contraseña debe tener entre 12 y
+128 caracteres y solo se guarda su hash. Las dos variables deben configurarse
+juntas. No escribas sus valores en Build Command, Start Command ni en el repositorio.
+
+Esta inicialización recupera el acceso después de un reinicio, pero no vuelve
+persistente a SQLite: en un sistema de archivos temporal todavía pueden perderse
+pedidos, productos e imágenes subidas. El comando `crear-personal` continúa siendo
+la opción recomendada para desarrollo local o servidores con acceso a terminal.
+
 Entra por «Personal» en la portada o por `/login`. Una cuenta interna da acceso
 a caja, cocina y administración; la separación por roles queda fuera de esta
 primera cuenta compartida del MVP. El estudiante sigue usando menú, carrito y

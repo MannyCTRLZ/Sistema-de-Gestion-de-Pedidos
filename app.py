@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlsplit
 
 import segno
 from flask import Flask, jsonify, render_template, request, url_for
-from acceso import instalar_acceso
+from acceso import inicializar_personal_desde_entorno, instalar_acceso
 from database import (
     MAX_ENTERO_SQLITE,
     cambiar_estado_en_caja,
@@ -67,6 +67,7 @@ def borrar_archivo_imagen(imagen):
 
 crear_tablas()
 insertar_productos_iniciales()
+inicializar_personal_desde_entorno()
 instalar_acceso(app)
 
 
