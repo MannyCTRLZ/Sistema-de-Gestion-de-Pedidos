@@ -56,18 +56,20 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 - El 22 de octubre de 2026 pasaron las 30 pruebas automatizadas sobre el contenido del merge en `main`, usando bases temporales sin alterar datos reales.
 - El Sprint 9 queda cerrado; la preparación de la demostración y entrega final corresponde al Sprint 10 y no se adelanta en esta integración.
 
-### Ajuste solicitado después del Sprint 9 — ticket y QR público
+### Ajustes solicitados después del Sprint 9 — Render, ticket y experiencia móvil
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Mostrar y descargar como imagen un ticket con detalle del pedido y su QR | Equipo / Codex | Código presente en `origin/main`; falta prueba visual en Render | `dev` → `origin/main` |
-| Usar la URL pública de Render para el QR cuando no haya `PUBLIC_BASE_URL` | Equipo / Codex | Código presente en `origin/main`; falta prueba en Render | `dev` → `origin/main` |
-| Usar la URL pública de Render si `PUBLIC_BASE_URL` está mal formada o apunta a `localhost` | Codex | Implementada en `dev`; pendiente de integración y prueba en Render | `dev` |
+| Mostrar y descargar como imagen un ticket con detalle del pedido y su QR | Equipo / Codex | Integrada en `main`; pendiente de prueba visual en Render | `dev` → `main` |
+| Usar la URL pública de Render para el QR cuando no haya `PUBLIC_BASE_URL` | Equipo / Codex | Integrada en `main`; pendiente de prueba en Render | `dev` → `main` |
+| Usar la URL pública de Render si `PUBLIC_BASE_URL` está mal formada o apunta a `localhost` | Codex | Integrada en `main`; pendiente de prueba en Render | `dev` → `main` |
+| Crear de forma idempotente la cuenta interna desde variables de entorno en despliegues sin terminal | Codex | Integrada en `main`; pendiente de prueba en Render | `dev` → `main` |
+| Reorganizar la cabecera del menú y mantener accesibles los controles del carrito en celulares | Codex | Integrada en `main`; pendiente de prueba visual en Render | `dev` → `main` |
 
-Las pruebas automatizadas pasan en `dev` con bases temporales. La referencia
-local `origin/main` ya contiene el ticket y la selección inicial de URL de Render;
-falta comprobar la descarga en el sitio desplegado. La nueva corrección permanece
-sin integrar ni publicar.
+El 17 de noviembre de 2026 pasaron las 35 pruebas automatizadas en `main` después
+de integrar estos ajustes. Falta comprobar en el sitio desplegado la descarga del
+ticket, el acceso creado desde el entorno y la distribución móvil en el dispositivo
+real; estas verificaciones no se sustituyen con las pruebas locales.
 
 ## Sprint Retrospective
 
