@@ -30,11 +30,13 @@ flask --app app run --host 0.0.0.0
 
 En Render, si `PUBLIC_BASE_URL` está vacío, se usa automáticamente
 `RENDER_EXTERNAL_URL` (la URL pública HTTPS del servicio). Para un dominio
-propio, configura `PUBLIC_BASE_URL` con esa dirección. Fuera de Render, si no
-configuras ninguna de las dos, el QR usa la dirección con la que se hizo el
-pedido. Una dirección `localhost` solo funciona en el mismo dispositivo.
-Si quedó un valor antiguo de `PUBLIC_BASE_URL` con `localhost` en Render,
-elimínalo o sustitúyelo por la URL pública.
+propio, configura `PUBLIC_BASE_URL` con esa dirección. Si `PUBLIC_BASE_URL`
+está mal formada o apunta a `localhost`, se usa la URL de Render. En el panel
+**Environment** de Render puedes eliminar `PUBLIC_BASE_URL` para usar siempre
+la dirección automática; si la editas, guarda y despliega el servicio para
+aplicar el cambio. Fuera de Render, si no configuras ninguna de las dos, el QR
+usa la dirección con la que se hizo el pedido. Una dirección `localhost` solo
+funciona en el mismo dispositivo.
 
 ## Acceso interno del personal (Sprint 9)
 
@@ -55,6 +57,17 @@ En PowerShell:
 El comando pide el usuario y una contraseña de 12 a 128 caracteres, sin mostrarla
 en pantalla. No existe cuenta ni contraseña por defecto. SQLite guarda únicamente
 su hash. No agregues credenciales reales al código, ejemplos, capturas o Git.
+
+En un despliegue sin terminal, como un servicio gratuito de Render, configura
+`ADMIN_USUARIO` y `ADMIN_PASSWORD` en **Environment**. Al arrancar, la aplicación
+crea esa cuenta únicamente si aún no existe; la contraseña debe tener entre 12 y
+128 caracteres y solo se guarda su hash. Las dos variables deben configurarse
+juntas. No escribas sus valores en Build Command, Start Command ni en el repositorio.
+
+Esta inicialización recupera el acceso después de un reinicio, pero no vuelve
+persistente a SQLite: en un sistema de archivos temporal todavía pueden perderse
+pedidos, productos e imágenes subidas. El comando `crear-personal` continúa siendo
+la opción recomendada para desarrollo local o servidores con acceso a terminal.
 
 Entra por «Personal» en la portada o por `/login`. Una cuenta interna da acceso
 a caja, cocina y administración; la separación por roles queda fuera de esta

@@ -100,6 +100,16 @@ class CajaTest(unittest.TestCase):
             f"https://pedidos-campus.onrender.com/caja?numero={numero_render}", error="m"
         )
 
+        for configurada in ("URL_DEL_SERVICIO", "https:pedidos-campus//.onrender.com",
+                            "http://localhost:5000"):
+            with patch.dict(os.environ, {"PUBLIC_BASE_URL": configurada,
+                                      "RENDER_EXTERNAL_URL": "https://pedidos-campus.onrender.com"}):
+                with patch("app.segno.make_qr", wraps=segno.make_qr) as generar_respaldo:
+                    numero_respaldo = self.crear_pedido("Respaldo")
+            generar_respaldo.assert_called_once_with(
+                f"https://pedidos-campus.onrender.com/caja?numero={numero_respaldo}", error="m"
+            )
+
         with patch.dict(os.environ, {"PUBLIC_BASE_URL": "", "RENDER_EXTERNAL_URL": ""}):
             with patch("app.segno.make_qr", wraps=segno.make_qr) as generar_local:
                 numero_local = self.crear_pedido("Luis")

@@ -60,11 +60,14 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 
 | Tarea | Responsable | Estado | Rama |
 |---|---|---|---|
-| Mostrar y descargar como imagen un ticket con detalle del pedido y su QR | Equipo / Codex | Implementada en `dev`; falta prueba visual e integración | `dev` |
-| Usar la URL pública de Render para el QR cuando no haya `PUBLIC_BASE_URL` | Equipo / Codex | Probada en `dev`; pendiente de integración | `dev` |
+| Mostrar y descargar como imagen un ticket con detalle del pedido y su QR | Equipo / Codex | Código presente en `origin/main`; falta prueba visual en Render | `dev` → `origin/main` |
+| Usar la URL pública de Render para el QR cuando no haya `PUBLIC_BASE_URL` | Equipo / Codex | Código presente en `origin/main`; falta prueba en Render | `dev` → `origin/main` |
+| Usar la URL pública de Render si `PUBLIC_BASE_URL` está mal formada o apunta a `localhost` | Codex | Implementada en `dev`; pendiente de integración y prueba en Render | `dev` |
 
-Las pruebas automatizadas pasan en `dev` con bases temporales; falta revisar la
-descarga en un navegador. El ajuste no está integrado en `main` ni publicado en Render.
+Las pruebas automatizadas pasan en `dev` con bases temporales. La referencia
+local `origin/main` ya contiene el ticket y la selección inicial de URL de Render;
+falta comprobar la descarga en el sitio desplegado. La nueva corrección permanece
+sin integrar ni publicar.
 
 ## Sprint Retrospective
 
