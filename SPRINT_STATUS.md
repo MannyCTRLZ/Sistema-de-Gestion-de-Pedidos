@@ -75,6 +75,10 @@ real; estas verificaciones no se sustituyen con las pruebas locales.
 El 24 de noviembre de 2026 pasaron las 35 pruebas automatizadas para la corrección
 del carrito. En Firefox se verificó el desplazamiento y la generación del número
 de pedido con ventanas de tamaño móvil y de escritorio, usando una base temporal.
+Tras reproducir el recorte reportado en Safari, el resumen del carrito móvil
+quedó debajo de los productos y el panel se ajustó al área visible del navegador.
+El nuevo ajuste se probó en WebKit y Firefox con uno y nueve productos,
+incluida una reducción del área visible. Pasaron las 35 pruebas automatizadas.
 
 ## Sprint Retrospective
 
