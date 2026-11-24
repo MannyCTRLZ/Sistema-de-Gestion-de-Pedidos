@@ -65,11 +65,16 @@ Versión candidata estable con acceso interno protegido y flujo Menú → Caja �
 | Usar la URL pública de Render si `PUBLIC_BASE_URL` está mal formada o apunta a `localhost` | Codex | Integrada en `main`; pendiente de prueba en Render | `dev` → `main` |
 | Crear de forma idempotente la cuenta interna desde variables de entorno en despliegues sin terminal | Codex | Integrada en `main`; pendiente de prueba en Render | `dev` → `main` |
 | Reorganizar la cabecera del menú y mantener accesibles los controles del carrito en celulares | Codex | Integrada en `main`; pendiente de prueba visual en Render | `dev` → `main` |
+| Permitir desplazar el carrito móvil y mantener accesible «Continuar pedido» | Codex | Integrada en `main`; pendiente de prueba en un celular desde Render | `dev` → `main` |
 
 El 17 de noviembre de 2026 pasaron las 35 pruebas automatizadas en `main` después
 de integrar estos ajustes. Falta comprobar en el sitio desplegado la descarga del
 ticket, el acceso creado desde el entorno y la distribución móvil en el dispositivo
 real; estas verificaciones no se sustituyen con las pruebas locales.
+
+El 24 de noviembre de 2026 pasaron las 35 pruebas automatizadas para la corrección
+del carrito. En Firefox se verificó el desplazamiento y la generación del número
+de pedido con ventanas de tamaño móvil y de escritorio, usando una base temporal.
 
 ## Sprint Retrospective
 
