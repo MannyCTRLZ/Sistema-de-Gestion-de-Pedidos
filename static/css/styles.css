@@ -1280,23 +1280,25 @@ a:focus-visible {
 
 @media (max-width: 520px), (pointer: coarse) {
     .carrito-panel {
+        top: var(--inicio-visible-carrito, 0px);
+        max-height: var(--altura-visible-carrito, 100dvh);
         overflow-y: auto;
         overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
     }
 
+    .carrito-vacio {
+        margin: 1.25rem 0 0;
+    }
+
     .carrito-productos {
-        flex-shrink: 0;
+        flex: 0 0 auto;
         overflow: visible;
     }
-}
 
-@media (max-width: 520px) and (min-height: 25rem),
-       (pointer: coarse) and (min-height: 25rem) {
     .carrito-resumen {
-        position: sticky;
-        bottom: 0;
-        background: var(--crema);
+        margin-top: 0;
     }
 }
 

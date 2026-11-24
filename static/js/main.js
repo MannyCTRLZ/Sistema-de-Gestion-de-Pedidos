@@ -6,6 +6,7 @@ const avisoCarrito = document.querySelector("#aviso-carrito");
 let temporizadorAviso;
 let temporizadorPulso;
 const panelCarrito = document.querySelector("#carrito-panel");
+const ventanaVisual = window.visualViewport;
 const fondoCarrito = document.querySelector("#carrito-fondo");
 const botonCerrar = document.querySelector("#carrito-cerrar");
 const listaCarrito = document.querySelector("#carrito-productos");
@@ -44,12 +45,23 @@ function formatearPrecio(precio) {
     return `$${precio.toFixed(2)}`;
 }
 
+function ajustarAlturaCarrito() {
+    if (!ventanaVisual || !panelCarrito.classList.contains("carrito-panel-abierto")) {
+        return;
+    }
+
+    panelCarrito.style.setProperty("--inicio-visible-carrito", `${ventanaVisual.offsetTop}px`);
+    panelCarrito.style.setProperty("--altura-visible-carrito", `${ventanaVisual.height}px`);
+}
+
 function abrirCarrito() {
     panelCarrito.classList.add("carrito-panel-abierto");
     panelCarrito.setAttribute("aria-hidden", "false");
     fondoCarrito.hidden = false;
     document.body.classList.add("carrito-visible");
-    botonCerrar.focus();
+    ajustarAlturaCarrito();
+    panelCarrito.scrollTop = 0;
+    botonCerrar.focus({ preventScroll: true });
 }
 
 function cerrarCarrito() {
@@ -440,6 +452,8 @@ botonVaciar.addEventListener("click", () => {
     actualizarCarrito();
 });
 
+ventanaVisual?.addEventListener("resize", ajustarAlturaCarrito);
+ventanaVisual?.addEventListener("scroll", ajustarAlturaCarrito);
 botonContinuar.addEventListener("click", abrirFormularioPedido);
 botonCerrarPedido.addEventListener("click", cerrarFormularioPedido);
 fondoPedido.addEventListener("click", cerrarFormularioPedido);
